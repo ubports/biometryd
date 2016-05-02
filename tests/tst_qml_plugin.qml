@@ -24,9 +24,29 @@ import Biometryd 0.0
 TestCase {
     name: "Biometryd"
 
+    Observer {
+        id: observer
+        onStarted: { console.log("started") }
+        onCanceled: { console.log("canceled") }
+        onFailed: { console.log("failed") }
+        onProgressed: {
+            console.log("progressed: ", percent.toFixed(2));
+            for (var prop in hints) {
+                console.log(prop, "=", hints[prop])
+            }
+        }
+        onSucceeded: {console.log("succeeded") }
+    }
+
     User {
         id: user
         uid: 0
+    }
+
+    SignalSpy {
+        id: spy
+        target: observer
+        signalName: "succeeded"
     }
 
     function test_defaultDeviceIsAvailable() {
@@ -36,13 +56,17 @@ TestCase {
 
     function test_templateStoreOfDefaultDeviceIsAvailable() {
         var ts = Biometryd.defaultDevice.templateStore;
-        var op = ts.enroll(user);
-        ts.size(user);
-        ts.clear(user);
+        ts.enroll(user).start(observer);
+        spy.wait(5000);
+        ts.size(user).start(observer);
+        spy.wait(5000);
+        ts.clear(user).start(observer);
+        spy.wait(5000);
     }
 
     function test_identifierOfDefaultDeviceIsAvailable() {
         var identifier = Biometryd.defaultDevice.identifier;
-        identifier.identifyUser();
+        identifier.identifyUser().start(observer);
+        spy.wait(5000);
     }
 }

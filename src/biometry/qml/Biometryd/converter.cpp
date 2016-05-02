@@ -17,12 +17,19 @@
  *
  */
 
-#include <biometry/qml/Biometryd/operation.h>
+#include <biometry/qml/Biometryd/converter.h>
 
-biometry::qml::Observer::Observer(QObject *parent) : QObject{parent}
+#include <biometry/geometry.h>
+
+QRect biometry::qml::Converter::convert(const biometry::Rectangle& rect)
 {
+    return QRect
+    {
+        static_cast<int>(rect.top_left.x),
+        static_cast<int>(rect.top_left.y),
+        static_cast<int>(rect.bottom_right.x),
+        static_cast<int>(rect.bottom_right.y)
+    };
 }
 
-biometry::qml::Operation::Operation(QObject* parent) : QObject{parent}
-{
-}
+

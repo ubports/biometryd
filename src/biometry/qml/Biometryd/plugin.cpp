@@ -19,7 +19,10 @@
 
 #include <biometry/qml/Biometryd/plugin.h>
 
+#include <biometry/user.h>
 #include <biometry/version.h>
+#include <biometry/devices/fingerprint_reader.h>
+
 #include <biometry/dbus/service.h>
 
 #include <biometry/qml/Biometryd/device.h>
@@ -33,39 +36,224 @@
 #include <QDebug>
 #include <QtQml>
 
-template<typename... T>
-std::runtime_error not_implemented(T&&...) { return std::runtime_error{"not implemented"}; }
+#include <boost/asio.hpp>
+
+#include <functional>
+#include <thread>
+
 namespace
 {
+template<typename... T>
+std::runtime_error not_implemented(T&&...) { return std::runtime_error{"not implemented"}; }
 
+namespace for_testing
+{
+// We enable testing of projects using the QML bindings by providing an environment
+// variable BIOMETRYD_QML_ENABLE_TESTING. If the variable is set to "1", we install a testing
+// stack emulating the multi-threaded/async behavior of the production system within the test
+// process.
+class Dispatcher
+{
+public:
+    static Dispatcher& instance()
+    {
+        static Dispatcher dispatcher;
+        return dispatcher;
+    }
 
-struct NullTemplateStore : public biometry::TemplateStore
+    ~Dispatcher()
+    {
+        service.stop();
+        if (t.joinable()) t.join();
+    }
+
+    void dispatch(const std::function<void()>& f)
+    {
+        service.post(f);
+    }
+
+private:
+    Dispatcher()
+        : keep_alive{service},
+          t{[this]() { service.run(); }}
+    {
+    }
+
+    boost::asio::io_service service;
+    boost::asio::io_service::work keep_alive;
+    std::thread t;
+
+};
+
+struct SizeQuery : public biometry::Operation<biometry::TemplateStore::SizeQuery>,
+                       public std::enable_shared_from_this<for_testing::SizeQuery>
+{
+    void start_with_observer(const typename Observer::Ptr& observer) override
+    {
+        auto thiz = shared_from_this();
+        Dispatcher::instance().dispatch([observer, thiz]()
+        {
+            observer->on_started();
+
+            for (std::size_t i = 1; i <= 100; i++)
+            {
+                if (thiz->canceled)
+                {
+                    observer->on_canceled("Canceled due to request from client");
+                    return;
+                }
+
+                observer->on_progress(biometry::Progress{biometry::Percent::from_raw_value(i/100.f), biometry::Dictionary{}});
+                std::this_thread::sleep_for(std::chrono::milliseconds{15});
+            }
+
+            observer->on_succeeded(42);
+        });
+    }
+
+    void cancel() override
+    {
+        canceled = true;
+    }
+
+    bool canceled{false};
+};
+
+struct Enrollment : public biometry::Operation<biometry::TemplateStore::Enrollment>,
+                        public std::enable_shared_from_this<for_testing::Enrollment>
+{
+    void start_with_observer(const typename Observer::Ptr& observer) override
+    {
+        auto thiz = shared_from_this();
+        Dispatcher::instance().dispatch([observer, thiz]()
+        {
+            observer->on_started();
+
+            for (std::size_t i = 1; i <= 100; i++)
+            {
+                if (thiz->canceled)
+                {
+                    observer->on_canceled("Canceled due to request from client");
+                    return;
+                }
+
+                biometry::devices::FingerprintReader::GuidedEnrollment::Hints hints;
+                hints.is_main_cluster_identified = i > 85;
+                hints.suggested_next_direction = static_cast<biometry::devices::FingerprintReader::Direction>(i % 9);
+                hints.masks = { biometry::Rectangle{biometry::Point{10, 10}, biometry::Point{50, 50}},
+                                biometry::Rectangle{biometry::Point{50, 50}, biometry::Point{90, 90}} };
+
+                observer->on_progress(biometry::Progress{biometry::Percent::from_raw_value(i/100.f), hints.to_dictionary()});
+                std::this_thread::sleep_for(std::chrono::milliseconds{15});
+            }
+
+            observer->on_succeeded(biometry::Void{});
+        });
+    }
+
+    void cancel() override
+    {
+        canceled = true;
+    }
+
+    bool canceled{false};
+};
+
+struct Identification : public biometry::Operation<biometry::Identification>,
+                           public std::enable_shared_from_this<for_testing::Identification>
+{
+    void start_with_observer(const typename Observer::Ptr& observer) override
+    {
+        auto thiz = shared_from_this();
+        Dispatcher::instance().dispatch([observer, thiz]()
+        {
+            observer->on_started();
+
+            for (std::size_t i = 1; i <= 100; i++)
+            {
+                if (thiz->canceled)
+                {
+                    observer->on_canceled("Canceled due to request from client");
+                    return;
+                }
+
+                observer->on_progress(biometry::Progress{biometry::Percent::from_raw_value(i/100.f), biometry::Dictionary{}});
+                std::this_thread::sleep_for(std::chrono::milliseconds{15});
+            }
+
+            observer->on_succeeded(biometry::User{42});
+        });
+    }
+
+    void cancel() override
+    {
+        canceled = true;
+    }
+
+    bool canceled{false};
+};
+
+struct Clearance : public biometry::Operation<biometry::TemplateStore::Clearance>,
+                       public std::enable_shared_from_this<for_testing::Clearance>
+{
+    void start_with_observer(const typename Observer::Ptr& observer) override
+    {
+        auto thiz = shared_from_this();
+        Dispatcher::instance().dispatch([observer, thiz]()
+        {
+            observer->on_started();
+
+            for (std::size_t i = 1; i <= 100; i++)
+            {
+                if (thiz->canceled)
+                {
+                    observer->on_canceled("Canceled due to request from client");
+                    return;
+                }
+
+                observer->on_progress(biometry::Progress{biometry::Percent::from_raw_value(i/100.f), biometry::Dictionary{}});
+                std::this_thread::sleep_for(std::chrono::milliseconds{15});
+            }
+
+            observer->on_succeeded(biometry::Void{});
+        });
+    }
+
+    void cancel() override
+    {
+        canceled = true;
+    }
+
+    bool canceled{false};
+};
+
+struct TemplateStore : public biometry::TemplateStore
 {
     biometry::Operation<SizeQuery>::Ptr size(const biometry::Application&, const biometry::User&) override
     {
-        return biometry::Operation<SizeQuery>::Ptr{};
+        return std::make_shared<for_testing::SizeQuery>();
     }
 
     biometry::Operation<Enrollment>::Ptr enroll(const biometry::Application&, const biometry::User&) override
     {
-        return biometry::Operation<Enrollment>::Ptr{};
+        return std::make_shared<for_testing::Enrollment>();
     }
 
     biometry::Operation<Clearance>::Ptr clear(const biometry::Application&, const biometry::User&) override
     {
-        return biometry::Operation<Clearance>::Ptr{};
+        return std::make_shared<for_testing::Clearance>();
     }
 };
 
-struct NullIdentifier : public biometry::Identifier
+struct Identifier : public biometry::Identifier
 {
     biometry::Operation<biometry::Identification>::Ptr identify_user(const biometry::Application&, const biometry::Reason&) override
     {
-        return biometry::Operation<biometry::Identification>::Ptr{};
+        return std::make_shared<for_testing::Identification>();
     }
 };
 
-struct NullDevice : public biometry::Device
+struct Device : public biometry::Device
 {
     biometry::TemplateStore& template_store() override
     {
@@ -82,19 +270,20 @@ struct NullDevice : public biometry::Device
         throw not_implemented();
     }
 
-    NullTemplateStore template_store_;
-    NullIdentifier identifier_;
+    TemplateStore template_store_;
+    Identifier identifier_;
 };
 
-struct NullService : public biometry::Service
+struct Service : public biometry::Service
 {
     std::shared_ptr<biometry::Device> default_device() const
     {
         return default_device_;
     }
 
-    std::shared_ptr<NullDevice> default_device_{std::make_shared<NullDevice>()};
+    std::shared_ptr<Device> default_device_{std::make_shared<for_testing::Device>()};
 };
+}
 }
 
 biometry::qml::Plugin::Plugin(QObject* parent) : QQmlExtensionPlugin{parent}
@@ -105,6 +294,7 @@ void biometry::qml::Plugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == std::string(biometry::qml::Plugin::ns));
 
+    qmlRegisterType<biometry::qml::Observer>(uri, Plugin::major, Plugin::minor, "Observer");
     qmlRegisterType<biometry::qml::User>(uri, Plugin::major, Plugin::minor, "User");
 
     qmlRegisterUncreatableType<biometry::qml::Device>(uri, Plugin::major, Plugin::minor, "Device", "Rely on Biometryd.instance");
@@ -122,6 +312,6 @@ void biometry::qml::Plugin::registerTypes(const char *uri)
                 {
                     return qgetenv("BIOMETRYD_QML_ENABLE_TESTING") != QByteArray{"1"} ?
                         new biometry::qml::Service{biometry::dbus::Service::create_stub()} :
-                        new biometry::qml::Service{std::make_shared<NullService>()};
+                        new biometry::qml::Service{std::make_shared<for_testing::Service>()};
                 });
 }

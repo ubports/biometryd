@@ -14,7 +14,8 @@ add_library(
 
     device.h
     device.cpp
-
+    converter.h
+    converter.cpp
     identifier.h
     identifier.cpp
     operation.h

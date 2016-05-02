@@ -17,12 +17,26 @@
  *
  */
 
-#include <biometry/qml/Biometryd/operation.h>
+#ifndef BIOMETRYD_QML_CONVERTER_H_
+#define BIOMETRYD_QML_CONVERTER_H_
 
-biometry::qml::Observer::Observer(QObject *parent) : QObject{parent}
+#include <QRect>
+
+namespace biometry
 {
+struct Rectangle;
+namespace qml
+{
+/// @brief Converter maps biometry::* to Qt- and biometry::qml::* types.
+struct Converter
+{
+    Converter() = delete;
+
+    /// @brief convert returns a QRect with the same coordinates as rect.
+    static QRect convert(const biometry::Rectangle& rect);
+
+};
+}
 }
 
-biometry::qml::Operation::Operation(QObject* parent) : QObject{parent}
-{
-}
+#endif // BIOMETRYD_QML_CONVERTER_H_

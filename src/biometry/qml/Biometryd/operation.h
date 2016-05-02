@@ -24,13 +24,43 @@
 #include <biometry/reason.h>
 #include <biometry/visibility.h>
 
+#include <biometry/devices/fingerprint_reader.h>
+#include <biometry/qml/Biometryd/converter.h>
+
 #include <QObject>
 #include <QVariantMap>
+#include <QRect>
+#include <QVector>
 
 namespace biometry
 {
 namespace qml
 {
+/// @brief Observer monitors an Operation.
+class BIOMETRY_DLL_PUBLIC Observer : public QObject
+{
+    Q_OBJECT
+public:
+    /// @brief Observer initializes a new instance with the given parent.
+    explicit Observer(QObject* parent = 0);
+
+    /// @brief started is emitted when the state changes to started.
+    Q_SIGNAL void started();
+    /// @brief progressed is emitted when the overall operation progresses towards completion.
+    /// @param percent Overall completion status of the operation, in [0,1], -1 indicates indeterminate.
+    /// @param dict Additional details about the operation.
+    Q_SIGNAL void progressed(double percent, const QVariantMap& hints);
+    /// @brief canceled is emitted when the operation has been canceled.
+    /// @param reason The human readable reason for cancelling the operation.
+    Q_SIGNAL void canceled(const QString& reason);
+    /// @brief failed is emitted when the operation fails to complete.
+    /// @param reason The human readable reason for the failure.
+    Q_SIGNAL void failed(const QString& reason);
+    /// @brief succeeded is emitted when the operation completes successfully.
+    /// @param result The result of the operation, might be empty.
+    Q_SIGNAL void succeeded(const QVariant& result);
+};
+
 /// @brief Operation models an arbitrary operation as an observable state machine.
 /// @ingroup qml
 ///
@@ -48,28 +78,13 @@ public:
     /// @brief Operation initializes a new instance with the given impl and parent.
     explicit Operation(QObject* parent);
 
-    /// @brief started is emitted when the state changes to started.
-    Q_SIGNAL void started();
-    /// @brief progressed is emitted when the overall operation progresses towards completion.
-    /// @param percent Overall completion status of the operation, in [0,1], -1 indicates indeterminate.
-    /// @param dict Additional details about the operation.
-    Q_SIGNAL void progressed(double percent, const QVariantMap& dict);
-    /// @brief canceled is emitted when the operation has been canceled.
-    /// @param reason The human readable reason for cancelling the operation.
-    Q_SIGNAL void canceled(const QString& reason);
-    /// @brief failed is emitted when the operation fails to complete.
-    /// @param reason The human readable reason for the failure.
-    Q_SIGNAL void failed(const QString& reason);
-    /// @brief succeeded is emitted when the operation completes successfully.
-    /// @param result The result of the operation, might be empty.
-    Q_SIGNAL void succeeded(const QVariant& result);
-
     /// @brief start requests the operation to be started.
+    /// @param observer Receiver for status updates about the operation.
     /// @return true if the issueing the request succeeded, false otherwise.
-    virtual bool start() = 0;
+    Q_INVOKABLE virtual bool start(Observer* observer) = 0;
     /// @brief cancel requests the operation to be aborted.
     /// @return true if issueing the request succeeded, false otherwise.
-    virtual bool cancel() = 0;
+    Q_INVOKABLE virtual bool cancel() = 0;
 };
 
 /// @brief TypedOperation implements Operation dispatching to a biometry::Operation<T>.
@@ -86,42 +101,59 @@ public:
         using typename biometry::Operation<T>::Observer::Error;
         using typename biometry::Operation<T>::Observer::Result;
 
-        Observer(Operation* op) : op{op}
+        Observer(qml::Observer* observer) : observer{observer}
         {
         }
 
         void on_started() override
         {
-            QMetaObject::invokeMethod(op, "started", Qt::QueuedConnection);
+            QMetaObject::invokeMethod(observer, "started", Qt::QueuedConnection);
         }
 
         void on_progress(const Progress& progress) override
         {
-            QMetaObject::invokeMethod(op, "progressed", Qt::QueuedConnection,
+            QVariantMap vm;
+
+            biometry::devices::FingerprintReader::GuidedEnrollment::Hints hints;
+            hints.from_dictionary(progress.details);
+
+            if (hints.is_main_cluster_identified)
+                vm["isMainClusterIdentified"] = *hints.is_main_cluster_identified;
+            if (hints.suggested_next_direction)
+                vm["suggestedNextDirection"] = static_cast<std::uint32_t>(*hints.suggested_next_direction);
+            if (hints.masks)
+            {
+                QVariantList vl;
+                for (auto m : *hints.masks)
+                    vl << Converter::convert(m);
+                vm["masks"] = vl;
+            }
+
+            QMetaObject::invokeMethod(observer, "progressed", Qt::QueuedConnection,
                                       Q_ARG(double, *progress.percent),
-                                      Q_ARG(QVariantMap, QVariantMap{}));
+                                      Q_ARG(QVariantMap, vm));
         }
 
         void on_canceled(const Reason& reason) override
         {
-            QMetaObject::invokeMethod(op, "canceled", Qt::QueuedConnection,
+            QMetaObject::invokeMethod(observer, "canceled", Qt::QueuedConnection,
                                       Q_ARG(QString, QString::fromStdString(reason)));
         }
 
         void on_failed(const Error& error) override
         {
-            QMetaObject::invokeMethod(op, "failed", Qt::QueuedConnection,
+            QMetaObject::invokeMethod(observer, "failed", Qt::QueuedConnection,
                                       Q_ARG(QString, QString::fromStdString(error)));
         }
 
         void on_succeeded(const Result&) override
         {
-            QMetaObject::invokeMethod(op, "succeeded", Qt::QueuedConnection,
+            QMetaObject::invokeMethod(observer, "succeeded", Qt::QueuedConnection,
                                       Q_ARG(QVariant, QVariant{}));
         }
 
     private:
-        Operation* op;
+        qml::Observer* observer;
     };
 
     /// @brief TypedOperation initializes a new instance with the given impl and parent.
@@ -132,11 +164,11 @@ public:
     }
 
     // From operation
-    bool start() override
+    bool start(qml::Observer* observer) override
     {
         try
         {
-            impl->start_with_observer(std::make_shared<Observer>(this));
+            impl->start_with_observer(std::make_shared<Observer>(observer));
             return true;
         }
         catch(...)
