@@ -31,8 +31,9 @@ TestCase {
         onFailed: { console.log("failed") }
         onProgressed: {
             console.log("progressed: ", percent.toFixed(2));
-            for (var prop in hints) {
-                console.log(prop, "=", hints[prop])
+            if (hints["fingerprintReaderHints"]) {
+                console.log(hints["fingerprintReaderHints"].hasMainClusterIdentified)
+                console.log(hints["fingerprintReaderHints"])
             }
         }
         onSucceeded: {console.log("succeeded") }

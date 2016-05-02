@@ -26,6 +26,7 @@
 #include <biometry/dbus/service.h>
 
 #include <biometry/qml/Biometryd/device.h>
+#include <biometry/qml/Biometryd/fingerprint_reader.h>
 #include <biometry/qml/Biometryd/identifier.h>
 #include <biometry/qml/Biometryd/operation.h>
 #include <biometry/qml/Biometryd/service.h>
@@ -301,6 +302,7 @@ void biometry::qml::Plugin::registerTypes(const char *uri)
     qmlRegisterUncreatableType<biometry::qml::Identification>(uri, Plugin::major, Plugin::minor, "Identification", "Rely on Biometryd.instance");
     qmlRegisterUncreatableType<biometry::qml::Identifier>(uri, Plugin::major, Plugin::minor, "Identifier", "Rely on Biometryd.instance");
 
+    qmlRegisterUncreatableType<biometry::qml::FingerprintReaderHints>(uri, Plugin::major, Plugin::minor, "FingerprintReaderHints", "Rely on Biometryd.instance");
     qmlRegisterUncreatableType<biometry::qml::Operation>(uri, Plugin::major, Plugin::minor, "Operation", "Rely on Biometryd.instance");
     qmlRegisterUncreatableType<biometry::qml::SizeQuery>(uri, Plugin::major, Plugin::minor, "SizeQuery", "Rely on Biometryd.instance");
     qmlRegisterUncreatableType<biometry::qml::Enrollment>(uri, Plugin::major, Plugin::minor, "Enrollment", "Rely on Biometryd.instance");

@@ -16,6 +16,8 @@ add_library(
     device.cpp
     converter.h
     converter.cpp
+    fingerprint_reader.h
+    fingerprint_reader.cpp
     identifier.h
     identifier.cpp
     operation.h

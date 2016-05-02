@@ -32,4 +32,17 @@ QRect biometry::qml::Converter::convert(const biometry::Rectangle& rect)
     };
 }
 
+QList<QRect> biometry::qml::Converter::convert(const std::vector<biometry::Rectangle>& rects)
+{
+    QList<QRect> result;
+    for (const auto& r : rects)
+        result << convert(r);
+
+    return result;
+}
+
+biometry::qml::FingerprintReaderHints::Direction biometry::qml::Converter::convert(biometry::devices::FingerprintReader::Direction dir)
+{
+    return static_cast<biometry::qml::FingerprintReaderHints::Direction>(dir);
+}
 

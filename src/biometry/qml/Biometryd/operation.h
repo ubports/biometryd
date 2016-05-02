@@ -25,7 +25,9 @@
 #include <biometry/visibility.h>
 
 #include <biometry/devices/fingerprint_reader.h>
+
 #include <biometry/qml/Biometryd/converter.h>
+#include <biometry/qml/Biometryd/fingerprint_reader.h>
 
 #include <QObject>
 #include <QVariantMap>
@@ -117,16 +119,19 @@ public:
             biometry::devices::FingerprintReader::GuidedEnrollment::Hints hints;
             hints.from_dictionary(progress.details);
 
-            if (hints.is_main_cluster_identified)
-                vm["isMainClusterIdentified"] = *hints.is_main_cluster_identified;
-            if (hints.suggested_next_direction)
-                vm["suggestedNextDirection"] = static_cast<std::uint32_t>(*hints.suggested_next_direction);
-            if (hints.masks)
+            const bool has_fingerprint_reader_hints =
+                    hints.is_main_cluster_identified &&
+                    hints.suggested_next_direction &&
+                    hints.masks;
+
+            if (has_fingerprint_reader_hints)
             {
-                QVariantList vl;
-                for (auto m : *hints.masks)
-                    vl << Converter::convert(m);
-                vm["masks"] = vl;
+                FingerprintReaderHints fprh;
+                fprh.setHasMainClusterIdentified(*hints.is_main_cluster_identified);
+                fprh.setSuggestedDirectionOfNextTouch(Converter::convert(*hints.suggested_next_direction));
+                fprh.setMasks(Converter::convert(*hints.masks));
+
+                vm[FingerprintReaderHints::key] = QVariant::fromValue(fprh);
             }
 
             QMetaObject::invokeMethod(observer, "progressed", Qt::QueuedConnection,
