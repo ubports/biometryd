@@ -1,0 +1,16 @@
+{
+global:
+    extern "C++" {
+        operator*;
+        biometry::*;
+	typeinfo?for?biometry::*;
+	typeinfo?name?for?biometry::*;
+	VTT?for?biometry::*;
+	virtual?thunk?to?biometry::*;
+	vtable?for?biometry::*;
+    };
+local:
+    extern "C++" {
+        *;
+    };
+};

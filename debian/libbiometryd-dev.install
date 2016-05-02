@@ -1,0 +1,3 @@
+usr/include/biometry/*
+usr/lib/*/libbiometry.so
+usr/lib/*/pkgconfig/*

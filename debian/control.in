@@ -1,0 +1,99 @@
+Source: biometryd
+Priority: optional
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Build-Depends: cmake,
+               debhelper (>= 9),
+               doxygen,
+               google-mock,
+               graphviz,
+               libapparmor-dev,
+               libboost-filesystem-dev,
+               libboost-program-options-dev,
+               libboost-system-dev,
+               libboost-test-dev,
+               libdbus-cpp-dev (>= 4.0.0),
+               libdbus-1-dev,
+               libelf-dev,
+               libgtest-dev,
+               libhybris-dev,
+               libhybris-common-dev,
+               libprocess-cpp-dev,
+               libsqlite3-dev,
+               lsb-release,
+               pkg-config,
+               qt5-default,
+               qtbase5-dev,
+               qtdeclarative5-dev,
+               qtdeclarative5-dev-tools,
+               qtdeclarative5-test-plugin,
+Standards-Version: 3.9.5
+Section: libs
+Homepage: https://launchpad.net/biometryd
+# if you don't have have commit access to this branch but would like to upload
+# directly to Ubuntu, don't worry: your changes will be merged back into the
+# upstream branch
+Vcs-Bzr: lp:biometryd
+
+Package: libbiometryd@BIOMETRYD_SOVERSION@
+Architecture: any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends},
+Depends: ${misc:Depends},
+         ${shlibs:Depends},
+Description: biometryd mediates/multiplexes to biometric devices - runtime library
+ biometryd mediates and multiplexes access to biometric devices present on the system,
+ enabling applications and system components to leverage them for identification and verification
+ of users.
+ .
+ This package includes the biometryd runtime libraries.
+
+Package: libbiometryd-dev
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends},
+Depends: libbiometryd@BIOMETRYD_SOVERSION@ (= ${binary:Version}),
+         ${misc:Depends},
+Description: biometryd mediates/multiplexes to biometric devices - runtime library 
+ biometryd mediates and multiplexes access to biometric devices present on the system,
+ enabling applications and system components to leverage them for identification and verification
+ of users.
+ .
+ This package includes all the development headers and libraries for
+ biometryd.
+
+Package: biometryd-bin
+Section: devel
+Architecture: any
+Depends: libbiometryd@BIOMETRYD_SOVERSION@ (= ${binary:Version}),
+         ${misc:Depends},
+Description: biometryd mediates/multiplexes to biometric devices - daemon/helper binaries
+ biometryd mediates and multiplexes access to biometric devices present on the system,
+ enabling applications and system components to leverage them for identification and verification
+ of users.
+ .
+ Daemon and helper binaries to be used by services.
+
+#Package: trust-store-tests
+#Section: libdevel
+#Architecture: any
+#Depends: libtrust-store@TRUST_STORE_SOVERSION@ (= ${binary:Version}),
+#         ${misc:Depends},
+#Suggests: libtrust-store-dev,
+#Description: Test files for libtrust-store1
+# Provides a common implementation of a trust store to be used by trusted
+# helpers.
+# .
+# This package includes test executables packaged for post-build execution.
+#
+#Package: libtrust-store-doc
+#Section: doc
+#Architecture: all
+#Depends: ${misc:Depends},
+#Suggests: libtrust-store-dev,
+#Description: Documentation files for libtrust-store-dev
+# Provides a common implementation of a trust store to be used by trusted
+# helpers.
+# .
+# This package includes documentation files for developing with and for
+# libtrust-store-dev.
