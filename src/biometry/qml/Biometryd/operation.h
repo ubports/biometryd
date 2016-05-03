@@ -50,8 +50,8 @@ public:
     Q_SIGNAL void started();
     /// @brief progressed is emitted when the overall operation progresses towards completion.
     /// @param percent Overall completion status of the operation, in [0,1], -1 indicates indeterminate.
-    /// @param dict Additional details about the operation.
-    Q_SIGNAL void progressed(double percent, const QVariantMap& hints);
+    /// @param details Additional details about the operation.
+    Q_SIGNAL void progressed(double percent, const QVariantMap& details);
     /// @brief canceled is emitted when the operation has been canceled.
     /// @param reason The human readable reason for cancelling the operation.
     Q_SIGNAL void canceled(const QString& reason);
@@ -119,20 +119,17 @@ public:
             biometry::devices::FingerprintReader::GuidedEnrollment::Hints hints;
             hints.from_dictionary(progress.details);
 
-            const bool has_fingerprint_reader_hints =
-                    hints.is_main_cluster_identified &&
-                    hints.suggested_next_direction &&
-                    hints.masks;
+            if (hints.is_main_cluster_identified)
+                vm[biometry::devices::FingerprintReader::GuidedEnrollment::Hints::key_is_main_cluster_identified] =
+                        *hints.is_main_cluster_identified;
 
-            if (has_fingerprint_reader_hints)
-            {
-                FingerprintReaderHints fprh;
-                fprh.setHasMainClusterIdentified(*hints.is_main_cluster_identified);
-                fprh.setSuggestedDirectionOfNextTouch(Converter::convert(*hints.suggested_next_direction));
-                fprh.setMasks(Converter::convert(*hints.masks));
+            if (hints.suggested_next_direction)
+                vm[biometry::devices::FingerprintReader::GuidedEnrollment::Hints::key_suggested_next_direction].setValue(
+                        Converter::convert(*hints.suggested_next_direction));
 
-                vm[FingerprintReaderHints::key] = QVariant::fromValue(fprh);
-            }
+            if (hints.masks)
+                vm[biometry::devices::FingerprintReader::GuidedEnrollment::Hints::key_masks] =
+                        Converter::convert(*hints.masks);
 
             QMetaObject::invokeMethod(observer, "progressed", Qt::QueuedConnection,
                                       Q_ARG(double, *progress.percent),

@@ -30,21 +30,21 @@ namespace biometry
 {
 namespace qml
 {
-class FingerprintReaderHints : public QObject
+/// @brief A FingerprintReader bundles well-known names of hints passed to Observers.
+class FingerprintReader : public QObject
 {
     Q_OBJECT
     Q_ENUMS(Direction)
-    Q_PROPERTY(bool hasMainClusterIdentified READ hasMainClusterIdentified WRITE setHasMainClusterIdentified)
-    Q_PROPERTY(Direction suggestedDirectionOfNextTouch READ suggestedDirectionOfNextTouch WRITE setSuggestedDirectionOfNextTouch)
-    Q_PROPERTY(QList<QRect> masks READ masks WRITE setMasks)
+    Q_PROPERTY(QString hasMainClusterIdentified READ hasMainClusterIdentified)
+    Q_PROPERTY(QString suggestedNextDirection READ suggestedNextDirection)
+    Q_PROPERTY(QString masks READ masks)
 
 public:
-    static constexpr const char* key{"fingerprintReaderHints"};
-
+    /// @brief Direction enumerates all known direction hints.
     enum class Direction
     {
         NotAvailable    = biometry::devices::FingerprintReader::Direction::not_available,
-        SouthWest       = biometry::devices::FingerprintReader::Direction::sout_west,
+        SouthWest       = biometry::devices::FingerprintReader::Direction::south_west,
         South           = biometry::devices::FingerprintReader::Direction::south,
         SouthEast       = biometry::devices::FingerprintReader::Direction::south_east,
         NorthWest       = biometry::devices::FingerprintReader::Direction::north_west,
@@ -54,26 +54,23 @@ public:
         West            = biometry::devices::FingerprintReader::Direction::west
     };
 
-    FingerprintReaderHints();
-    FingerprintReaderHints(const FingerprintReaderHints& rhs);
+    /// @brief FingerprintReader initializes a new instance with the given parent.
+    FingerprintReader(QObject* parent = nullptr);
 
-    Q_INVOKABLE bool hasMainClusterIdentified() const;
-    Q_INVOKABLE void setHasMainClusterIdentified(bool);
-
-    Q_INVOKABLE Direction suggestedDirectionOfNextTouch() const;
-    Q_INVOKABLE void setSuggestedDirectionOfNextTouch(Direction);
-
-    Q_INVOKABLE QList<QRect> masks() const;
-    Q_INVOKABLE void setMasks(QList<QRect>);
-
-private:
-    bool hasMainClusterIdentified_{false};
-    Direction suggestedDirectionOfNextTouch_{Direction::NotAvailable};
-    QList<QRect> masks_;
+    /// @brief isFingerPresent returns the key of the isFingerPresent hint.
+    Q_INVOKABLE QString isFingerPresent() const;
+    /// @brief hasMainClusterIdentified returns the key of the hasMainClusterIdentified hint.
+    Q_INVOKABLE QString hasMainClusterIdentified() const;
+    /// @brief suggestedNextDirection returns the key of the suggestedNextDirection hint.
+    Q_INVOKABLE QString suggestedNextDirection() const;
+    /// @brief estimatedFingerSize returns the key of the estimatedFingerSize hint.
+    Q_INVOKABLE QString estimatedFingerSize() const;
+    /// @brief masks returns the key of the masks hint.
+    Q_INVOKABLE QString masks() const;
 };
 }
 }
 
-Q_DECLARE_METATYPE(biometry::qml::FingerprintReaderHints)
+Q_DECLARE_METATYPE(biometry::qml::FingerprintReader::Direction)
 
 #endif // BIOMETRYD_QML_FINGERPRINT_READER_H_

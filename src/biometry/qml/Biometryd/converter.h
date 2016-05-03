@@ -39,9 +39,9 @@ struct Converter
     /// @brief convert returns a QRect with the same coordinates as rect.
     static QRect convert(const biometry::Rectangle& rect);
     /// @brief convert returns a QList<QRect> containing the rectangles given in rects.
-    static QList<QRect> convert(const std::vector<biometry::Rectangle>& rects);
+    static QVariantList convert(const std::vector<biometry::Rectangle>& rects);
     /// @brief convert returns the enum value correspondig to dir.
-    static FingerprintReaderHints::Direction convert(biometry::devices::FingerprintReader::Direction dir);
+    static FingerprintReader::Direction convert(biometry::devices::FingerprintReader::Direction dir);
 };
 }
 }

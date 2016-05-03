@@ -19,44 +19,52 @@
 
 #include <biometry/qml/Biometryd/fingerprint_reader.h>
 
-biometry::qml::FingerprintReaderHints::FingerprintReaderHints()
+biometry::qml::FingerprintReader::FingerprintReader(QObject* parent)
+    : QObject{parent}
 {
 }
 
-biometry::qml::FingerprintReaderHints::FingerprintReaderHints(const FingerprintReaderHints& rhs)
-    : QObject{},
-      hasMainClusterIdentified_{rhs.hasMainClusterIdentified_},
-      suggestedDirectionOfNextTouch_{rhs.suggestedDirectionOfNextTouch_},
-      masks_{rhs.masks_}
+QString biometry::qml::FingerprintReader::isFingerPresent() const
 {
+    static const QString s
+    {
+        biometry::devices::FingerprintReader::GuidedEnrollment::Hints::key_is_finger_present
+    };
+    return s;
 }
 
-bool biometry::qml::FingerprintReaderHints::hasMainClusterIdentified() const
+QString biometry::qml::FingerprintReader::hasMainClusterIdentified() const
 {
-    return hasMainClusterIdentified_;
+    static const QString s
+    {
+        biometry::devices::FingerprintReader::GuidedEnrollment::Hints::key_is_main_cluster_identified
+    };
+    return s;
 }
 
-void biometry::qml::FingerprintReaderHints::setHasMainClusterIdentified(bool value)
+QString biometry::qml::FingerprintReader::suggestedNextDirection() const
 {
-    hasMainClusterIdentified_ = value;
+    static const QString s
+    {
+        biometry::devices::FingerprintReader::GuidedEnrollment::Hints::key_suggested_next_direction
+    };
+    return s;
 }
 
-biometry::qml::FingerprintReaderHints::Direction biometry::qml::FingerprintReaderHints::suggestedDirectionOfNextTouch() const
+QString biometry::qml::FingerprintReader::estimatedFingerSize() const
 {
-    return suggestedDirectionOfNextTouch_;
+    static const QString s
+    {
+        biometry::devices::FingerprintReader::GuidedEnrollment::Hints::key_estimated_finger_size
+    };
+    return s;
 }
 
-void biometry::qml::FingerprintReaderHints::setSuggestedDirectionOfNextTouch(Direction d)
+QString biometry::qml::FingerprintReader::masks() const
 {
-    suggestedDirectionOfNextTouch_ = d;
-}
-
-QList<QRect> biometry::qml::FingerprintReaderHints::masks() const
-{
-    return masks_;
-}
-
-void biometry::qml::FingerprintReaderHints::setMasks(QList<QRect> masks)
-{
-    masks_ = masks;
+    static const QString s
+    {
+        biometry::devices::FingerprintReader::GuidedEnrollment::Hints::key_masks
+    };
+    return s;
 }

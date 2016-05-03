@@ -302,12 +302,12 @@ void biometry::qml::Plugin::registerTypes(const char *uri)
     qmlRegisterUncreatableType<biometry::qml::Identification>(uri, Plugin::major, Plugin::minor, "Identification", "Rely on Biometryd.instance");
     qmlRegisterUncreatableType<biometry::qml::Identifier>(uri, Plugin::major, Plugin::minor, "Identifier", "Rely on Biometryd.instance");
 
-    qmlRegisterUncreatableType<biometry::qml::FingerprintReaderHints>(uri, Plugin::major, Plugin::minor, "FingerprintReaderHints", "Rely on Biometryd.instance");
     qmlRegisterUncreatableType<biometry::qml::Operation>(uri, Plugin::major, Plugin::minor, "Operation", "Rely on Biometryd.instance");
     qmlRegisterUncreatableType<biometry::qml::SizeQuery>(uri, Plugin::major, Plugin::minor, "SizeQuery", "Rely on Biometryd.instance");
     qmlRegisterUncreatableType<biometry::qml::Enrollment>(uri, Plugin::major, Plugin::minor, "Enrollment", "Rely on Biometryd.instance");
     qmlRegisterUncreatableType<biometry::qml::Clearance>(uri, Plugin::major, Plugin::minor, "Clearance", "Rely on Biometryd.instance");
     qmlRegisterUncreatableType<biometry::qml::TemplateStore>(uri, Plugin::major, Plugin::minor, "TemplateStore", "Rely on Biometryd.instance");
+
     qmlRegisterSingletonType<biometry::qml::Service>(
                 uri, Plugin::major, Plugin::minor, "Biometryd",
                 [](QQmlEngine*, QJSEngine*) -> QObject*
@@ -316,4 +316,9 @@ void biometry::qml::Plugin::registerTypes(const char *uri)
                         new biometry::qml::Service{biometry::dbus::Service::create_stub()} :
                         new biometry::qml::Service{std::make_shared<for_testing::Service>()};
                 });
+
+    qmlRegisterSingletonType<biometry::qml::FingerprintReader>(uri, Plugin::major, Plugin::minor, "FingerprintReader", [](QQmlEngine*, QJSEngine*) -> QObject*
+    {
+        return new biometry::qml::FingerprintReader{};
+    });
 }

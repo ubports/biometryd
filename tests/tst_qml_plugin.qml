@@ -26,17 +26,34 @@ TestCase {
 
     Observer {
         id: observer
-        onStarted: { console.log("started") }
-        onCanceled: { console.log("canceled") }
-        onFailed: { console.log("failed") }
-        onProgressed: {
-            console.log("progressed: ", percent.toFixed(2));
-            if (hints["fingerprintReaderHints"]) {
-                console.log(hints["fingerprintReaderHints"].hasMainClusterIdentified)
-                console.log(hints["fingerprintReaderHints"])
-            }
+        onStarted: {
+            console.log("started")
         }
-        onSucceeded: {console.log("succeeded") }
+        onCanceled: {
+            console.log("canceled")
+        }
+        onFailed: {
+            console.log("failed")
+        }
+        onProgressed: {
+            // biometryd API users can use details to receive
+            // device/operation-specific information about the
+            // operation. We illustrate the case of a FingerprintReader here.
+            console.log("progressed: ", percent.toFixed(2));
+
+            var isFingerPresent             = details[FingerprintReader.isFingerPresent]
+            var hasMainClusterIdentified    = details[FingerprintReader.hasMainClusterIdentified]
+            var suggestedNextDirection      = details[FingerprintReader.suggestedNextDirection]
+            var masks                       = details[FingerprintReader.masks]
+
+            console.log("isFingerPresent:",            isFingerPresent,
+                        "hasMainClusterIdentified:",   hasMainClusterIdentified,
+                        "suggestedNextDirection:",     suggestedNextDirection,
+                        "masks:",                      masks);
+        }
+        onSucceeded: {
+            console.log("succeeded")
+        }
     }
 
     User {
@@ -57,17 +74,29 @@ TestCase {
 
     function test_templateStoreOfDefaultDeviceIsAvailable() {
         var ts = Biometryd.defaultDevice.templateStore;
-        ts.enroll(user).start(observer);
-        spy.wait(5000);
-        ts.size(user).start(observer);
-        spy.wait(5000);
-        ts.clear(user).start(observer);
-        spy.wait(5000);
+
+        // The API is structured around the concept of an Operation.
+        // An operation is asynchronous. Its state can be observed with the help
+        // of an Observer.
+        {
+            var op = ts.enroll(user); op.start(observer);
+            spy.wait(5000);
+        }
+
+        {
+            op = ts.size(user); op.start(observer);
+            spy.wait(5000);
+        }
+
+        {
+            op = ts.clear(user); op.start(observer);
+            spy.wait(5000);
+        }
     }
 
     function test_identifierOfDefaultDeviceIsAvailable() {
         var identifier = Biometryd.defaultDevice.identifier;
-        identifier.identifyUser().start(observer);
+        var op = identifier.identifyUser(); op.start(observer);
         spy.wait(5000);
     }
 }
