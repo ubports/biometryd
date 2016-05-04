@@ -17,13 +17,18 @@
  *
  */
 
-#include <util/atomic_counter.h>
+#include <biometry/dispatching_service.h>
 
-util::AtomicCounter::AtomicCounter(uint64_t value) : counter{value}
+#include <biometry/devices/dispatching.h>
+
+#include <memory>
+
+biometry::DispatchingService::DispatchingService(const std::shared_ptr<biometry::util::Dispatcher>& dispatcher, const std::shared_ptr<Device>& default_device)
+    : default_device_{std::make_shared<devices::Dispatching>(dispatcher, default_device)}
 {
 }
 
-std::uint64_t util::AtomicCounter::increment()
+std::shared_ptr<biometry::Device> biometry::DispatchingService::default_device() const
 {
-    return counter++;
+    return default_device_;
 }

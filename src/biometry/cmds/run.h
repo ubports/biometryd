@@ -17,13 +17,12 @@
  *
  */
 
-#ifndef BIOMETRYD_CMDS_IDENTIFY_H_
-#define BIOMETRYD_CMDS_IDENTIFY_H_
+#ifndef BIOMETRYD_CMDS_RUN_H_
+#define BIOMETRYD_CMDS_RUN_H_
 
 #include <biometry/daemon.h>
-#include <biometry/user.h>
 
-#include <boost/filesystem.hpp>
+#include <core/dbus/bus.h>
 
 #include <functional>
 #include <iostream>
@@ -33,22 +32,25 @@ namespace biometry
 {
 namespace cmds
 {
-/// @brief Identify requests identification of the user.
-class Identify : public biometry::Daemon::Command
+class Run : public biometry::Daemon::Command
 {
 public:
-    /// @brief Enroll creates a new instance, initializing flags to default values.
-    Identify();
+    /// @brief BusFactory models creation of bus instances.
+    typedef std::function<core::dbus::Bus::Ptr()> BusFactory;
 
-    // From Daemon::Command.
+    /// @brief system_bus_factory returns a BusFactory creating connections to the system bus.
+    static BusFactory system_bus_factory();
+
+    Run(const BusFactory& bus_factory = system_bus_factory());
+
     Info info() const override;
     int run() override;
 
 private:
-    TypedFlag<std::string>::Ptr device;
-    TypedFlag<boost::filesystem::path>::Ptr config;
+    BusFactory bus_factory;
+    TypedFlag<std::string>::Ptr config;
 };
 }
 }
 
-#endif // BIOMETRYD_CMDS_IDENTIFY_H_
+#endif // BIOMETRYD_CMDS_RUN_H_

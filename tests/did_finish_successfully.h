@@ -124,6 +124,14 @@ void PrintTo(const Result& result, std::ostream* os)
 
 namespace testing
 {
+::testing::AssertionResult did_exit(const core::posix::wait::Result& result)
+{
+    if (result.status != core::posix::wait::Result::Status::exited)
+        ::testing::AssertionFailure() << "Process did not exit: " << testing::PrintToString(result);
+
+    return ::testing::AssertionSuccess();
+}
+
 ::testing::AssertionResult did_finish_successfully(const core::posix::wait::Result& result)
 {
     if (result.status != core::posix::wait::Result::Status::exited)

@@ -17,13 +17,15 @@
  *
  */
 
-#ifndef UTIL_ONCE_H_
-#define UTIL_ONCE_H_
+#ifndef BIOMETRY_UTIL_ONCE_H_
+#define BIOMETRY_UTIL_ONCE_H_
 
 #include <boost/optional.hpp>
 
 #include <mutex>
 
+namespace biometry
+{
 namespace util
 {
 /// @brief Once<T> models an optional value that is initialized at most once.
@@ -57,5 +59,6 @@ private:
     mutable boost::optional<T> value;
 };
 }
+}
 
-#endif // UTIL_ONCE_H_
+#endif // BIOMETRY_UTIL_ONCE_H_

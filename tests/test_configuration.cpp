@@ -17,7 +17,9 @@
  *
  */
 
-#include <util/configuration.h>
+#include <biometry/util/configuration.h>
+#include <biometry/util/json_configuration_builder.h>
+#include <biometry/util/streaming_configuration_builder.h>
 
 #include <gtest/gtest.h>
 
@@ -25,38 +27,38 @@
 
 TEST(Configuration, default_constructor_yields_valid_configuration)
 {
-    util::Configuration config;
+    biometry::util::Configuration config;
 }
 
 TEST(ConfigurationNode, setting_value_of_node_works)
 {
-    util::Configuration config;
-    config.children()["test"] = util::Configuration::Node{util::Variant::i(42)};
+    biometry::util::Configuration config;
+    config.children()["test"] = biometry::util::Configuration::Node{biometry::Variant::i(42)};
     ASSERT_EQ(1, config.children().count("test"));
     ASSERT_EQ(42, config.children().at("test").value().integer());
 }
 
 TEST(Variant, constructors_yield_correct_type_and_value)
 {
-    {const bool rv = true; util::Variant v{rv}; EXPECT_EQ(util::Variant::Type::boolean, v.type()); EXPECT_EQ(rv, v.boolean());}
-    {const std::int64_t rv = 42; util::Variant v{rv}; EXPECT_EQ(util::Variant::Type::integer, v.type()); EXPECT_EQ(rv, v.integer());}
-    {const double rv = 42.f; util::Variant v{rv}; EXPECT_EQ(util::Variant::Type::floating_point, v.type()); EXPECT_EQ(rv, v.floating_point());}
-    {const std::string rv = "42"; util::Variant v{rv}; EXPECT_EQ(util::Variant::Type::string, v.type()); EXPECT_EQ(rv, v.string());}
-    {const std::vector<std::uint8_t> rv = {4, 2}; util::Variant v{rv}; EXPECT_EQ(util::Variant::Type::blob, v.type()); EXPECT_EQ(rv, v.blob());}
+    {const bool rv = true; biometry::Variant v{rv}; EXPECT_EQ(biometry::Variant::Type::boolean, v.type()); EXPECT_EQ(rv, v.boolean());}
+    {const std::int64_t rv = 42; biometry::Variant v{rv}; EXPECT_EQ(biometry::Variant::Type::integer, v.type()); EXPECT_EQ(rv, v.integer());}
+    {const double rv = 42.f; biometry::Variant v{rv}; EXPECT_EQ(biometry::Variant::Type::floating_point, v.type()); EXPECT_EQ(rv, v.floating_point());}
+    {const std::string rv = "42"; biometry::Variant v{rv}; EXPECT_EQ(biometry::Variant::Type::string, v.type()); EXPECT_EQ(rv, v.string());}
+    {const std::vector<std::uint8_t> rv = {4, 2}; biometry::Variant v{rv}; EXPECT_EQ(biometry::Variant::Type::blob, v.type()); EXPECT_EQ(rv, v.blob());}
 }
 
 TEST(Variant, named_constructors_yield_correct_type_and_value)
 {
-    {const bool rv = true; auto v = util::Variant::b(rv); EXPECT_EQ(util::Variant::Type::boolean, v.type()); EXPECT_EQ(rv, v.boolean());}
-    {const std::int64_t rv = 42; auto v = util::Variant::i(rv); EXPECT_EQ(util::Variant::Type::integer, v.type()); EXPECT_EQ(rv, v.integer());}
-    {const double rv = 42.f; auto v = util::Variant::d(rv); EXPECT_EQ(util::Variant::Type::floating_point, v.type()); EXPECT_EQ(rv, v.floating_point());}
-    {const std::string rv = "42"; auto v = util::Variant::s(rv); EXPECT_EQ(util::Variant::Type::string, v.type()); EXPECT_EQ(rv, v.string());}
-    {const std::vector<std::uint8_t> rv = {4, 2}; auto v = util::Variant::bl(rv); EXPECT_EQ(util::Variant::Type::blob, v.type()); EXPECT_EQ(rv, v.blob());}
+    {const bool rv = true; auto v = biometry::Variant::b(rv); EXPECT_EQ(biometry::Variant::Type::boolean, v.type()); EXPECT_EQ(rv, v.boolean());}
+    {const std::int64_t rv = 42; auto v = biometry::Variant::i(rv); EXPECT_EQ(biometry::Variant::Type::integer, v.type()); EXPECT_EQ(rv, v.integer());}
+    {const double rv = 42.f; auto v = biometry::Variant::d(rv); EXPECT_EQ(biometry::Variant::Type::floating_point, v.type()); EXPECT_EQ(rv, v.floating_point());}
+    {const std::string rv = "42"; auto v = biometry::Variant::s(rv); EXPECT_EQ(biometry::Variant::Type::string, v.type()); EXPECT_EQ(rv, v.string());}
+    {const std::vector<std::uint8_t> rv = {4, 2}; auto v = biometry::Variant::bl(rv); EXPECT_EQ(biometry::Variant::Type::blob, v.type()); EXPECT_EQ(rv, v.blob());}
 }
 
 TEST(Variant, stream_insertion_operator_works)
 {
-    util::Variant v; std::cout << v << std::endl;
+    biometry::Variant v; std::cout << v << std::endl;
 }
 
 TEST(JsonConfigurationBuilder, works_for_valid_json)
@@ -91,7 +93,8 @@ TEST(JsonConfigurationBuilder, works_for_valid_json)
         out << json;
     }
 
-    util::JsonConfigurationBuilder builder{"test.json"};
+    std::ifstream in{"test.json"};
+    biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder> builder{in};
     auto config = builder.build_configuration();
 
     EXPECT_EQ(1, config.children().count("devices"));

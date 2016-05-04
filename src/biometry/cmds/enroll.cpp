@@ -24,11 +24,17 @@
 
 #include <biometry/cmds/enroll.h>
 
+#include <biometry/util/configuration.h>
+#include <biometry/util/json_configuration_builder.h>
+#include <biometry/util/streaming_configuration_builder.h>
+
+#include <fstream>
 #include <iostream>
 #include <memory>
 
 biometry::cmds::Enroll::Enroll()
     : device{biometry::make_command_flag<std::string>(Name{"device"}, Description{"The device to enroll to"})},
+      config{std::make_shared<TypedFlag<boost::filesystem::path>>(Command::Name{"config"}, Command::Description{"The daemon configuration"})},
       user{biometry::make_command_flag<biometry::User>(Name{"user"}, Description{"The user to enroll for"})}
 {
     user->value(biometry::User::current());
@@ -53,8 +59,16 @@ int biometry::cmds::Enroll::run()
         return EXIT_FAILURE;
     }
 
+    using StreamingJsonConfigurationBuilder = util::StreamingConfigurationBuilder<util::JsonConfigurationBuilder>;
+    StreamingJsonConfigurationBuilder builder
+    {
+         config->value() ?
+             StreamingJsonConfigurationBuilder::make_streamer(config->value().get()) :
+             StreamingJsonConfigurationBuilder::make_streamer(std::cin)
+    };
+
     auto descriptor = biometry::device_registry().at(*device->value());
-    auto device = descriptor->create();
+    auto device = descriptor->create(builder.build_configuration());
 
     auto op = device->template_store().enroll(biometry::Application{"system"}, biometry::User::current());
 

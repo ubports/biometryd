@@ -65,6 +65,13 @@ bool operator<(const SizeConstrainedString<max>& lhs, const SizeConstrainedStrin
     return lhs.as_string() < rhs.as_string();
 }
 
+template<std::size_t max>
+bool operator==(const SizeConstrainedString<max>& lhs, const SizeConstrainedString<max>& rhs)
+{
+    return lhs.as_string() == rhs.as_string();
+}
+
+
 class BIOMETRY_DLL_PUBLIC Daemon : public DoNotCopyOrMove
 {
 public:
@@ -158,7 +165,7 @@ public:
     Daemon();
 
     /// @brief run executes the daemon.
-    int run(int argc, char** argv);
+    int run(const std::vector<std::string>& args);
 
 private:
     void install_command(const Command::Ptr& command);

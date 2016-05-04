@@ -17,38 +17,30 @@
  *
  */
 
-#ifndef BIOMETRYD_CMDS_IDENTIFY_H_
-#define BIOMETRYD_CMDS_IDENTIFY_H_
+#ifndef BIOMETRYD_DEVICES_DUMMY_H_
+#define BIOMETRYD_DEVICES_DUMMY_H_
 
-#include <biometry/daemon.h>
-#include <biometry/user.h>
-
-#include <boost/filesystem.hpp>
-
-#include <functional>
-#include <iostream>
-#include <memory>
+#include <biometry/device.h>
 
 namespace biometry
 {
-namespace cmds
+namespace devices
 {
-/// @brief Identify requests identification of the user.
-class Identify : public biometry::Daemon::Command
+/// @brief Dummy is a biometry::Device.
+class BIOMETRY_DLL_PUBLIC Dummy : public biometry::Device
 {
 public:
-    /// @brief Enroll creates a new instance, initializing flags to default values.
-    Identify();
+    static constexpr const char* id{"biometry::devices::Dummy"};
 
-    // From Daemon::Command.
-    Info info() const override;
-    int run() override;
+    /// @brief Dummy initializes a new instance.
+    Dummy();
 
-private:
-    TypedFlag<std::string>::Ptr device;
-    TypedFlag<boost::filesystem::path>::Ptr config;
+    // From biometry::Device
+    TemplateStore& template_store() override;
+    Identifier& identifier() override;
+    Verifier& verifier() override;
 };
 }
 }
 
-#endif // BIOMETRYD_CMDS_IDENTIFY_H_
+#endif // BIOMETRYD_DEVICES_DUMMY_H_

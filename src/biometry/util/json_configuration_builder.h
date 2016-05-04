@@ -17,39 +17,33 @@
  *
  */
 
-#ifndef UTIL_ATOMIC_COUNTER_H_
-#define UTIL_ATOMIC_COUNTER_H_
+#ifndef BIOMETRY_UTIL_JSON_CONFIGURATION_BUILDER_H_
+#define BIOMETRY_UTIL_JSON_CONFIGURATION_BUILDER_H_
 
+#include <biometry/util/configuration.h>
 #include <biometry/visibility.h>
 
-#include <cstdint>
+#include <iosfwd>
+#include <map>
+#include <string>
 
-#include <atomic>
-
+namespace biometry
+{
 namespace util
 {
-/// @brief AtomicCounter models an atomic counter.
-class BIOMETRY_DLL_PUBLIC AtomicCounter
+/// @brief JsonConfigurationBuilder implements ConfigurationBuilder for sources in JSON format.
+class BIOMETRY_DLL_PUBLIC JsonConfigurationBuilder : public ConfigurationBuilder
 {
 public:
-    /// @brief AtomicCounter initializes a new instance to the given value.
-    explicit AtomicCounter(std::uint64_t value = 0);
-
-    /// @brief increment increments the value of the counter and returns the previously stored value.
-    std::uint64_t increment();
+    /// @brief JsonConfigurationBuilder initializes a new instance reading from the given input stream.
+    JsonConfigurationBuilder(std::istream& in);
+    /// build_configuration returns a Configuration assembled from a JSON-formatted file.
+    Configuration build_configuration() override;
 
 private:
-    /// @cond
-    std::atomic<std::uint64_t> counter;
-    /// @endcond
+    std::istream& in;
 };
-
-template<typename Tag>
-inline AtomicCounter& counter()
-{
-    static AtomicCounter instance;
-    return instance;
 }
 }
 
-#endif // UTIL_ATOMIC_COUNTER_H_
+#endif // BIOMETRY_UTIL_CONFIGURATION_H_

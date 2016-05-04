@@ -17,38 +17,32 @@
  *
  */
 
-#ifndef BIOMETRYD_CMDS_IDENTIFY_H_
-#define BIOMETRYD_CMDS_IDENTIFY_H_
+#ifndef BIOMETRYD_DISPATCHING_SERVICE_H_
+#define BIOMETRYD_DISPATCHING_SERVICE_H_
 
-#include <biometry/daemon.h>
-#include <biometry/user.h>
+#include <biometry/service.h>
 
-#include <boost/filesystem.hpp>
+#include <biometry/devices/dispatching.h>
 
-#include <functional>
-#include <iostream>
+#include <boost/asio.hpp>
+
 #include <memory>
 
 namespace biometry
 {
-namespace cmds
-{
-/// @brief Identify requests identification of the user.
-class Identify : public biometry::Daemon::Command
+/// @brief DispatchingService is biometry::Service wrapping device impls as a devices::Dispatching device.
+class BIOMETRY_DLL_PUBLIC DispatchingService : public Service
 {
 public:
-    /// @brief Enroll creates a new instance, initializing flags to default values.
-    Identify();
+    /// @brief DispatchingService initializes a new instance with the given default_device.
+    DispatchingService(const std::shared_ptr<biometry::util::Dispatcher>& dispatcher, const std::shared_ptr<Device>& default_device);
 
-    // From Daemon::Command.
-    Info info() const override;
-    int run() override;
+    // From Service.
+    std::shared_ptr<Device> default_device() const override;
 
-private:
-    TypedFlag<std::string>::Ptr device;
-    TypedFlag<boost::filesystem::path>::Ptr config;
+protected:
+    devices::Dispatching::Ptr default_device_;
 };
 }
-}
 
-#endif // BIOMETRYD_CMDS_IDENTIFY_H_
+#endif // BIOMETRYD_DISPATCHING_SERVICE_H_

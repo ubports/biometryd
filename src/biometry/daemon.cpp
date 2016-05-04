@@ -23,6 +23,7 @@
 #include <biometry/cmds/help.h>
 #include <biometry/cmds/identify.h>
 #include <biometry/cmds/list_devices.h>
+#include <biometry/cmds/run.h>
 #include <biometry/cmds/version.h>
 
 #include <boost/program_options.hpp>
@@ -65,6 +66,7 @@ biometry::Daemon::Daemon()
     install_command(std::make_shared<cmds::Enroll>());
     install_command(std::make_shared<cmds::Identify>());
     install_command(std::make_shared<cmds::ListDevices>());
+    install_command(std::make_shared<cmds::Run>());
     install_command(std::make_shared<cmds::Version>());
 
     help = std::make_shared<cmds::Help>([this](const cmds::Help::Enumerator& enumerator)
@@ -74,7 +76,7 @@ biometry::Daemon::Daemon()
     });
 }
 
-int biometry::Daemon::run(int argc, char** argv)
+int biometry::Daemon::run(const std::vector<std::string>& args)
 {
     po::positional_options_description pdesc;
     pdesc.add("command", 1);
@@ -116,7 +118,7 @@ int biometry::Daemon::run(int argc, char** argv)
     try
     {
         po::variables_map vm;
-        po::store(po::command_line_parser(argc, argv).options(desc).positional(pdesc).run(), vm);
+        po::store(po::command_line_parser(args).options(desc).positional(pdesc).run(), vm);
         po::notify(vm);
 
         auto command = vm["command"].as<std::string>();
@@ -126,8 +128,9 @@ int biometry::Daemon::run(int argc, char** argv)
 
         return cmds[command]->run();
     }
-    catch (...)
+    catch (const std::exception& e)
     {
+        std::cout << e.what() << std::endl;
         return help->run();
     }
 }

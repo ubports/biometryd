@@ -51,6 +51,8 @@ target_link_libraries(biometryd_devices_plugin_dl gtest gmock)
 
 BIOMETRYD_ADD_TEST(test_atomic_counter test_atomic_counter.cpp)
 BIOMETRYD_ADD_TEST(test_configuration test_configuration.cpp)
+BIOMETRYD_ADD_TEST(test_daemon test_daemon.cpp)
+BIOMETRYD_ADD_TEST(test_dispatching_device_and_service test_dispatching_service_and_device.cpp)
 BIOMETRYD_ADD_TEST(test_dbus_codec test_dbus_codec.cpp)
 BIOMETRYD_ADD_TEST(test_dbus_stub_skeleton test_dbus_stub_skeleton.cpp)
 BIOMETRYD_ADD_TEST(test_dictionary test_dictionary.cpp)

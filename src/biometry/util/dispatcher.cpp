@@ -17,38 +17,31 @@
  *
  */
 
-#ifndef BIOMETRYD_CMDS_IDENTIFY_H_
-#define BIOMETRYD_CMDS_IDENTIFY_H_
+#include <biometry/util/dispatcher.h>
 
-#include <biometry/daemon.h>
-#include <biometry/user.h>
-
-#include <boost/filesystem.hpp>
-
-#include <functional>
-#include <iostream>
-#include <memory>
-
-namespace biometry
+namespace
 {
-namespace cmds
-{
-/// @brief Identify requests identification of the user.
-class Identify : public biometry::Daemon::Command
+struct AsioStrandDispatcher : public biometry::util::Dispatcher
 {
 public:
-    /// @brief Enroll creates a new instance, initializing flags to default values.
-    Identify();
+    AsioStrandDispatcher(const std::shared_ptr<biometry::Runtime>& rt)
+        : rt{rt},
+          strand{rt->service()}
+    {
+    }
 
-    // From Daemon::Command.
-    Info info() const override;
-    int run() override;
+    void dispatch(const Task &task) override
+    {
+        strand.post(task);
+    }
 
 private:
-    TypedFlag<std::string>::Ptr device;
-    TypedFlag<boost::filesystem::path>::Ptr config;
+    std::shared_ptr<biometry::Runtime> rt;
+    boost::asio::io_service::strand strand;
 };
 }
-}
 
-#endif // BIOMETRYD_CMDS_IDENTIFY_H_
+std::shared_ptr<biometry::util::Dispatcher> biometry::util::create_dispatcher_for_runtime(const std::shared_ptr<biometry::Runtime>& rt)
+{
+    return std::make_shared<AsioStrandDispatcher>(rt);
+}

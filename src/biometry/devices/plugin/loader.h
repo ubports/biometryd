@@ -25,7 +25,7 @@
 
 #include <biometry/devices/plugin/interface.h>
 
-#include <util/dynamic_library.h>
+#include <biometry/util/dynamic_library.h>
 
 #include <boost/filesystem.hpp>
 

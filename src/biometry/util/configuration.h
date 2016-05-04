@@ -17,20 +17,23 @@
  *
  */
 
-#ifndef UTIL_CONFIGURATION_H_
-#define UTIL_CONFIGURATION_H_
+#ifndef BIOMETRY_UTIL_CONFIGURATION_H_
+#define BIOMETRY_UTIL_CONFIGURATION_H_
 
 #include <biometry/do_not_copy_or_move.h>
-#include <util/variant.h>
+#include <biometry/variant.h>
+#include <biometry/visibility.h>
 
 #include <boost/filesystem.hpp>
 
 #include <map>
 #include <string>
 
+namespace biometry
+{
 namespace util
 {
-class Configuration
+class BIOMETRY_DLL_PUBLIC Configuration
 {
 public:
     /// @cond
@@ -74,7 +77,7 @@ private:
 };
 
 /// @brief ConfigurationBuilder models loading of configuration from arbitrary sources.
-class ConfigurationBuilder : public biometry::DoNotCopyOrMove
+class BIOMETRY_DLL_PUBLIC ConfigurationBuilder : public biometry::DoNotCopyOrMove
 {
 public:
     /// @brief build_configuration returns a Configuration instance.
@@ -86,19 +89,7 @@ protected:
     ConfigurationBuilder() = default;
     /// @endcond
 };
-
-/// @brief JsonConfigurationBuilder implements ConfigurationBuilder for sources in JSON format.
-class JsonConfigurationBuilder : public ConfigurationBuilder
-{
-public:
-    /// @brief JsonConfigurationBuilder creates a new instance for the given path.
-    JsonConfigurationBuilder(const boost::filesystem::path& path);
-    /// build_configuration returns a Configuration assembled from a JSON-formatted file.
-    Configuration build_configuration() override;
-
-private:
-    boost::filesystem::path path;
-};
+}
 }
 
-#endif // UTIL_CONFIGURATION_H_
+#endif // BIOMETRY_UTIL_CONFIGURATION_H_

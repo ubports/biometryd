@@ -17,38 +17,42 @@
  *
  */
 
-#ifndef UTIL_SYNCHRONIZED_H_
-#define UTIL_SYNCHRONIZED_H_
+#ifndef BIOMETRY_UTIL_ATOMIC_COUNTER_H_
+#define BIOMETRY_UTIL_ATOMIC_COUNTER_H_
 
-#include <mutex>
-#include <type_traits>
+#include <biometry/visibility.h>
 
+#include <cstdint>
+
+#include <atomic>
+
+namespace biometry
+{
 namespace util
 {
-/// @brief Synchronized<T> bundles together a value and a mutex guarding it.
-template<typename T>
-class Synchronized
+/// @brief AtomicCounter models an atomic counter.
+class BIOMETRY_DLL_PUBLIC AtomicCounter
 {
 public:
-    typedef T ValueType;
+    /// @brief AtomicCounter initializes a new instance to the given value.
+    explicit AtomicCounter(std::uint64_t value = 0);
 
-    /// @brief Synchronized creates a new instance, initializing the value to t.
-    explicit Synchronized(const T& t = T{}) : value{t}
-    {
-    }
-
-    /// @brief synchronized invokes the given functor f with the locked, mutable instance managed by this Synchronized<T> instance.
-    template<typename F>
-    void synchronized(const F& f)
-    {
-        std::lock_guard<std::mutex> lg{guard};
-        f(value);
-    }
+    /// @brief increment increments the value of the counter and returns the previously stored value.
+    std::uint64_t increment();
 
 private:
-    std::mutex guard;
-    T value;
+    /// @cond
+    std::atomic<std::uint64_t> counter;
+    /// @endcond
 };
+
+template<typename Tag>
+inline AtomicCounter& counter()
+{
+    static AtomicCounter instance;
+    return instance;
+}
+}
 }
 
-#endif // UTIL_SYNCHRONIZED_H_
+#endif // BIOMETRY_UTIL_ATOMIC_COUNTER_H_

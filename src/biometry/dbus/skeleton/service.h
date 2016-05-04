@@ -25,7 +25,7 @@
 
 #include <biometry/dbus/skeleton/device.h>
 
-#include <util/once.h>
+#include <biometry/util/once.h>
 
 #include <core/dbus/object.h>
 #include <core/dbus/service.h>
