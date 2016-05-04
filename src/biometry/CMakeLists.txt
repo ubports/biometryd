@@ -8,7 +8,6 @@ add_library(
   biometry SHARED
 
   application.cpp
-  configuration.h
   daemon.h
   daemon.cpp
   device_registry.h
