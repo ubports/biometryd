@@ -20,6 +20,8 @@
 #include <biometry/devices/plugin/device.h>
 #include <biometry/util/dynamic_library.h>
 
+#include <biometry/device_registry.h>
+
 #include <gmock/gmock.h>
 
 #include <fstream>
@@ -43,6 +45,11 @@ struct MockPluginLoader : public biometry::devices::plugin::Loader
             verify_and_load,
             std::shared_ptr<biometry::Device> (const std::shared_ptr<biometry::util::DynamicLibrary::Api>&, const boost::filesystem::path&));
 };
+}
+
+TEST(PluginDevice, is_known_to_device_registry)
+{
+    EXPECT_TRUE(biometry::device_registry().count(biometry::devices::plugin::id) > 0);
 }
 
 TEST(PluginDeviceLoad, calls_into_loader)

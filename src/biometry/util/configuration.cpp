@@ -26,6 +26,14 @@
 #include <string>
 #include <tuple>
 
+namespace
+{
+const biometry::util::Configuration::Node& null()
+{
+    static const biometry::util::Configuration::Node instance;
+    return instance;
+}
+}
 biometry::util::Configuration::Node::Node(const Variant &value)
     : value_{value}
 {
@@ -70,4 +78,13 @@ biometry::util::Configuration::Children& biometry::util::Configuration::children
 biometry::util::Configuration::Node& biometry::util::Configuration::operator[](const std::string& name)
 {
     return children_[name];
+}
+
+const biometry::util::Configuration::Node& biometry::util::Configuration::operator[](const std::string& name) const
+{
+    auto it = children_.find(name);
+    if (it != children_.end())
+        return it->second;
+
+    return null();
 }

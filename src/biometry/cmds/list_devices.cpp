@@ -42,7 +42,7 @@ int biometry::cmds::ListDevices::run()
 {
     std::cout << "Known devices:" << std::endl;
     for (const auto& pair : biometry::device_registry())
-        std::cout << " - " << pair.second->name() << "\t" << pair.second->description() << std::endl;
+        std::cout << " - " << pair.first << "\t" << pair.second->description() << std::endl;
 
     return 0;
 }
