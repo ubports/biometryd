@@ -17,18 +17,18 @@
  *
  */
 
-#include <util/atomic_counter.h>
+#include <biometry/util/atomic_counter.h>
 
 #include <gtest/gtest.h>
 
 TEST(AtomicCounter, initializes_to_zero_by_default)
 {
-    util::AtomicCounter counter;
+    biometry::util::AtomicCounter counter;
     EXPECT_EQ(0, counter.increment());
 }
 
 TEST(AtomicCounter, returns_previous_value_on_increment)
 {
-    util::AtomicCounter counter;
+    biometry::util::AtomicCounter counter;
     EXPECT_EQ(0, counter.increment());
 }

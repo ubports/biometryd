@@ -17,38 +17,13 @@
  *
  */
 
-#ifndef BIOMETRYD_CMDS_IDENTIFY_H_
-#define BIOMETRYD_CMDS_IDENTIFY_H_
+#include <biometry/util/atomic_counter.h>
 
-#include <biometry/daemon.h>
-#include <biometry/user.h>
-
-#include <boost/filesystem.hpp>
-
-#include <functional>
-#include <iostream>
-#include <memory>
-
-namespace biometry
+biometry::util::AtomicCounter::AtomicCounter(uint64_t value) : counter{value}
 {
-namespace cmds
-{
-/// @brief Identify requests identification of the user.
-class Identify : public biometry::Daemon::Command
-{
-public:
-    /// @brief Enroll creates a new instance, initializing flags to default values.
-    Identify();
-
-    // From Daemon::Command.
-    Info info() const override;
-    int run() override;
-
-private:
-    TypedFlag<std::string>::Ptr device;
-    TypedFlag<boost::filesystem::path>::Ptr config;
-};
-}
 }
 
-#endif // BIOMETRYD_CMDS_IDENTIFY_H_
+std::uint64_t biometry::util::AtomicCounter::increment()
+{
+    return counter++;
+}

@@ -25,7 +25,7 @@
 #include <core/dbus/object.h>
 #include <core/dbus/service.h>
 
-#include <util/synchronized.h>
+#include <biometry/util/synchronized.h>
 
 #include <unordered_map>
 
@@ -56,7 +56,7 @@ public:
     Operation<Identification>::Ptr identify_user(const Application& app, const Reason& reason) override;
 
 private:
-    typedef util::Synchronized<std::unordered_map<core::dbus::types::ObjectPath, Operation<Identification>::Ptr>> IdentificationOps;
+    typedef biometry::util::Synchronized<std::unordered_map<core::dbus::types::ObjectPath, Operation<Identification>::Ptr>> IdentificationOps;
 
     /// @brief Service creates a new instance for the given remote service and object.
     Identifier(const core::dbus::Bus::Ptr& bus, const core::dbus::Service::Ptr& service, const core::dbus::Object::Ptr& object, const std::reference_wrapper<biometry::Identifier>& impl);

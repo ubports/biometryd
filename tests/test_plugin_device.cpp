@@ -18,7 +18,7 @@
  */
 
 #include <biometry/devices/plugin/device.h>
-#include <util/dynamic_library.h>
+#include <biometry/util/dynamic_library.h>
 
 #include <gmock/gmock.h>
 
@@ -29,11 +29,11 @@
 
 namespace
 {
-struct MockDynamicLibraryApi : public util::DynamicLibrary::Api
+struct MockDynamicLibraryApi : public biometry::util::DynamicLibrary::Api
 {
-    MOCK_CONST_METHOD1(open, util::DynamicLibrary::Handle(const boost::filesystem::path& path));
-    MOCK_CONST_METHOD1(close, void(const util::DynamicLibrary::Handle&));
-    MOCK_CONST_METHOD2(sym, util::DynamicLibrary::Symbol(const util::DynamicLibrary::Handle&, const std::string& symbol));
+    MOCK_CONST_METHOD1(open, biometry::util::DynamicLibrary::Handle(const boost::filesystem::path& path));
+    MOCK_CONST_METHOD1(close, void(const biometry::util::DynamicLibrary::Handle&));
+    MOCK_CONST_METHOD2(sym, biometry::util::DynamicLibrary::Symbol(const biometry::util::DynamicLibrary::Handle&, const std::string& symbol));
     MOCK_CONST_METHOD0(error, std::string());
 };
 
@@ -41,7 +41,7 @@ struct MockPluginLoader : public biometry::devices::plugin::Loader
 {
     MOCK_CONST_METHOD2(
             verify_and_load,
-            std::shared_ptr<biometry::Device> (const std::shared_ptr<util::DynamicLibrary::Api>&, const boost::filesystem::path&));
+            std::shared_ptr<biometry::Device> (const std::shared_ptr<biometry::util::DynamicLibrary::Api>&, const boost::filesystem::path&));
 };
 }
 
@@ -49,7 +49,7 @@ TEST(PluginDeviceLoad, calls_into_loader)
 {
     using namespace testing;
 
-    std::shared_ptr<util::DynamicLibrary::Api> api = std::make_shared<NiceMock<MockDynamicLibraryApi>>();
+    std::shared_ptr<biometry::util::DynamicLibrary::Api> api = std::make_shared<NiceMock<MockDynamicLibraryApi>>();
     const boost::filesystem::path path{"/tmp/does/not/exist/module.so"};
 
     MockPluginLoader loader;
@@ -63,7 +63,7 @@ TEST(NonVerifyingLoader, can_load_plugin)
     const auto p = testing::runtime_dir() / "libbiometryd_devices_plugin_dl.so";
 
     biometry::devices::plugin::NonVerifyingLoader loader;
-    EXPECT_NO_THROW(loader.verify_and_load(util::glibc::dl_api(), p));
+    EXPECT_NO_THROW(loader.verify_and_load(biometry::util::glibc::dl_api(), p));
 }
 
 TEST(ElfDescriptorLoader, can_load_from_plugin)

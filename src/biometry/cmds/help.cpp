@@ -47,5 +47,5 @@ int biometry::cmds::Help::run()
         std::cout << "  " << command->info().name << "\t" << command->info().description << std::endl;
     });
 
-    return 0;
+    return EXIT_FAILURE;
 }

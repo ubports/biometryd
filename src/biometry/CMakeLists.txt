@@ -8,10 +8,13 @@ add_library(
   biometry SHARED
 
   application.cpp
+  configuration.h
   daemon.h
   daemon.cpp
   device_registry.h
   device_registry.cpp
+  dispatching_service.h
+  dispatching_service.cpp
   geometry.cpp
   percent.cpp
   progress.cpp
@@ -31,6 +34,8 @@ add_library(
   cmds/list_devices.cpp
   cmds/help.h
   cmds/help.cpp
+  cmds/run.h
+  cmds/run.cpp
   cmds/version.h
   cmds/version.cpp
 
@@ -59,6 +64,10 @@ add_library(
   dbus/skeleton/observer.h
   dbus/skeleton/operation.h
 
+  devices/dispatching.h
+  devices/dispatching.cpp
+  devices/dummy.h
+  devices/dummy.cpp
   devices/fingerprint_reader.cpp
   devices/forwarding.h
   devices/forwarding.cpp
@@ -67,6 +76,22 @@ add_library(
   devices/plugin/device.cpp
   devices/plugin/loader.h
   devices/plugin/loader.cpp
+
+  util/atomic_counter.h
+  util/atomic_counter.cpp
+  util/configuration.h
+  util/configuration.cpp
+  util/dispatcher.h
+  util/dispatcher.cpp
+  util/dynamic_library.h
+  util/dynamic_library.cpp
+  util/json_configuration_builder.h
+  util/json_configuration_builder.cpp
+  util/not_implemented.h
+  util/not_implemented.cpp
+  util/once.h
+  util/streaming_configuration_builder.h
+  util/synchronized.h
 
   ${BIOMETRYD_PUBLIC_HEADERS})
 
@@ -85,7 +110,9 @@ target_link_libraries(
 
   util
 
+  dl
   elf
+  hybris-common
 
   ${Boost_LIBRARIES}
   ${DBUS_CPP_LIBRARIES}

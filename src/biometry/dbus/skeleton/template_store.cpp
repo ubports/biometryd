@@ -25,8 +25,8 @@
 #include <biometry/dbus/interface.h>
 #include <biometry/dbus/skeleton/operation.h>
 
-#include <util/atomic_counter.h>
-#include <util/synchronized.h>
+#include <biometry/util/atomic_counter.h>
+#include <biometry/util/synchronized.h>
 
 #include <boost/format.hpp>
 

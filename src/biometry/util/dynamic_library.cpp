@@ -17,7 +17,7 @@
  *
  */
 
-#include <util/dynamic_library.h>
+#include <biometry/util/dynamic_library.h>
 
 #include <dlfcn.h>
 #include <hybris/dlfcn/dlfcn.h>
@@ -28,31 +28,31 @@ namespace
 {
 namespace glibc
 {
-struct DlApi : public util::DynamicLibrary::Api
+struct DlApi : public biometry::util::DynamicLibrary::Api
 {
     // See man dlopen.
-    util::DynamicLibrary::Handle open(const boost::filesystem::path& path) const override
+    biometry::util::DynamicLibrary::Handle open(const boost::filesystem::path& path) const override
     {
         if (auto handle = ::dlopen(path.string().c_str(), RTLD_NOW | RTLD_LOCAL))
-            return util::DynamicLibrary::Handle{handle};
+            return biometry::util::DynamicLibrary::Handle{handle};
 
-        throw util::DynamicLibrary::Api::Error{*this};
+        throw biometry::util::DynamicLibrary::Api::Error{*this};
     }
 
     // See man dlclose.
-    void close(const util::DynamicLibrary::Handle& handle) const override
+    void close(const biometry::util::DynamicLibrary::Handle& handle) const override
     {
         if (::dlclose(handle.as<>()) < 0)
-            throw util::DynamicLibrary::Api::Error{*this};
+            throw biometry::util::DynamicLibrary::Api::Error{*this};
     }
 
     // See man dlsym.
-    util::DynamicLibrary::Symbol sym(const util::DynamicLibrary::Handle& handle, const std::string& symbol) const override
+    biometry::util::DynamicLibrary::Symbol sym(const biometry::util::DynamicLibrary::Handle& handle, const std::string& symbol) const override
     {
         if (auto sh = ::dlsym(handle.as<>(), symbol.c_str()))
-            return util::DynamicLibrary::Symbol{sh};
+            return biometry::util::DynamicLibrary::Symbol{sh};
 
-        throw util::DynamicLibrary::Api::Error{*this};
+        throw biometry::util::DynamicLibrary::Api::Error{*this};
     }
 
     // See man dlerror.
@@ -67,31 +67,31 @@ struct DlApi : public util::DynamicLibrary::Api
 }
 namespace bionic
 {
-struct DlApi : public util::DynamicLibrary::Api
+struct DlApi : public biometry::util::DynamicLibrary::Api
 {
     // See man dlopen.
-    util::DynamicLibrary::Handle open(const boost::filesystem::path& path) const override
+    biometry::util::DynamicLibrary::Handle open(const boost::filesystem::path& path) const override
     {
         if (auto handle = ::hybris_dlopen(path.string().c_str(), RTLD_NOW | RTLD_LOCAL))
-            return util::DynamicLibrary::Handle{handle};
+            return biometry::util::DynamicLibrary::Handle{handle};
 
-        throw util::DynamicLibrary::Api::Error{*this};
+        throw biometry::util::DynamicLibrary::Api::Error{*this};
     }
 
     // See man dlclose.
-    void close(const util::DynamicLibrary::Handle& handle) const override
+    void close(const biometry::util::DynamicLibrary::Handle& handle) const override
     {
         if (::hybris_dlclose(handle.as<>()) < 0)
-            throw util::DynamicLibrary::Api::Error{*this};
+            throw biometry::util::DynamicLibrary::Api::Error{*this};
     }
 
     // See man dlsym.
-    util::DynamicLibrary::Symbol sym(const util::DynamicLibrary::Handle& handle, const std::string& symbol) const override
+    biometry::util::DynamicLibrary::Symbol sym(const biometry::util::DynamicLibrary::Handle& handle, const std::string& symbol) const override
     {
         if (auto sh = ::hybris_dlsym(handle.as<>(), symbol.c_str()))
-            return util::DynamicLibrary::Symbol{sh};
+            return biometry::util::DynamicLibrary::Symbol{sh};
 
-        throw util::DynamicLibrary::Api::Error{*this};
+        throw biometry::util::DynamicLibrary::Api::Error{*this};
     }
 
     // See man dlerror.
@@ -106,34 +106,34 @@ struct DlApi : public util::DynamicLibrary::Api
 }
 }
 
-util::DynamicLibrary::OpaqueTypeIsEmpty::OpaqueTypeIsEmpty()
+biometry::util::DynamicLibrary::OpaqueTypeIsEmpty::OpaqueTypeIsEmpty()
     : std::runtime_error{"Opaque type is empty."}
 {
 }
 
-util::DynamicLibrary::Api::Error::Error(const Api& api) : std::runtime_error{api.error()}
+biometry::util::DynamicLibrary::Api::Error::Error(const Api& api) : std::runtime_error{api.error()}
 {
 }
 
-util::DynamicLibrary::NoSuchSymbol::NoSuchSymbol(const std::string& symbol, const Api::Error& error)
+biometry::util::DynamicLibrary::NoSuchSymbol::NoSuchSymbol(const std::string& symbol, const Api::Error& error)
     : std::runtime_error{(boost::format("Failed to resolve %1%: %2%.") % symbol % error.what()).str()}
 {
 }
 
 // DynamicLibrary opens the dynamic library located at path, relying on api to do so.
 // Throws Api::Error in case of issues.
-util::DynamicLibrary::DynamicLibrary(const std::shared_ptr<Api>& api, const boost::filesystem::path& path)
+biometry::util::DynamicLibrary::DynamicLibrary(const std::shared_ptr<Api>& api, const boost::filesystem::path& path)
     : api{api},
       handle{api->open(path)}
 {
 }
 
-util::DynamicLibrary::~DynamicLibrary()
+biometry::util::DynamicLibrary::~DynamicLibrary()
 {
     api->close(handle);
 }
 
-util::DynamicLibrary::Symbol util::DynamicLibrary::resolve_symbol_or_throw(const std::string& symbol) const
+biometry::util::DynamicLibrary::Symbol biometry::util::DynamicLibrary::resolve_symbol_or_throw(const std::string& symbol) const
 {
     try
     {
@@ -145,12 +145,12 @@ util::DynamicLibrary::Symbol util::DynamicLibrary::resolve_symbol_or_throw(const
     }
 }
 
-std::shared_ptr<util::DynamicLibrary::Api> util::glibc::dl_api()
+std::shared_ptr<biometry::util::DynamicLibrary::Api> biometry::util::glibc::dl_api()
 {
-    return std::make_shared<::glibc::DlApi>();
+    return std::make_shared< ::glibc::DlApi >();
 }
 
-std::shared_ptr<util::DynamicLibrary::Api> util::bionic::dl_api()
+std::shared_ptr<biometry::util::DynamicLibrary::Api> biometry::util::bionic::dl_api()
 {
-    return std::make_shared<::bionic::DlApi>();
+    return std::make_shared< ::bionic::DlApi >();
 }

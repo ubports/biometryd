@@ -22,7 +22,7 @@
 
 #include <biometry/template_store.h>
 
-#include <util/synchronized.h>
+#include <biometry/util/synchronized.h>
 
 #include <core/dbus/object.h>
 #include <core/dbus/service.h>

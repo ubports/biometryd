@@ -23,6 +23,8 @@
 #include <biometry/daemon.h>
 #include <biometry/user.h>
 
+#include <boost/filesystem.hpp>
+
 #include <functional>
 #include <iostream>
 #include <memory>
@@ -44,6 +46,7 @@ public:
 
 private:
     TypedFlag<std::string>::Ptr device;
+    TypedFlag<boost::filesystem::path>::Ptr config;
     TypedFlag<User>::Ptr user;
 };
 }

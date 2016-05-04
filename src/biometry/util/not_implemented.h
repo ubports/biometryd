@@ -17,38 +17,27 @@
  *
  */
 
-#ifndef BIOMETRYD_CMDS_IDENTIFY_H_
-#define BIOMETRYD_CMDS_IDENTIFY_H_
+#ifndef BIOMETRY_UTIL_NOT_IMPLEMENTED_H_
+#define BIOMETRY_UTIL_NOT_IMPLEMENTED_H_
 
-#include <biometry/daemon.h>
-#include <biometry/user.h>
-
-#include <boost/filesystem.hpp>
-
-#include <functional>
-#include <iostream>
-#include <memory>
+#include <stdexcept>
+#include <string>
 
 namespace biometry
 {
-namespace cmds
+namespace util
 {
-/// @brief Identify requests identification of the user.
-class Identify : public biometry::Daemon::Command
+/// @brief NotImplemented is thrown from not_implemented(), indicating
+/// a missing implementation.
+struct NotImplemented : public std::logic_error
 {
-public:
-    /// @brief Enroll creates a new instance, initializing flags to default values.
-    Identify();
-
-    // From Daemon::Command.
-    Info info() const override;
-    int run() override;
-
-private:
-    TypedFlag<std::string>::Ptr device;
-    TypedFlag<boost::filesystem::path>::Ptr config;
+    /// @brief NotImplemented initializes a new instance for the given function name.
+    explicit NotImplemented(const std::string& function);
 };
+
+/// @brief not_implemented throws NotImplemented.
+__attribute__((noreturn)) void not_implemented(const std::string& function);
 }
 }
 
-#endif // BIOMETRYD_CMDS_IDENTIFY_H_
+#endif // BIOMETRY_UTIL_NOT_IMPLEMENTED_H_

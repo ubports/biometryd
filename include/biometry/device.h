@@ -33,6 +33,10 @@ namespace biometry
 class Identifier;
 class TemplateStore;
 class Verifier;
+namespace util
+{
+class Configuration;
+}
 /// @endcond
 
 /// @brief Device models a biometric device.
@@ -50,7 +54,7 @@ public:
         typedef std::shared_ptr<Descriptor> Ptr;
 
         /// @brief create returns an instance of the device.
-        virtual std::shared_ptr<Device> create() = 0;
+        virtual std::shared_ptr<Device> create(const util::Configuration&) = 0;
         /// @brief name returns the human-readable name of the device.
         virtual std::string name() const = 0;
         /// @brief author returns the name of the author of the device implementation.

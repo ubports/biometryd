@@ -26,12 +26,18 @@
 
 #include <biometry/cmds/identify.h>
 
+#include <biometry/util/configuration.h>
+#include <biometry/util/json_configuration_builder.h>
+#include <biometry/util/streaming_configuration_builder.h>
+
+#include <fstream>
 #include <iostream>
 #include <memory>
 
 
 biometry::cmds::Identify::Identify()
-    : device{biometry::make_command_flag<std::string>(Name{"device"}, Description{"The device to enroll to"})}
+    : device{biometry::make_command_flag<std::string>(Name{"device"}, Description{"The device to enroll to"})},
+      config{std::make_shared<TypedFlag<boost::filesystem::path>>(Command::Name{"config"}, Command::Description{"The daemon configuration"})}
 {
 }
 
@@ -54,8 +60,16 @@ int biometry::cmds::Identify::run()
         return EXIT_FAILURE;
     }
 
+    using StreamingJsonConfigurationBuilder = util::StreamingConfigurationBuilder<util::JsonConfigurationBuilder>;
+    StreamingJsonConfigurationBuilder builder
+    {
+        config->value() ?
+            StreamingJsonConfigurationBuilder::make_streamer(config->value().get()) :
+            StreamingJsonConfigurationBuilder::make_streamer(std::cin)
+    };
+
     auto descriptor = biometry::device_registry().at(*device->value());
-    auto device = descriptor->create();
+    auto device = descriptor->create(builder.build_configuration());
 
     auto op = device->identifier().identify_user(biometry::Application{"system"}, biometry::Reason{"requested by cli"});
 

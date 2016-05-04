@@ -17,38 +17,41 @@
  *
  */
 
-#ifndef BIOMETRYD_CMDS_IDENTIFY_H_
-#define BIOMETRYD_CMDS_IDENTIFY_H_
+#ifndef BIOMETRY_UTIL_SYNCHRONIZED_H_
+#define BIOMETRY_UTIL_SYNCHRONIZED_H_
 
-#include <biometry/daemon.h>
-#include <biometry/user.h>
-
-#include <boost/filesystem.hpp>
-
-#include <functional>
-#include <iostream>
-#include <memory>
+#include <mutex>
+#include <type_traits>
 
 namespace biometry
 {
-namespace cmds
+namespace util
 {
-/// @brief Identify requests identification of the user.
-class Identify : public biometry::Daemon::Command
+/// @brief Synchronized<T> bundles together a value and a mutex guarding it.
+template<typename T>
+class Synchronized
 {
 public:
-    /// @brief Enroll creates a new instance, initializing flags to default values.
-    Identify();
+    typedef T ValueType;
 
-    // From Daemon::Command.
-    Info info() const override;
-    int run() override;
+    /// @brief Synchronized creates a new instance, initializing the value to t.
+    explicit Synchronized(const T& t = T{}) : value{t}
+    {
+    }
+
+    /// @brief synchronized invokes the given functor f with the locked, mutable instance managed by this Synchronized<T> instance.
+    template<typename F>
+    void synchronized(const F& f)
+    {
+        std::lock_guard<std::mutex> lg{guard};
+        f(value);
+    }
 
 private:
-    TypedFlag<std::string>::Ptr device;
-    TypedFlag<boost::filesystem::path>::Ptr config;
+    std::mutex guard;
+    T value;
 };
 }
 }
 
-#endif // BIOMETRYD_CMDS_IDENTIFY_H_
+#endif // BIOMETRY_UTIL_SYNCHRONIZED_H_
