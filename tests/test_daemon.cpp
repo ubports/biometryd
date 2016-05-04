@@ -137,7 +137,7 @@ TEST_F(Daemon, invoking_run_succeeds)
         {
             "defaultDevice":
             {
-                "id": "biometry::devices::Dummy",
+                "id": "Dummy",
                 "config":{}
             }
         })_";

@@ -72,6 +72,8 @@ public:
     virtual Children& children();
     /// @brief Returns a mutable reference to the child with the given name.
     Node& operator[](const std::string& name);
+    /// @brief Returns a mutable reference to the child with the given name.
+    const Node& operator[](const std::string& name) const;
 private:
     Children children_; ///< mutable set of all children_ of this Node.
 };

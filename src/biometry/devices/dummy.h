@@ -30,7 +30,7 @@ namespace devices
 class BIOMETRY_DLL_PUBLIC Dummy : public biometry::Device
 {
 public:
-    static constexpr const char* id{"biometry::devices::Dummy"};
+    static constexpr const char* id{"Dummy"};
 
     /// @brief Dummy initializes a new instance.
     Dummy();

@@ -31,7 +31,12 @@ namespace devices
 {
 namespace plugin
 {
+/// @brief id is the unique name for registering the device type with the device registry.
+static constexpr const char* id{"Plugin"};
+
+/// @cond
 using Device = biometry::devices::Forwarding;
+/// @endcond
 
 /// @brief load returns a biometry::Device implementation that has been loaded from a shared object located at path,
 /// relying on api to open the library and resolve symbols.
