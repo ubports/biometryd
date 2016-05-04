@@ -35,6 +35,7 @@ class FingerprintReader : public QObject
 {
     Q_OBJECT
     Q_ENUMS(Direction)
+    Q_PROPERTY(QString isFingerPresent READ isFingerPresent)
     Q_PROPERTY(QString hasMainClusterIdentified READ hasMainClusterIdentified)
     Q_PROPERTY(QString suggestedNextDirection READ suggestedNextDirection)
     Q_PROPERTY(QString masks READ masks)

@@ -44,6 +44,7 @@ TestCase {
             var isFingerPresent             = details[FingerprintReader.isFingerPresent]
             var hasMainClusterIdentified    = details[FingerprintReader.hasMainClusterIdentified]
             var suggestedNextDirection      = details[FingerprintReader.suggestedNextDirection]
+            var estimatedFingerSize         = details[FingerprintReader.estimatedFingerSize]
             var masks                       = details[FingerprintReader.masks]
 
             console.log("isFingerPresent:",            isFingerPresent,
@@ -52,7 +53,7 @@ TestCase {
                         "masks:",                      masks);
         }
         onSucceeded: {
-            console.log("succeeded")
+            console.log("succeeded:", result)
         }
     }
 

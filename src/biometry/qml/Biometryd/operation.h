@@ -22,6 +22,7 @@
 
 #include <biometry/operation.h>
 #include <biometry/reason.h>
+#include <biometry/user.h>
 #include <biometry/visibility.h>
 
 #include <biometry/devices/fingerprint_reader.h>
@@ -29,6 +30,7 @@
 #include <biometry/qml/Biometryd/converter.h>
 #include <biometry/qml/Biometryd/fingerprint_reader.h>
 
+#include <QDebug>
 #include <QObject>
 #include <QVariantMap>
 #include <QRect>
@@ -38,6 +40,41 @@ namespace biometry
 {
 namespace qml
 {
+namespace traits
+{
+template<typename T>
+struct Result
+{
+    static QVariant to_variant(const T&);
+};
+
+template<>
+struct Result<biometry::Void>
+{
+    static QVariant to_variant(const biometry::Void&)
+    {
+        return QVariant{};
+    }
+};
+
+template<>
+struct Result<biometry::User>
+{
+    static QVariant to_variant(const biometry::User& user)
+    {
+        return QVariant{user.id};
+    }
+};
+
+template<>
+struct Result<biometry::TemplateStore::SizeQuery::Result>
+{
+    static QVariant to_variant(const biometry::TemplateStore::SizeQuery::Result& sq)
+    {
+        return QVariant{sq};
+    }
+};
+}
 /// @brief Observer monitors an Operation.
 class BIOMETRY_DLL_PUBLIC Observer : public QObject
 {
@@ -119,6 +156,10 @@ public:
             biometry::devices::FingerprintReader::GuidedEnrollment::Hints hints;
             hints.from_dictionary(progress.details);
 
+            if (hints.is_finger_present)
+                vm[biometry::devices::FingerprintReader::GuidedEnrollment::Hints::key_is_finger_present] =
+                        *hints.is_finger_present;
+
             if (hints.is_main_cluster_identified)
                 vm[biometry::devices::FingerprintReader::GuidedEnrollment::Hints::key_is_main_cluster_identified] =
                         *hints.is_main_cluster_identified;
@@ -148,10 +189,10 @@ public:
                                       Q_ARG(QString, QString::fromStdString(error)));
         }
 
-        void on_succeeded(const Result&) override
+        void on_succeeded(const Result& result) override
         {
             QMetaObject::invokeMethod(observer, "succeeded", Qt::QueuedConnection,
-                                      Q_ARG(QVariant, QVariant{}));
+                                      Q_ARG(QVariant, traits::Result<Result>::to_variant(result)));
         }
 
     private:

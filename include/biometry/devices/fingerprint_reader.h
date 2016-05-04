@@ -61,7 +61,7 @@ public:
             /// @cond
             static constexpr const char* key_is_finger_present
             {
-                "FingerprintReader::Hints::is_main_cluster_identified"
+                "FingerprintReader::Hints::is_finger_present"
             };
 
             static constexpr const char* key_is_main_cluster_identified
