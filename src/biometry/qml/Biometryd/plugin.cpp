@@ -49,6 +49,12 @@ std::runtime_error not_implemented(T&&...) { return std::runtime_error{"not impl
 
 namespace for_testing
 {
+std::uint32_t& template_counter()
+{
+    static std::uint32_t instance{0};
+    return instance;
+}
+
 // We enable testing of projects using the QML bindings by providing an environment
 // variable BIOMETRYD_QML_ENABLE_TESTING. If the variable is set to "1", we install a testing
 // stack emulating the multi-threaded/async behavior of the production system within the test
@@ -108,7 +114,7 @@ struct SizeQuery : public biometry::Operation<biometry::TemplateStore::SizeQuery
                 std::this_thread::sleep_for(std::chrono::milliseconds{15});
             }
 
-            observer->on_succeeded(42);
+            observer->on_succeeded(template_counter());
         });
     }
 
@@ -149,6 +155,7 @@ struct Enrollment : public biometry::Operation<biometry::TemplateStore::Enrollme
                 std::this_thread::sleep_for(std::chrono::milliseconds{15});
             }
 
+            template_counter()++;
             observer->on_succeeded(biometry::Void{});
         });
     }
@@ -162,7 +169,7 @@ struct Enrollment : public biometry::Operation<biometry::TemplateStore::Enrollme
 };
 
 struct Identification : public biometry::Operation<biometry::Identification>,
-                           public std::enable_shared_from_this<for_testing::Identification>
+                        public std::enable_shared_from_this<for_testing::Identification>
 {
     void start_with_observer(const typename Observer::Ptr& observer) override
     {
@@ -217,6 +224,7 @@ struct Clearance : public biometry::Operation<biometry::TemplateStore::Clearance
                 std::this_thread::sleep_for(std::chrono::milliseconds{15});
             }
 
+            template_counter() = 0;
             observer->on_succeeded(biometry::Void{});
         });
     }
