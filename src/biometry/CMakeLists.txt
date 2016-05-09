@@ -4,12 +4,16 @@ set(symbol_map "${CMAKE_SOURCE_DIR}/symbols.map")
 
 add_subdirectory(qml)
 
+configure_file(daemon_configuration.cpp.in daemon_configuration.cpp)
+
 add_library(
   biometry SHARED
 
   application.cpp
   daemon.h
-  daemon.cpp
+  daemon.cpp  
+  device_registrar.h
+  device_registrar.cpp
   device_registry.h
   device_registry.cpp
   dispatching_service.h
@@ -25,6 +29,8 @@ add_library(
   variant.cpp
   version.cpp
   
+  "${CMAKE_CURRENT_BINARY_DIR}/daemon_configuration.cpp"
+
   cmds/enroll.h
   cmds/enroll.cpp
   cmds/identify.h
@@ -73,8 +79,12 @@ add_library(
 
   devices/plugin/device.h
   devices/plugin/device.cpp
+  devices/plugin/enumerator.h
+  devices/plugin/enumerator.cpp
   devices/plugin/loader.h
   devices/plugin/loader.cpp
+  devices/plugin/verifier.h
+  devices/plugin/verifier.cpp
 
   util/atomic_counter.h
   util/atomic_counter.cpp

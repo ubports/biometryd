@@ -20,10 +20,12 @@
 #ifndef BIOMETRYD_DEVICE_DAEMON_H_
 #define BIOMETRYD_DEVICE_DAEMON_H_
 
+#include <biometry/device_registrar.h>
 #include <biometry/do_not_copy_or_move.h>
 #include <biometry/visibility.h>
 
 #include <boost/any.hpp>
+#include <boost/filesystem.hpp>
 #include <boost/optional.hpp>
 #include <boost/optional/optional_io.hpp>
 
@@ -75,6 +77,11 @@ bool operator==(const SizeConstrainedString<max>& lhs, const SizeConstrainedStri
 class BIOMETRY_DLL_PUBLIC Daemon : public DoNotCopyOrMove
 {
 public:
+    struct Configuration
+    {
+        static boost::filesystem::path default_plugin_directory();
+    };
+
     /// @brief Command abstracts an individual command available from the daemon.
     class Command : public DoNotCopyOrMove
     {
@@ -170,6 +177,7 @@ public:
 private:
     void install_command(const Command::Ptr& command);
 
+    DeviceRegistrar device_registrar;
     std::unordered_map<std::string, Command::Ptr> cmds;
     Command::Ptr help;
 };

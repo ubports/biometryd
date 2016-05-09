@@ -19,6 +19,8 @@
 
 #include <biometry/daemon.h>
 
+#include <biometry/devices/plugin/enumerator.h>
+
 #include <biometry/cmds/enroll.h>
 #include <biometry/cmds/help.h>
 #include <biometry/cmds/identify.h>
@@ -37,7 +39,6 @@ namespace po = boost::program_options;
 
 namespace
 {
-
 std::multimap<biometry::Daemon::Command::Name, std::function<void(const std::string&)>>& notifiers()
 {
     static std::multimap<biometry::Daemon::Command::Name, std::function<void(const std::string&)>> instance;
@@ -61,7 +62,7 @@ const biometry::Daemon::Command::Description& biometry::Daemon::Command::Flag::d
     return description_;
 }
 
-biometry::Daemon::Daemon()
+biometry::Daemon::Daemon() : device_registrar{biometry::devices::plugin::DirectoryEnumerator{Configuration::default_plugin_directory()}}
 {
     install_command(std::make_shared<cmds::Enroll>());
     install_command(std::make_shared<cmds::Identify>());
