@@ -44,7 +44,7 @@ biometry::Verifier& biometry::devices::Dummy::verifier()
 
 namespace
 {
-struct Descriptor : public biometry::Device::Descriptor
+struct DummyDescriptor : public biometry::Device::Descriptor
 {
     std::shared_ptr<biometry::Device> create(const biometry::util::Configuration&) override
     {
@@ -66,12 +66,9 @@ struct Descriptor : public biometry::Device::Descriptor
         return "Dummy is a biometry::Device implementation for tesing purposes.";
     }
 };
-
-bool register_descriptor()
-{
-    biometry::device_registry()[biometry::devices::Dummy::id] = std::make_shared<Descriptor>();
-    return true;
 }
 
-__attribute__((unused)) static const bool registered = register_descriptor();
+biometry::Device::Descriptor::Ptr biometry::devices::Dummy::make_descriptor()
+{
+    return std::make_shared<DummyDescriptor>();
 }

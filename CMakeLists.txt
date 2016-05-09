@@ -35,6 +35,10 @@ set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-undefined")
 
 include(GNUInstallDirs)
 
+set(
+    BIOMETRYD_DEFAULT_PLUGIN_DIRECTORY "${CMAKE_INSTALL_FULL_LIBDIR}/biometryd/plugins"
+    CACHE STRING "Default plugin installation directory")
+
 enable_testing()
 
 find_package(PkgConfig)

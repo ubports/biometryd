@@ -17,33 +17,9 @@
  *
  */
 
-#ifndef BIOMETRYD_DEVICES_DUMMY_H_
-#define BIOMETRYD_DEVICES_DUMMY_H_
+#include <biometry/daemon.h>
 
-#include <biometry/device.h>
-
-namespace biometry
+boost::filesystem::path biometry::Daemon::Configuration::default_plugin_directory()
 {
-namespace devices
-{
-/// @brief Dummy is a biometry::Device.
-class BIOMETRY_DLL_PUBLIC Dummy : public biometry::Device
-{
-public:
-    static constexpr const char* id{"Dummy"};
-
-    /// @brief make_descriptor returns a descriptor instance describing a Dummy device;
-    static Descriptor::Ptr make_descriptor();
-
-    /// @brief Dummy initializes a new instance.
-    Dummy();
-
-    // From biometry::Device
-    TemplateStore& template_store() override;
-    Identifier& identifier() override;
-    Verifier& verifier() override;
-};
+    return "@BIOMETRYD_DEFAULT_PLUGIN_DIRECTORY@";
 }
-}
-
-#endif // BIOMETRYD_DEVICES_DUMMY_H_

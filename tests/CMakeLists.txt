@@ -49,9 +49,13 @@ endmacro(BIOMETRYD_ADD_TEST)
 add_library(biometryd_devices_plugin_dl SHARED biometryd_devices_plugin_dl.cpp)
 target_link_libraries(biometryd_devices_plugin_dl gtest gmock)
 
+add_library(biometryd_devices_plugin_dl_version_mismatch SHARED biometryd_devices_plugin_dl_version_mismatch.cpp)
+target_link_libraries(biometryd_devices_plugin_dl_version_mismatch gtest gmock)
+
 BIOMETRYD_ADD_TEST(test_atomic_counter test_atomic_counter.cpp)
 BIOMETRYD_ADD_TEST(test_configuration test_configuration.cpp)
 BIOMETRYD_ADD_TEST(test_daemon test_daemon.cpp)
+BIOMETRYD_ADD_TEST(test_device_registrar test_device_registrar.cpp)
 BIOMETRYD_ADD_TEST(test_dispatching_device_and_service test_dispatching_service_and_device.cpp)
 BIOMETRYD_ADD_TEST(test_dbus_codec test_dbus_codec.cpp)
 BIOMETRYD_ADD_TEST(test_dbus_stub_skeleton test_dbus_stub_skeleton.cpp)

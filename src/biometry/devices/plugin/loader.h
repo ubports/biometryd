@@ -61,6 +61,18 @@ struct BIOMETRY_DLL_PUBLIC NonVerifyingLoader : public Loader
 struct BIOMETRY_DLL_PUBLIC ElfDescriptorLoader
 {
 public:
+    /// @brief FailedToInitializeElf is thrown if the loader fails to initialize the elf access library for a given file.
+    struct FailedToInitializeElf : public std::runtime_error
+    {
+        FailedToInitializeElf();
+    };
+
+    /// @brief NotAnElfObject is thrown if the loader is invoked on a file that is not an elf object.
+    struct NotAnElfObject : public std::runtime_error
+    {
+        NotAnElfObject();
+    };
+
     /// @brief NoSuchSection is thrown if a named section in an elf executable cannot be found.
     struct NoSuchSection : public std::runtime_error
     {

@@ -17,33 +17,23 @@
  *
  */
 
-#ifndef BIOMETRYD_DEVICES_DUMMY_H_
-#define BIOMETRYD_DEVICES_DUMMY_H_
+#include <biometry/devices/plugin/verifier.h>
 
-#include <biometry/device.h>
+#include <boost/format.hpp>
 
-namespace biometry
+namespace plugin = biometry::devices::plugin;
+
+plugin::MajorVersionVerifier::MajorVersionMismatch::MajorVersionMismatch(std::uint32_t host, std::uint32_t plugin)
+    : std::runtime_error{(boost::format("Major version mismatch on host: %1% vs. %2%") % host % plugin).str()},
+      host{host},
+      plugin{plugin}
 {
-namespace devices
-{
-/// @brief Dummy is a biometry::Device.
-class BIOMETRY_DLL_PUBLIC Dummy : public biometry::Device
-{
-public:
-    static constexpr const char* id{"Dummy"};
-
-    /// @brief make_descriptor returns a descriptor instance describing a Dummy device;
-    static Descriptor::Ptr make_descriptor();
-
-    /// @brief Dummy initializes a new instance.
-    Dummy();
-
-    // From biometry::Device
-    TemplateStore& template_store() override;
-    Identifier& identifier() override;
-    Verifier& verifier() override;
-};
-}
 }
 
-#endif // BIOMETRYD_DEVICES_DUMMY_H_
+plugin::Descriptor plugin::MajorVersionVerifier::verify(const Descriptor &descriptor) const
+{
+    if (descriptor.version.host.major != biometry::build::version_major)
+        throw MajorVersionMismatch{descriptor.version.host.major, biometry::build::version_major};
+
+    return descriptor;
+}

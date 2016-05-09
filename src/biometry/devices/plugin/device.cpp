@@ -32,7 +32,7 @@ std::shared_ptr<biometry::Device> plugin::load(const std::shared_ptr<util::Dynam
 
 namespace
 {
-struct Descriptor : public biometry::Device::Descriptor
+struct PluginDescriptor : public biometry::Device::Descriptor
 {
     std::shared_ptr<biometry::Device> create(const biometry::util::Configuration& config) override
     {
@@ -56,12 +56,10 @@ struct Descriptor : public biometry::Device::Descriptor
         return "Plugin loads device implementations from shared modules.";
     }
 };
-
-bool register_descriptor()
-{
-    biometry::device_registry()[biometry::devices::plugin::id] = std::make_shared<Descriptor>();
-    return true;
 }
 
-__attribute__((unused)) static const bool registered = register_descriptor();
+/// @brief make_descriptor returns a descriptor instance describing a plugin device;
+biometry::Device::Descriptor::Ptr plugin::make_descriptor()
+{
+    return std::make_shared<PluginDescriptor>();
 }

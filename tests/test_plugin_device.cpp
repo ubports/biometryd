@@ -18,6 +18,10 @@
  */
 
 #include <biometry/devices/plugin/device.h>
+#include <biometry/devices/plugin/enumerator.h>
+#include <biometry/devices/plugin/verifier.h>
+
+#include <biometry/util/configuration.h>
 #include <biometry/util/dynamic_library.h>
 
 #include <biometry/device_registry.h>
@@ -45,11 +49,6 @@ struct MockPluginLoader : public biometry::devices::plugin::Loader
             verify_and_load,
             std::shared_ptr<biometry::Device> (const std::shared_ptr<biometry::util::DynamicLibrary::Api>&, const boost::filesystem::path&));
 };
-}
-
-TEST(PluginDevice, is_known_to_device_registry)
-{
-    EXPECT_TRUE(biometry::device_registry().count(biometry::devices::plugin::id) > 0);
 }
 
 TEST(PluginDeviceLoad, calls_into_loader)
@@ -107,4 +106,33 @@ TEST(ElfDescriptorLoader, throws_when_trying_to_load_non_elf_object)
     {std::ofstream out("test.txt"); out << "test";}
     biometry::devices::plugin::ElfDescriptorLoader loader;
     EXPECT_THROW(loader.load_with_name("test.txt", "DoesNotExist"), std::runtime_error);
+}
+
+TEST(MajorVersionVerifier, throws_when_verifying_plugin_with_major_host_version_mismatch)
+{
+    const auto p = testing::runtime_dir() / "libbiometryd_devices_plugin_dl_version_mismatch.so";
+    biometry::devices::plugin::ElfDescriptorLoader loader;
+
+    biometry::devices::plugin::MajorVersionVerifier verifier;
+    EXPECT_THROW(verifier.verify(loader.load_with_name(p, BIOMETRYD_DEVICES_PLUGIN_DESCRIPTOR_SECTION)),
+                 biometry::devices::plugin::MajorVersionVerifier::MajorVersionMismatch);
+}
+
+TEST(MajorVersionVerifier, does_not_throw_when_verifying_plugin_with_major_host_version_match)
+{
+    const auto p = testing::runtime_dir() / "libbiometryd_devices_plugin_dl.so";
+    biometry::devices::plugin::ElfDescriptorLoader loader;
+
+    biometry::devices::plugin::MajorVersionVerifier verifier;
+    EXPECT_NO_THROW(verifier.verify(loader.load_with_name(p, BIOMETRYD_DEVICES_PLUGIN_DESCRIPTOR_SECTION)));
+}
+
+TEST(DirectoryEnumerator, finds_biometryd_plugins)
+{
+    biometry::devices::plugin::DirectoryEnumerator enumerator{testing::runtime_dir()};
+    EXPECT_GE(1, enumerator.enumerate([](const biometry::Device::Descriptor::Ptr& ptr)
+    {
+        static const biometry::util::Configuration the_empty_config;
+        EXPECT_NO_THROW(ptr->create(the_empty_config));
+    }));
 }
