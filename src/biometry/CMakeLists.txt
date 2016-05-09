@@ -121,7 +121,6 @@ target_link_libraries(
 
   dl
   elf
-  hybris-common
 
   ${Boost_LIBRARIES}
   ${DBUS_CPP_LIBRARIES}

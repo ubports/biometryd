@@ -109,11 +109,6 @@ namespace glibc
 {
 BIOMETRY_DLL_PUBLIC std::shared_ptr<DynamicLibrary::Api> dl_api();
 }
-
-namespace bionic
-{
-BIOMETRY_DLL_PUBLIC std::shared_ptr<DynamicLibrary::Api> dl_api();
-}
 }
 }
 
