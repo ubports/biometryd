@@ -20,7 +20,6 @@
 #include <biometry/util/dynamic_library.h>
 
 #include <dlfcn.h>
-#include <hybris/dlfcn/dlfcn.h>
 
 #include <boost/format.hpp>
 
@@ -59,45 +58,6 @@ struct DlApi : public biometry::util::DynamicLibrary::Api
     std::string error() const override
     {
         if (auto e = ::dlerror())
-            return e;
-
-        return std::string{};
-    }
-};
-}
-namespace bionic
-{
-struct DlApi : public biometry::util::DynamicLibrary::Api
-{
-    // See man dlopen.
-    biometry::util::DynamicLibrary::Handle open(const boost::filesystem::path& path) const override
-    {
-        if (auto handle = ::hybris_dlopen(path.string().c_str(), RTLD_NOW | RTLD_LOCAL))
-            return biometry::util::DynamicLibrary::Handle{handle};
-
-        throw biometry::util::DynamicLibrary::Api::Error{*this};
-    }
-
-    // See man dlclose.
-    void close(const biometry::util::DynamicLibrary::Handle& handle) const override
-    {
-        if (::hybris_dlclose(handle.as<>()) < 0)
-            throw biometry::util::DynamicLibrary::Api::Error{*this};
-    }
-
-    // See man dlsym.
-    biometry::util::DynamicLibrary::Symbol sym(const biometry::util::DynamicLibrary::Handle& handle, const std::string& symbol) const override
-    {
-        if (auto sh = ::hybris_dlsym(handle.as<>(), symbol.c_str()))
-            return biometry::util::DynamicLibrary::Symbol{sh};
-
-        throw biometry::util::DynamicLibrary::Api::Error{*this};
-    }
-
-    // See man dlerror.
-    std::string error() const override
-    {
-        if (auto e = ::hybris_dlerror())
             return e;
 
         return std::string{};
@@ -148,9 +108,4 @@ biometry::util::DynamicLibrary::Symbol biometry::util::DynamicLibrary::resolve_s
 std::shared_ptr<biometry::util::DynamicLibrary::Api> biometry::util::glibc::dl_api()
 {
     return std::make_shared< ::glibc::DlApi >();
-}
-
-std::shared_ptr<biometry::util::DynamicLibrary::Api> biometry::util::bionic::dl_api()
-{
-    return std::make_shared< ::bionic::DlApi >();
 }
