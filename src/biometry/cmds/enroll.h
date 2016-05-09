@@ -20,7 +20,9 @@
 #ifndef BIOMETRYD_CMDS_ENROLL_H_
 #define BIOMETRYD_CMDS_ENROLL_H_
 
-#include <biometry/daemon.h>
+#include <biometry/util/cli.h>
+
+#include <biometry/optional.h>
 #include <biometry/user.h>
 
 #include <boost/filesystem.hpp>
@@ -34,20 +36,16 @@ namespace biometry
 namespace cmds
 {
 /// @brief Enroll requests enrollment of a new template to a biometric device.
-class Enroll : public biometry::Daemon::Command
+class Enroll : public util::cli::Command
 {
 public:
     /// @brief Enroll creates a new instance, initializing flags to default values.
     Enroll();
 
-    // From Daemon::Command.
-    Info info() const override;
-    int run() override;
-
 private:
-    TypedFlag<std::string>::Ptr device;
-    TypedFlag<boost::filesystem::path>::Ptr config;
-    TypedFlag<User>::Ptr user;
+    std::string device;
+    Optional<boost::filesystem::path> config;
+    User user;
 };
 }
 }

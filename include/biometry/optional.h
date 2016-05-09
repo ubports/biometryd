@@ -21,6 +21,7 @@
 #define BIOMETRY_OPTIONAL_H_
 
 #include <boost/optional.hpp>
+#include <boost/optional/optional_io.hpp>
 
 namespace biometry
 {

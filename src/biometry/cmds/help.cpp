@@ -19,33 +19,22 @@
 
 #include <biometry/cmds/help.h>
 
-biometry::cmds::Help::Help(const CommandEnumerator& enumerator) : enumerator{enumerator}
+namespace cli = biometry::util::cli;
+
+biometry::cmds::Help::Help(const CommandEnumerator& enumerator)
+    : Command{{Name{"help"}, Usage{"help"}, Description{"print a help message and exit"}, {}}, [this]()
+      {
+          std::cout << "Usage: biometryd [COMMAND] \n"
+              "\n"
+              "biometryd mediates access to biometric devices. \n"
+              "\n"
+              "Commands:\n";
+          Help::enumerator([](const Command::Ptr& command)
+          {
+              std::cout << "  " << command->info().name << " " << command->info().description << std::endl;
+          });
+          return EXIT_FAILURE;
+      }},
+      enumerator{enumerator}
 {
-}
-
-biometry::Daemon::Command::Info biometry::cmds::Help::info() const
-{
-    return Info
-    {
-        Name{"help"},
-        Usage{"help"},
-        Description{"print a help message and exit"},
-        {}
-    };
-}
-
-int biometry::cmds::Help::run()
-{
-    std::cout << "Usage: biometryd [COMMAND] \n"
-                 "\n"
-                 "biometryd mediates access to biometric devices. \n"
-                 "\n"
-                 "Commands:\n";
-
-    enumerator([](const Command::Ptr& command)
-    {
-        std::cout << "  " << command->info().name << "\t" << command->info().description << std::endl;
-    });
-
-    return EXIT_FAILURE;
 }

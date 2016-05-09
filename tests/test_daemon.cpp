@@ -29,27 +29,29 @@
 #include <fstream>
 #include <thread>
 
+namespace cli = biometry::util::cli;
+
 namespace
 {
 struct Daemon : core::dbus::testing::Fixture
 {
-
 };
 }
+
 TEST(SizeConstrainedString, throws_on_construction_for_string_too_long)
 {
-    EXPECT_ANY_THROW(biometry::SizeConstrainedString<0>{"test"});
+    EXPECT_ANY_THROW(cli::SizeConstrainedString<0>{"test"});
 }
 
 TEST(SizeConstrainedString, construction_succeeds_for_string_of_correct_length)
 {
-    EXPECT_NO_THROW(biometry::SizeConstrainedString<10>{"test"});
+    EXPECT_NO_THROW(cli::SizeConstrainedString<10>{"test"});
 }
 
 TEST(SizeConstrainedString, operator_lt_works)
 {
-    biometry::SizeConstrainedString<10> a{"a"};
-    biometry::SizeConstrainedString<10> b{"b"};
+    cli::SizeConstrainedString<10> a{"a"};
+    cli::SizeConstrainedString<10> b{"b"};
 
     EXPECT_TRUE(a < b);
     EXPECT_FALSE(b < a);
@@ -57,24 +59,24 @@ TEST(SizeConstrainedString, operator_lt_works)
 
 TEST(SizeConstrainedString, stores_string_content_passed_on_construction)
 {
-    biometry::SizeConstrainedString<20> a{"a"};
+    cli::SizeConstrainedString<20> a{"a"};
     EXPECT_EQ("a", a.as_string());
 }
 
 TEST(TypedFlag, stores_name_and_desc_passed_on_construction)
 {
-    biometry::Daemon::Command::Name name{"42"};
-    biometry::Daemon::Command::Description desc{"43"};
-    biometry::Daemon::Command::TypedFlag<int> flag{name, desc};
+    cli::Command::Name name{"42"};
+    cli::Command::Description desc{"43"};
+    cli::Command::TypedFlag<int> flag{name, desc};
     EXPECT_EQ(name, flag.name());
     EXPECT_EQ(desc, flag.description());
 }
 
 TEST(TypedFlag, parses_string_on_notify_and_sets_value)
 {
-    biometry::Daemon::Command::Name name{"42"};
-    biometry::Daemon::Command::Description desc{"43"};
-    biometry::Daemon::Command::TypedFlag<int> flag{name, desc};
+    cli::Command::Name name{"42"};
+    cli::Command::Description desc{"43"};
+    cli::Command::TypedFlag<int> flag{name, desc};
     EXPECT_FALSE(flag.value().is_initialized());
     flag.notify("42");
     EXPECT_TRUE(flag.value().is_initialized());

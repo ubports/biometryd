@@ -20,7 +20,7 @@
 #ifndef BIOMETRYD_CMDS_VERSION_H_
 #define BIOMETRYD_CMDS_VERSION_H_
 
-#include <biometry/daemon.h>
+#include <biometry/util/cli.h>
 
 #include <functional>
 #include <iostream>
@@ -30,13 +30,10 @@ namespace biometry
 {
 namespace cmds
 {
-class Version : public biometry::Daemon::Command
+class Version : public util::cli::Command
 {
 public:
     Version();
-
-    Info info() const override;
-    int run() override;
 };
 }
 }

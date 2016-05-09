@@ -32,49 +32,49 @@
 #include <iostream>
 #include <memory>
 
+namespace cli = biometry::util::cli;
+
 biometry::cmds::Enroll::Enroll()
-    : device{biometry::make_command_flag<std::string>(Name{"device"}, Description{"The device to enroll to"})},
-      config{std::make_shared<TypedFlag<boost::filesystem::path>>(Command::Name{"config"}, Command::Description{"The daemon configuration"})},
-      user{biometry::make_command_flag<biometry::User>(Name{"user"}, Description{"The user to enroll for"})}
+    : Command
+      {
+          {
+              Name{"enroll"},
+              Usage{"enroll"},
+              Description{"enrolls a new template to a device"},
+              {}
+          }
+      },
+      user(biometry::User::current())
 {
-    user->value(biometry::User::current());
-}
+    mutable_info().flags.push_back(cli::make_flag(Name{"device"}, Description{"The device to enroll to"}, device));
+    mutable_info().flags.push_back(cli::make_flag(Name{"device"}, Description{"The device to enroll to"}, device));
+    mutable_info().flags.push_back(cli::make_flag(Name{"user"}, Description{"The user to enroll for"}, device));
 
-biometry::Daemon::Command::Info biometry::cmds::Enroll::info() const
-{
-    return Info
+    mutable_run() = [this]()
     {
-        Name{"enroll"},
-        Usage{"enroll"},
-        Description{"enrolls a new template to a device"},
-        {device, user}
+        if (device.empty())
+        {
+            std::cout << "You must specify a device for enrolling a template" << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        using StreamingJsonConfigurationBuilder = util::StreamingConfigurationBuilder<util::JsonConfigurationBuilder>;
+        StreamingJsonConfigurationBuilder builder
+        {
+             config ?
+                 StreamingJsonConfigurationBuilder::make_streamer(config.get()) :
+                 StreamingJsonConfigurationBuilder::make_streamer(std::cin)
+        };
+
+        auto descriptor = biometry::device_registry().at(device);
+        auto device = descriptor->create(builder.build_configuration());
+
+        auto op = device->template_store().enroll(biometry::Application::system(), user);
+
+        std::cout << "Starting template enrollment for " << user << " to " << descriptor->name() << std::endl;
+
+        op->start_with_observer(std::make_shared<TracingObserver<biometry::TemplateStore::Enrollment>>());
+
+        return 0;
     };
-}
-
-int biometry::cmds::Enroll::run()
-{
-    if (not device->value())
-    {
-        std::cout << "You must specify a device for enrolling a template" << std::endl;
-        return EXIT_FAILURE;
-    }
-
-    using StreamingJsonConfigurationBuilder = util::StreamingConfigurationBuilder<util::JsonConfigurationBuilder>;
-    StreamingJsonConfigurationBuilder builder
-    {
-         config->value() ?
-             StreamingJsonConfigurationBuilder::make_streamer(config->value().get()) :
-             StreamingJsonConfigurationBuilder::make_streamer(std::cin)
-    };
-
-    auto descriptor = biometry::device_registry().at(*device->value());
-    auto device = descriptor->create(builder.build_configuration());
-
-    auto op = device->template_store().enroll(biometry::Application{"system"}, biometry::User::current());
-
-    std::cout << "Starting template enrollment for " << user->value() << " to " << descriptor->name() << std::endl;
-
-    op->start_with_observer(std::make_shared<TracingObserver<biometry::TemplateStore::Enrollment>>());
-
-    return 0;
 }

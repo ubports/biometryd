@@ -88,6 +88,8 @@ add_library(
 
   util/atomic_counter.h
   util/atomic_counter.cpp
+  util/cli.h
+  util/cli.cpp
   util/configuration.h
   util/configuration.cpp
   util/dispatcher.h

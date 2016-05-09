@@ -20,7 +20,7 @@
 #ifndef BIOMETRYD_CMDS_HELP_H_
 #define BIOMETRYD_CMDS_HELP_H_
 
-#include <biometry/daemon.h>
+#include <biometry/util/cli.h>
 
 #include <functional>
 #include <iostream>
@@ -30,16 +30,13 @@ namespace biometry
 {
 namespace cmds
 {
-class Help : public biometry::Daemon::Command
+class Help : public util::cli::Command
 {
 public:
     typedef std::function<void(const Command::Ptr&)> Enumerator;
     typedef std::function<void(const Enumerator&)> CommandEnumerator;
 
     Help(const CommandEnumerator& enumerator);
-
-    Info info() const override;
-    int run() override;
 
 private:
     CommandEnumerator enumerator;

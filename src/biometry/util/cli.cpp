@@ -17,21 +17,32 @@
  *
  */
 
-#ifndef BIOMETRYD_CMDS_LIST_DEVICES_H_
-#define BIOMETRYD_CMDS_LIST_DEVICES_H_
-
 #include <biometry/util/cli.h>
 
-namespace biometry
+namespace cli = biometry::util::cli;
+
+cli::Command::Info cli::Command::info() const
 {
-namespace cmds
-{
-class ListDevices : public util::cli::Command
-{
-public:
-    ListDevices();
-};
-}
+    return info_;
 }
 
-#endif // BIOMETRYD_CMDS_LIST_DEVICES_H_
+int cli::Command::run()
+{
+    return run_();
+}
+
+cli::Command::Command(const cli::Command::Info& info, const std::function<int()>& run)
+    : info_(info),
+      run_{run}
+{
+}
+
+cli::Command::Info& cli::Command::mutable_info()
+{
+    return info_;
+}
+
+std::function<int()>& cli::Command::mutable_run()
+{
+    return run_;
+}

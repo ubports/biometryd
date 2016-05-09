@@ -34,48 +34,38 @@
 #include <iostream>
 #include <memory>
 
+namespace cli = biometry::util::cli;
 
 biometry::cmds::Identify::Identify()
-    : device{biometry::make_command_flag<std::string>(Name{"device"}, Description{"The device to enroll to"})},
-      config{std::make_shared<TypedFlag<boost::filesystem::path>>(Command::Name{"config"}, Command::Description{"The daemon configuration"})}
+    : Command{{Name{"identify"}, Usage{"identify"}, Description{"tries to identify the user holding the device"}, {}}}
 {
-}
-
-biometry::Daemon::Command::Info biometry::cmds::Identify::info() const
-{
-    return Info
+    mutable_info().flags.push_back(cli::make_flag(Name{"device"}, Description{"The device to enroll to"}, device));
+    mutable_info().flags.push_back(cli::make_flag(Command::Name{"config"}, Command::Description{"The daemon configuration"}, config));
+    mutable_run() = [this]()
     {
-        Name{"identify"},
-        Usage{"identify"},
-        Description{"tries to identify the user holding the device"},
-        {device}
+        if (device.empty())
+        {
+            std::cout << "You must specify a device for identification" << std::endl;
+            return EXIT_FAILURE;
+        }
+
+        using StreamingJsonConfigurationBuilder = util::StreamingConfigurationBuilder<util::JsonConfigurationBuilder>;
+        StreamingJsonConfigurationBuilder builder
+        {
+            config ?
+                StreamingJsonConfigurationBuilder::make_streamer(config.get()) :
+                StreamingJsonConfigurationBuilder::make_streamer(std::cin)
+        };
+
+        auto descriptor = biometry::device_registry().at(device);
+        auto device = descriptor->create(builder.build_configuration());
+
+        auto op = device->identifier().identify_user(biometry::Application::system(), biometry::Reason{"requested by cli"});
+
+        std::cout << "Starting identification using device " << descriptor->name() << std::endl;
+
+        op->start_with_observer(std::make_shared<TracingObserver<biometry::Identification>>());
+
+        return 0;
     };
-}
-
-int biometry::cmds::Identify::run()
-{
-    if (not device->value())
-    {
-        std::cout << "You must specify a device for identification" << std::endl;
-        return EXIT_FAILURE;
-    }
-
-    using StreamingJsonConfigurationBuilder = util::StreamingConfigurationBuilder<util::JsonConfigurationBuilder>;
-    StreamingJsonConfigurationBuilder builder
-    {
-        config->value() ?
-            StreamingJsonConfigurationBuilder::make_streamer(config->value().get()) :
-            StreamingJsonConfigurationBuilder::make_streamer(std::cin)
-    };
-
-    auto descriptor = biometry::device_registry().at(*device->value());
-    auto device = descriptor->create(builder.build_configuration());
-
-    auto op = device->identifier().identify_user(biometry::Application{"system"}, biometry::Reason{"requested by cli"});
-
-    std::cout << "Starting identification using device " << descriptor->name() << std::endl;
-
-    op->start_with_observer(std::make_shared<TracingObserver<biometry::Identification>>());
-
-    return 0;
 }
