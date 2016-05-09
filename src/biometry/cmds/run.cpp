@@ -35,6 +35,8 @@
 
 #include <fstream>
 
+namespace cli = biometry::util::cli;
+
 biometry::cmds::Run::BusFactory biometry::cmds::Run::system_bus_factory()
 {
     return []()
@@ -45,59 +47,50 @@ biometry::cmds::Run::BusFactory biometry::cmds::Run::system_bus_factory()
 
 
 biometry::cmds::Run::Run(const BusFactory& bus_factory)
-    : bus_factory{bus_factory},
-      config{std::make_shared<TypedFlag<std::string>>(Command::Name{"config"}, Command::Description{"The daemon configuration"})}
+    : Command{{Name{"run"}, Usage{"run"}, Description{"run the daemon"}, {}}},
+      bus_factory{bus_factory}
 {
-}
-
-biometry::Daemon::Command::Info biometry::cmds::Run::info() const
-{
-    return Info
+    mutable_info().flags.push_back(cli::make_flag(Command::Name{"config"}, Command::Description{"The daemon configuration"}, config));
+    mutable_run() = [this]()
     {
-        Name{"run"},
-        Usage{"run"},
-        Description{"run the daemon"},
-        {config}
+        auto trap = core::posix::trap_signals_for_all_subsequent_threads({core::posix::Signal::sig_term});
+        trap->signal_raised().connect([trap](const core::posix::Signal&)
+        {
+            trap->stop();
+        });
+
+        std::cout << "here " << config.get() << std::endl;
+
+        using StreamingJsonConfigurationBuilder = util::StreamingConfigurationBuilder<util::JsonConfigurationBuilder>;
+        StreamingJsonConfigurationBuilder builder
+        {
+            config ?
+                StreamingJsonConfigurationBuilder::make_streamer(config.get()) :
+                StreamingJsonConfigurationBuilder::make_streamer(std::cin)
+        };
+        auto configuration = builder.build_configuration();
+
+        auto default_device = configuration["defaultDevice"];
+        auto default_device_descriptor = device_registry().at(default_device["id"].value().string());
+
+        util::Configuration device_config; device_config["config"] = default_device["config"];
+        auto device = default_device_descriptor->create(device_config);
+
+        auto runtime = Runtime::create();
+        auto impl = std::make_shared<biometry::DispatchingService>(biometry::util::create_dispatcher_for_runtime(runtime), device);
+
+        runtime->start();
+
+        auto bus = this->bus_factory();
+        bus->install_executor(core::dbus::asio::make_executor(bus, runtime->service()));
+
+        auto skeleton = biometry::dbus::skeleton::Service::create_for_bus(bus, impl);
+
+        trap->run();
+
+        bus->stop();
+        runtime->stop();
+
+        return EXIT_SUCCESS;
     };
-}
-
-int biometry::cmds::Run::run()
-{
-    auto trap = core::posix::trap_signals_for_all_subsequent_threads({core::posix::Signal::sig_term});
-    trap->signal_raised().connect([trap](const core::posix::Signal&)
-    {
-        trap->stop();
-    });
-
-    using StreamingJsonConfigurationBuilder = util::StreamingConfigurationBuilder<util::JsonConfigurationBuilder>;
-    StreamingJsonConfigurationBuilder builder
-    {
-        config->value() ?
-            StreamingJsonConfigurationBuilder::make_streamer(config->value().get()) :
-            StreamingJsonConfigurationBuilder::make_streamer(std::cin)
-    };
-    auto configuration = builder.build_configuration();
-
-    auto default_device = configuration["defaultDevice"];
-    auto default_device_descriptor = device_registry().at(default_device["id"].value().string());
-
-    util::Configuration device_config; device_config["config"] = default_device["config"];
-    auto device = default_device_descriptor->create(device_config);
-
-    auto runtime = Runtime::create();
-    auto impl = std::make_shared<biometry::DispatchingService>(biometry::util::create_dispatcher_for_runtime(runtime), device);
-
-    runtime->start();
-
-    auto bus = bus_factory();
-    bus->install_executor(core::dbus::asio::make_executor(bus, runtime->service()));
-
-    auto skeleton = biometry::dbus::skeleton::Service::create_for_bus(bus, impl);
-
-    trap->run();
-
-    bus->stop();
-    runtime->stop();
-
-    return EXIT_SUCCESS;
 }

@@ -20,9 +20,13 @@
 #ifndef BIOMETRYD_CMDS_RUN_H_
 #define BIOMETRYD_CMDS_RUN_H_
 
-#include <biometry/daemon.h>
+#include <biometry/util/cli.h>
+
+#include <biometry/optional.h>
 
 #include <core/dbus/bus.h>
+
+#include <boost/filesystem.hpp>
 
 #include <functional>
 #include <iostream>
@@ -32,7 +36,7 @@ namespace biometry
 {
 namespace cmds
 {
-class Run : public biometry::Daemon::Command
+class Run : public util::cli::Command
 {
 public:
     /// @brief BusFactory models creation of bus instances.
@@ -41,14 +45,12 @@ public:
     /// @brief system_bus_factory returns a BusFactory creating connections to the system bus.
     static BusFactory system_bus_factory();
 
+    /// @brief Run initializes a new instance with the given bus_factory.
     Run(const BusFactory& bus_factory = system_bus_factory());
-
-    Info info() const override;
-    int run() override;
 
 private:
     BusFactory bus_factory;
-    TypedFlag<std::string>::Ptr config;
+    Optional<boost::filesystem::path> config;
 };
 }
 }

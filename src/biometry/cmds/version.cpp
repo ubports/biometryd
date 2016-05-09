@@ -20,25 +20,15 @@
 #include <biometry/version.h>
 #include <biometry/cmds/version.h>
 
+namespace cli = biometry::util::cli;
+
 biometry::cmds::Version::Version()
+    : Command{{Name{"version"}, Usage{"version"}, Description{"print the version of the daemon"}, {}}, []()
+      {
+          std::uint32_t major, minor, patch;
+          biometry::version(major, minor, patch);
+          std::cout << "biometryd " << major << "." << minor << "." << patch << std::endl;
+          return 0;
+      }}
 {
-}
-
-biometry::Daemon::Command::Info biometry::cmds::Version::info() const
-{
-    return Info
-    {
-        Name{"version"},
-        Usage{"version"},
-        Description{"print the version of the daemon"},
-        {}
-    };
-}
-
-int biometry::cmds::Version::run()
-{
-    std::uint32_t major, minor, patch;
-    biometry::version(major, minor, patch);
-    std::cout << "biometryd " << major << "." << minor << "." << patch << std::endl;
-    return 0;
 }

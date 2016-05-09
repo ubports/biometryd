@@ -34,30 +34,30 @@
 #include <iostream>
 #include <map>
 
+namespace cli = biometry::util::cli;
 namespace po = boost::program_options;
-
 
 namespace
 {
-std::multimap<biometry::Daemon::Command::Name, std::function<void(const std::string&)>>& notifiers()
+std::multimap<cli::Command::Name, std::function<void(const std::string&)>>& notifiers()
 {
-    static std::multimap<biometry::Daemon::Command::Name, std::function<void(const std::string&)>> instance;
+    static std::multimap<cli::Command::Name, std::function<void(const std::string&)>> instance;
     return instance;
 }
 }
 
-biometry::Daemon::Command::Flag::Flag(const Name& name, const Description& description)
+cli::Command::Flag::Flag(const Name& name, const Description& description)
     : name_{name},
       description_{description}
 {
 }
 
-const biometry::Daemon::Command::Name& biometry::Daemon::Command::Flag::name() const
+const cli::Command::Name& cli::Command::Flag::name() const
 {
     return name_;
 }
 
-const biometry::Daemon::Command::Description& biometry::Daemon::Command::Flag::description() const
+const cli::Command::Description& cli::Command::Flag::description() const
 {
     return description_;
 }
@@ -136,7 +136,7 @@ int biometry::Daemon::run(const std::vector<std::string>& args)
     }
 }
 
-void biometry::Daemon::install_command(const Command::Ptr& command)
+void biometry::Daemon::install_command(const cli::Command::Ptr& command)
 {
     cmds[command->info().name] = command;
 }
