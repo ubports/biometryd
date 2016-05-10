@@ -35,14 +35,14 @@ class BIOMETRY_DLL_PUBLIC AtomicCounter
 {
 public:
     /// @brief AtomicCounter initializes a new instance to the given value.
-    explicit AtomicCounter(std::uint64_t value = 0);
+    explicit AtomicCounter(std::uint32_t value = 0);
 
     /// @brief increment increments the value of the counter and returns the previously stored value.
-    std::uint64_t increment();
+    std::uint32_t increment();
 
 private:
     /// @cond
-    std::atomic<std::uint64_t> counter;
+    std::atomic<std::uint32_t> counter;
     /// @endcond
 };
 
