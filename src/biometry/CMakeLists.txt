@@ -37,8 +37,6 @@ add_library(
   cmds/identify.cpp
   cmds/list_devices.h
   cmds/list_devices.cpp
-  cmds/help.h
-  cmds/help.cpp
   cmds/run.h
   cmds/run.cpp
   cmds/version.h

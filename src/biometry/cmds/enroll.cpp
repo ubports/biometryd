@@ -35,26 +35,18 @@
 namespace cli = biometry::util::cli;
 
 biometry::cmds::Enroll::Enroll()
-    : Command
-      {
-          {
-              Name{"enroll"},
-              Usage{"enroll"},
-              Description{"enrolls a new template to a device"},
-              {}
-          }
-      },
+    : CommandWithFlagsAndAction{cli::Name{"enroll"}, cli::Usage{"enroll"}, cli::Description{"enrolls a new template to a device"}},
       user(biometry::User::current())
 {
-    mutable_info().flags.push_back(cli::make_flag(Name{"device"}, Description{"The device to enroll to"}, device));
-    mutable_info().flags.push_back(cli::make_flag(Name{"device"}, Description{"The device to enroll to"}, device));
-    mutable_info().flags.push_back(cli::make_flag(Name{"user"}, Description{"The user to enroll for"}, device));
+    flag(cli::make_flag(cli::Name{"device"}, cli::Description{"The device to enroll to"}, device));
+    flag(cli::make_flag(cli::Name{"device"}, cli::Description{"The device to enroll to"}, device));
+    flag(cli::make_flag(cli::Name{"user"}, cli::Description{"The user to enroll for"}, device));
 
-    mutable_run() = [this]()
+    action([this](const cli::Command::Context& ctxt)
     {
         if (device.empty())
         {
-            std::cout << "You must specify a device for enrolling a template" << std::endl;
+            ctxt.cout << "You must specify a device for enrolling a template" << std::endl;
             return EXIT_FAILURE;
         }
 
@@ -71,10 +63,10 @@ biometry::cmds::Enroll::Enroll()
 
         auto op = device->template_store().enroll(biometry::Application::system(), user);
 
-        std::cout << "Starting template enrollment for " << user << " to " << descriptor->name() << std::endl;
+        ctxt.cout << "Starting template enrollment for " << user << " to " << descriptor->name() << std::endl;
 
         op->start_with_observer(std::make_shared<TracingObserver<biometry::TemplateStore::Enrollment>>());
 
         return 0;
-    };
+    });
 }

@@ -54,11 +54,8 @@ public:
     int run(const std::vector<std::string>& args);
 
 private:
-    void install_command(const util::cli::Command::Ptr& command);
-
     DeviceRegistrar device_registrar;
-    std::unordered_map<std::string, util::cli::Command::Ptr> cmds;
-    util::cli::Command::Ptr help;
+    util::cli::CommandWithSubcommands cmd;
 };
 
 

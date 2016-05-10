@@ -25,12 +25,13 @@
 namespace cli = biometry::util::cli;
 
 biometry::cmds::ListDevices::ListDevices()
-    : Command{{Name{"list-devices"}, Usage{"list-devices"}, Description{"lists all known devices"}, {}}, []()
-      {
-          std::cout << "Known devices:" << std::endl;
-          for (const auto& pair : biometry::device_registry())
-              std::cout << " - " << pair.first << "\t" << pair.second->description() << std::endl;
-          return 0;
-      }}
+    : CommandWithFlagsAndAction{cli::Name{"list-devices"}, cli::Usage{"list-devices"}, cli::Description{"lists all known devices"}}
 {
+    action([](const cli::Command::Context& ctxt)
+    {
+        ctxt.cout << "Known devices:" << std::endl;
+        for (const auto& pair : biometry::device_registry())
+            ctxt.cout << " - " << pair.first << "\t" << pair.second->description() << std::endl;
+        return 0;
+    });
 }

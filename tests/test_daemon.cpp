@@ -65,18 +65,18 @@ TEST(SizeConstrainedString, stores_string_content_passed_on_construction)
 
 TEST(TypedFlag, stores_name_and_desc_passed_on_construction)
 {
-    cli::Command::Name name{"42"};
-    cli::Command::Description desc{"43"};
-    cli::Command::TypedFlag<int> flag{name, desc};
+    cli::Name name{"42"};
+    cli::Description desc{"43"};
+    cli::TypedFlag<int> flag{name, desc};
     EXPECT_EQ(name, flag.name());
     EXPECT_EQ(desc, flag.description());
 }
 
 TEST(TypedFlag, parses_string_on_notify_and_sets_value)
 {
-    cli::Command::Name name{"42"};
-    cli::Command::Description desc{"43"};
-    cli::Command::TypedFlag<int> flag{name, desc};
+    cli::Name name{"42"};
+    cli::Description desc{"43"};
+    cli::TypedFlag<int> flag{name, desc};
     EXPECT_FALSE(flag.value().is_initialized());
     flag.notify("42");
     EXPECT_TRUE(flag.value().is_initialized());
@@ -153,7 +153,7 @@ TEST_F(Daemon, invoking_run_succeeds)
         biometry::Daemon daemon;
         auto rc = daemon.run(
         {
-            "run", "--config", "test.json"
+            "run", "--config=test.json"
         });
 
         return rc == EXIT_SUCCESS ? core::posix::exit::Status::success : core::posix::exit::Status::failure;
