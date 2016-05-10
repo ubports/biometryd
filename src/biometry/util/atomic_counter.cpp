@@ -19,11 +19,11 @@
 
 #include <biometry/util/atomic_counter.h>
 
-biometry::util::AtomicCounter::AtomicCounter(uint64_t value) : counter{value}
+biometry::util::AtomicCounter::AtomicCounter(std::uint32_t value) : counter{value}
 {
 }
 
-std::uint64_t biometry::util::AtomicCounter::increment()
+std::uint32_t biometry::util::AtomicCounter::increment()
 {
     return counter++;
 }
