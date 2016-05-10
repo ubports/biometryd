@@ -21,6 +21,7 @@
 
 #include <biometry/devices/plugin/enumerator.h>
 
+#include <biometry/cmds/config.h>
 #include <biometry/cmds/enroll.h>
 #include <biometry/cmds/identify.h>
 #include <biometry/cmds/list_devices.h>
@@ -41,6 +42,7 @@ biometry::Daemon::Daemon()
       cmd{cli::Name{"biometryd"}, cli::Usage{"biometryd"}, cli::Description{"biometryd"}}
 {
     cmd.command(std::make_shared<cmds::Enroll>())
+       .command(std::make_shared<cmds::Config>())
        .command(std::make_shared<cmds::Identify>())
        .command(std::make_shared<cmds::ListDevices>())
        .command(std::make_shared<cmds::Run>())

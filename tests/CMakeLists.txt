@@ -70,6 +70,8 @@ BIOMETRYD_ADD_TEST(test_progress test_progress.cpp)
 BIOMETRYD_ADD_TEST(test_user test_user.cpp)
 BIOMETRYD_ADD_TEST(test_verifier test_verifier.cpp)
 
+BIOMETRYD_ADD_TEST(test_cmds_config cmds/test_config.cpp)
+
 add_executable(test_qml_plugin test_qml_plugin.cpp)
 qt5_use_modules(test_qml_plugin Core Qml Quick QuickTest)
 add_test(test_qml_plugin test_qml_plugin)

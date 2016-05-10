@@ -205,6 +205,20 @@ public:
     // Safe us some typing
     typedef std::shared_ptr<Command> Ptr;    
 
+    /// @brief FlagsMissing is thrown if at least one required flag is missing.
+    struct FlagsMissing : public std::runtime_error
+    {
+        /// @brief FlagsMissing initializes a new instance.
+        FlagsMissing();
+    };
+
+    /// @brief FlagsWithWrongValue is thrown if a value passed on the command line is invalid.
+    struct FlagsWithInvalidValue : public std::runtime_error
+    {
+        /// @brief FlagsWithInvalidValue initializes a new instance.
+        FlagsWithInvalidValue();
+    };
+
     /// @brief Context bundles information passed to Command::run invocations.
     struct Context
     {
