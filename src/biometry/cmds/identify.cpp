@@ -37,15 +37,15 @@
 namespace cli = biometry::util::cli;
 
 biometry::cmds::Identify::Identify()
-    : Command{{Name{"identify"}, Usage{"identify"}, Description{"tries to identify the user holding the device"}, {}}}
+    : CommandWithFlagsAndAction{cli::Name{"identify"}, cli::Usage{"identify"}, cli::Description{"tries to identify the user holding the device"}}
 {
-    mutable_info().flags.push_back(cli::make_flag(Name{"device"}, Description{"The device to enroll to"}, device));
-    mutable_info().flags.push_back(cli::make_flag(Command::Name{"config"}, Command::Description{"The daemon configuration"}, config));
-    mutable_run() = [this]()
+    flag(cli::make_flag(cli::Name{"device"}, cli::Description{"The device to enroll to"}, device));
+    flag(cli::make_flag(cli::Name{"config"}, cli::Description{"The daemon configuration"}, config));
+    action([this](const cli::Command::Context& ctxt)
     {
         if (device.empty())
         {
-            std::cout << "You must specify a device for identification" << std::endl;
+            ctxt.cout << "You must specify a device for identification" << std::endl;
             return EXIT_FAILURE;
         }
 
@@ -62,10 +62,10 @@ biometry::cmds::Identify::Identify()
 
         auto op = device->identifier().identify_user(biometry::Application::system(), biometry::Reason{"requested by cli"});
 
-        std::cout << "Starting identification using device " << descriptor->name() << std::endl;
+        ctxt.cout << "Starting identification using device " << descriptor->name() << std::endl;
 
         op->start_with_observer(std::make_shared<TracingObserver<biometry::Identification>>());
 
         return 0;
-    };
+    });
 }

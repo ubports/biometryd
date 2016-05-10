@@ -30,7 +30,7 @@ namespace biometry
 {
 namespace cmds
 {
-class Version : public util::cli::Command
+class Version : public util::cli::CommandWithFlagsAndAction
 {
 public:
     Version();

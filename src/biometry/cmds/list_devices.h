@@ -26,7 +26,7 @@ namespace biometry
 {
 namespace cmds
 {
-class ListDevices : public util::cli::Command
+class ListDevices : public util::cli::CommandWithFlagsAndAction
 {
 public:
     ListDevices();

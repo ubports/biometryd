@@ -36,7 +36,7 @@ namespace biometry
 namespace cmds
 {
 /// @brief Enroll requests enrollment of a new template to a biometric device.
-class Enroll : public util::cli::Command
+class Enroll : public util::cli::CommandWithFlagsAndAction
 {
 public:
     /// @brief Enroll creates a new instance, initializing flags to default values.

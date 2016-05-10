@@ -26,9 +26,11 @@
 #include <iomanip>
 #include <iostream>
 #include <memory>
+#include <set>
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <unordered_map>
 
 namespace biometry
 {
@@ -78,170 +80,263 @@ BIOMETRY_DLL_PUBLIC std::ostream& operator<<(std::ostream& out, const SizeConstr
     return out << std::setw(max) << std::left << scs.as_string();
 }
 
+// We are imposing size constraints to ensure a consistent CLI layout.
+typedef SizeConstrainedString<15> Name;
+typedef SizeConstrainedString<60> Usage;
+typedef SizeConstrainedString<60> Description;
+
+/// @brief Flag models an input parameter to a command.
+class BIOMETRY_DLL_PUBLIC Flag : public DoNotCopyOrMove
+{
+public:
+    // Safe us some typing.
+    typedef std::shared_ptr<Flag> Ptr;
+
+    /// @brief notify announces a new value to the flag.
+    virtual void notify(const std::string& value) = 0;
+    /// @brief name returns the name of the Flag.
+    const Name& name() const;
+    /// @brief description returns a human-readable description of the flag.
+    const Description& description() const;
+
+protected:
+    /// @brief Flag creates a new instance, initializing name and description
+    /// from the given values.
+    Flag(const Name& name, const Description& description);
+
+private:
+    Name name_;
+    Description description_;
+};
+
+/// @brief TypedFlag implements Flag relying on operator<< and operator>> to read/write values to/from strings.
+template<typename T>
+class BIOMETRY_DLL_PUBLIC TypedFlag : public Flag
+{
+public:
+    typedef std::shared_ptr<TypedFlag<T>> Ptr;
+
+    TypedFlag(const Name& name, const Description& description) : Flag{name, description}
+    {
+    }
+
+    /// @brief value installs the given value in the flag.
+    TypedFlag& value(const T& value)
+    {
+        value_ = value;
+        return *this;
+    }
+
+    /// @brief value returns the optional value associated with the flag.
+    const Optional<T>& value() const
+    {
+        return value_;
+    }
+
+    /// @brief notify tries to unwrap a value of type T from value.
+    void notify(const std::string& s) override
+    {
+        std::stringstream ss{s};
+        T value; ss >> value;
+        value_ = value;
+    }
+
+private:
+    Optional<T> value_;
+};
+
+/// @brief TypedReferenceFlag implements Flag, relying on operator<</>> to convert to/from string representations,
+/// updating the given mutable reference to a value of type T.
+template<typename T>
+class BIOMETRY_DLL_PUBLIC TypedReferenceFlag : public Flag
+{
+public:
+    // Safe us some typing.
+    typedef std::shared_ptr<TypedReferenceFlag<T>> Ptr;
+
+    /// @brief TypedReferenceFlag initializes a new instance with name, description and value.
+    TypedReferenceFlag(const Name& name, const Description& description, T& value)
+        : Flag{name, description},
+          value_{value}
+    {
+    }
+
+    /// @brief notify tries to unwrap a value of type T from value,
+    /// relying on operator>> to read from given string s.
+    void notify(const std::string& s) override
+    {
+        std::stringstream ss{s};
+        ss >> value_.get();
+    }
+
+private:
+    std::reference_wrapper<T> value_;
+};
+
+/// @brief OptionalTypedReferenceFlag handles Optional<T> references, making sure that
+/// a value is always read on notify, even if the Optional<T> wasn't initialized previously.
+template<typename T>
+class BIOMETRY_DLL_PUBLIC OptionalTypedReferenceFlag : public Flag
+{
+public:
+    typedef std::shared_ptr<OptionalTypedReferenceFlag<T>> Ptr;
+
+    OptionalTypedReferenceFlag(const Name& name, const Description& description, Optional<T>& value)
+        : Flag{name, description},
+          value_{value}
+    {
+    }
+
+    /// @brief notify tries to unwrap a value of type T from value.
+    void notify(const std::string& s) override
+    {
+        std::stringstream ss{s}; T value; ss >> value;
+        value_.get() = value;
+    }
+
+private:
+    std::reference_wrapper<Optional<T>> value_;
+};
+
 /// @brief Command abstracts an individual command available from the daemon.
 class BIOMETRY_DLL_PUBLIC Command : public DoNotCopyOrMove
 {
 public:
     // Safe us some typing
-    typedef std::shared_ptr<Command> Ptr;
+    typedef std::shared_ptr<Command> Ptr;    
 
-    // We are imposing size constraints to ensure a consistent CLI layout.
-    typedef SizeConstrainedString<15> Name;
-    typedef SizeConstrainedString<60> Usage;
-    typedef SizeConstrainedString<60> Description;
-
-    /// @brief Flag models an input parameter to a command.
-    class Flag : public DoNotCopyOrMove
+    /// @brief Context bundles information passed to Command::run invocations.
+    struct Context
     {
-    public:
-        // Safe us some typing.
-        typedef std::shared_ptr<Flag> Ptr;
-
-        /// @brief notify announces a new value to the flag.
-        virtual void notify(const std::string& value) = 0;
-        /// @brief name returns the name of the Flag.
-        const Name& name() const;
-        /// @brief description returns a human-readable description of the flag.
-        const Description& description() const;
-
-    protected:
-        /// @brief Flag creates a new instance, initializing name and description
-        /// from the given values.
-        Flag(const Name& name, const Description& description);
-
-    private:
-        Name name_;
-        Description description_;
+        std::istream& cin;              ///< The std::istream that should be used for reading.
+        std::ostream& cout;             ///< The std::ostream that should be used for writing.
+        std::vector<std::string> args;  ///< The command line args.
     };
 
-    /// @brief Info bundles details about a command.
-    struct Info
-    {
-        Name name;  ///< The name of the command.
-        Usage usage; ///< Short usage description of the command.
-        Description description; /// More detailed description of the command.
-        std::vector<Flag::Ptr> flags; /// Flags known to the command.
-    };
+    /// @brief name returns the Name of the command.
+    virtual Name name() const;
 
-    template<typename T>
-    class TypedFlag : public Flag
-    {
-    public:
-        typedef std::shared_ptr<TypedFlag<T>> Ptr;
+    /// @brief usage returns a short usage string for the command.
+    virtual Usage usage() const;
 
-        TypedFlag(const Name& name, const Description& description) : Flag{name, description}
-        {
-        }
+    /// @brief description returns a longer string explaining the command.
+    virtual Description description() const;
 
-        /// @brief value installs the given value in the flag.
-        TypedFlag& value(const T& value)
-        {
-            value_ = value;
-            return *this;
-        }
-
-        /// @brief value returns the optional value associated with the flag.
-        const Optional<T>& value() const
-        {
-            return value_;
-        }
-
-        /// @brief notify tries to unwrap a value of type T from value.
-        void notify(const std::string& s) override
-        {
-            std::stringstream ss{s};
-            T value; ss >> value;
-            value_ = value;
-        }
-
-    private:
-        Optional<T> value_;
-    };
-
-    template<typename T>
-    class TypedReferenceFlag : public Flag
-    {
-    public:
-        typedef std::shared_ptr<TypedReferenceFlag<T>> Ptr;
-
-        TypedReferenceFlag(const Name& name, const Description& description, T& value)
-            : Flag{name, description},
-              value_{value}
-        {
-        }
-
-        /// @brief notify tries to unwrap a value of type T from value.
-        void notify(const std::string& s) override
-        {
-            std::stringstream ss{s};
-            ss >> value_.get();
-        }
-
-    private:
-        std::reference_wrapper<T> value_;
-    };
-
-    /// @brief OptionalTypedReferenceFlag handles Optional<T> references, making sure that
-    /// a value is always read on notify, even if the Optional<T> wasn't initialized previously.
-    template<typename T>
-    class OptionalTypedReferenceFlag : public Flag
-    {
-    public:
-        typedef std::shared_ptr<OptionalTypedReferenceFlag<T>> Ptr;
-
-        OptionalTypedReferenceFlag(const Name& name, const Description& description, Optional<T>& value)
-            : Flag{name, description},
-              value_{value}
-        {
-        }
-
-        /// @brief notify tries to unwrap a value of type T from value.
-        void notify(const std::string& s) override
-        {
-            std::stringstream ss{s}; T value; ss >> value;
-            value_.get() = value;
-        }
-
-    private:
-        std::reference_wrapper<Optional<T>> value_;
-    };
-
-    /// @brief info returns Info about a command.
-    virtual Info info() const;
     /// @brief run puts the command to execution.
-    virtual int run();
+    virtual int run(const Context& context) = 0;
+
+    /// @brief help prints information about a command to out.
+    virtual void help(std::ostream& out) = 0;
 
 protected:
-    /// @brief Command initializes a new instance with the given info and functor.
-    Command(const Info& info, const std::function<int()>& run = std::function<int()>());
+    /// @brief Command initializes a new instance with the given name, usage and description.
+    Command(const Name& name, const Usage& usage, const Description& description);
 
-    /// @brief info returns a mutable reference to info_.
-    Info& mutable_info();
-
-    /// @brief run returns a mutable reference to run_.
-    std::function<int()>& mutable_run();
+    /// @brief name adjusts the name of the command to n.
+    // virtual void name(const Name& n);
+    /// @brief usage adjusts the usage string of the comand to u.
+    // virtual void usage(const Usage& u);
+    /// @brief description adjusts the description string of the command to d.
+    // virtual void description(const Description& d);
 
 private:
-    Info info_;
-    std::function<int()> run_;
+    Name name_;
+    Usage usage_;
+    Description description_;
 };
 
-template<typename T>
-BIOMETRY_DLL_PUBLIC typename Command::TypedFlag<T>::Ptr make_flag(const Command::Name& name, const Command::Description& desc)
+/// @brief CommandWithSubcommands implements Command, selecting one of a set of actions.
+class BIOMETRY_DLL_PUBLIC CommandWithSubcommands : public Command
 {
-    return std::make_shared<Command::TypedFlag<T>>(name, desc);
+public:
+    typedef std::shared_ptr<CommandWithSubcommands> Ptr;
+    typedef std::function<int(const Context&)> Action;
+
+    /// @brief CommandWithSubcommands initializes a new instance with the given name, usage and description
+    CommandWithSubcommands(const Name& name, const Usage& usage, const Description& description);
+
+    /// @brief command adds the given command to the set of known commands.
+    CommandWithSubcommands& command(const Command::Ptr& command);
+
+    /// @brief flag adds the given flag to the set of known flags.
+    CommandWithSubcommands& flag(const Flag::Ptr& flag);
+
+    // From Command
+    int run(const Context& context) override;
+    void help(std::ostream &out) override;
+
+private:
+    std::unordered_map<std::string, Command::Ptr> commands_;
+    std::set<Flag::Ptr> flags_;
+};
+
+/// @brief CommandWithFlagsAction implements Command, executing an Action after handling
+class BIOMETRY_DLL_PUBLIC CommandWithFlagsAndAction : public Command
+{
+public:
+    typedef std::shared_ptr<CommandWithFlagsAndAction> Ptr;
+    typedef std::function<int(const Context&)> Action;
+
+    /// @brief CommandWithFlagsAndAction initializes a new instance with the given name, usage and description
+    CommandWithFlagsAndAction(const Name& name, const Usage& usage, const Description& description);
+
+    /// @brief flag adds the given flag to the set of known flags.
+    CommandWithFlagsAndAction& flag(const Flag::Ptr& flag);
+
+    /// @brief action installs the given action.
+    CommandWithFlagsAndAction& action(const Action& action);
+
+    // From Command
+    int run(const Context& context) override;
+    void help(std::ostream &out) override;
+
+private:
+    std::set<Flag::Ptr> flags_;
+    Action action_;
+};
+
+namespace cmd
+{
+/// @brief HelpFor prints a help message for the given command on execution.
+class Help : public Command
+{
+public:
+    /// @brief HelpFor initializes a new instance with the given reference to a cmd.
+    explicit Help(Command& cmd);
+
+    // From Command
+    int run(const Context &context) override;
+    void help(std::ostream &out) override;
+
+private:
+    /// @cond
+    Command& command;
+    /// @endcond
+};
 }
 
+/// @brief args returns a vector of strings assembled from argc and argv.
+BIOMETRY_DLL_PUBLIC std::vector<std::string> args(int argc, char** argv);
+
+/// @brief make_flag returns a flag with the given name and description.
 template<typename T>
-BIOMETRY_DLL_PUBLIC typename Command::TypedReferenceFlag<T>::Ptr make_flag(const Command::Name& name, const Command::Description& desc, T& value)
+BIOMETRY_DLL_PUBLIC typename TypedFlag<T>::Ptr make_flag(const Name& name, const Description& description)
 {
-    return std::make_shared<Command::TypedReferenceFlag<T>>(name, desc, value);
+    return std::make_shared<TypedFlag<T>>(name, description);
 }
 
+/// @brief make_flag returns a flag with the given name and description, notifying updates to value.
 template<typename T>
-BIOMETRY_DLL_PUBLIC typename Command::OptionalTypedReferenceFlag<T>::Ptr make_flag(const Command::Name& name, const Command::Description& desc, Optional<T>& value)
+BIOMETRY_DLL_PUBLIC typename TypedReferenceFlag<T>::Ptr make_flag(const Name& name, const Description& desc, T& value)
 {
-    return std::make_shared<Command::OptionalTypedReferenceFlag<T>>(name, desc, value);
+    return std::make_shared<TypedReferenceFlag<T>>(name, desc, value);
+}
+
+/// @brief make_flag returns a flag with the given name and description, updating the given optional value.
+template<typename T>
+BIOMETRY_DLL_PUBLIC typename OptionalTypedReferenceFlag<T>::Ptr make_flag(const Name& name, const Description& desc, Optional<T>& value)
+{
+    return std::make_shared<OptionalTypedReferenceFlag<T>>(name, desc, value);
 }
 }
 }

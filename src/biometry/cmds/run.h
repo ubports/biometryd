@@ -36,7 +36,7 @@ namespace biometry
 {
 namespace cmds
 {
-class Run : public util::cli::Command
+class Run : public util::cli::CommandWithFlagsAndAction
 {
 public:
     /// @brief BusFactory models creation of bus instances.

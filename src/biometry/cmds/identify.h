@@ -36,7 +36,7 @@ namespace biometry
 namespace cmds
 {
 /// @brief Identify requests identification of the user.
-class Identify : public util::cli::Command
+class Identify : public util::cli::CommandWithFlagsAndAction
 {
 public:
     /// @brief Enroll creates a new instance, initializing flags to default values.

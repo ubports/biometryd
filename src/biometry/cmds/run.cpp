@@ -47,19 +47,17 @@ biometry::cmds::Run::BusFactory biometry::cmds::Run::system_bus_factory()
 
 
 biometry::cmds::Run::Run(const BusFactory& bus_factory)
-    : Command{{Name{"run"}, Usage{"run"}, Description{"run the daemon"}, {}}},
+    : CommandWithFlagsAndAction{cli::Name{"run"}, cli::Usage{"run"}, cli::Description{"run the daemon"}},
       bus_factory{bus_factory}
 {
-    mutable_info().flags.push_back(cli::make_flag(Command::Name{"config"}, Command::Description{"The daemon configuration"}, config));
-    mutable_run() = [this]()
+    flag(cli::make_flag(cli::Name{"config"}, cli::Description{"The daemon configuration"}, config));
+    action([this](const cli::Command::Context&)
     {
         auto trap = core::posix::trap_signals_for_all_subsequent_threads({core::posix::Signal::sig_term});
         trap->signal_raised().connect([trap](const core::posix::Signal&)
         {
             trap->stop();
         });
-
-        std::cout << "here " << config.get() << std::endl;
 
         using StreamingJsonConfigurationBuilder = util::StreamingConfigurationBuilder<util::JsonConfigurationBuilder>;
         StreamingJsonConfigurationBuilder builder
@@ -92,5 +90,5 @@ biometry::cmds::Run::Run(const BusFactory& bus_factory)
         runtime->stop();
 
         return EXIT_SUCCESS;
-    };
+    });
 }
