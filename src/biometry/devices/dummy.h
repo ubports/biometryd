@@ -22,6 +22,10 @@
 
 #include <biometry/device.h>
 
+#include <biometry/identifier.h>
+#include <biometry/template_store.h>
+#include <biometry/verifier.h>
+
 namespace biometry
 {
 namespace devices
@@ -32,6 +36,45 @@ class BIOMETRY_DLL_PUBLIC Dummy : public biometry::Device
 public:
     static constexpr const char* id{"Dummy"};
 
+    template<typename T>
+    struct Operation : public biometry::Operation<T>
+    {
+        void start_with_observer(const typename biometry::Operation<T>::Observer::Ptr& observer) override
+        {
+            observer->on_started();
+            typename biometry::Operation<T>::Result result{};
+            observer->on_succeeded(result);
+        }
+
+        void cancel() override
+        {
+
+        }
+    };
+
+    class TemplateStore : public biometry::TemplateStore
+    {
+    public:
+        // From biometry::TemplateStore.
+        biometry::Operation<biometry::TemplateStore::SizeQuery>::Ptr size(const biometry::Application& app, const biometry::User& user) override;
+        biometry::Operation<biometry::TemplateStore::Enrollment>::Ptr enroll(const biometry::Application& app, const biometry::User& user) override;
+        biometry::Operation<biometry::TemplateStore::Clearance>::Ptr clear(const biometry::Application& app, const biometry::User& user) override;
+    };
+
+    class Identifier : public biometry::Identifier
+    {
+    public:
+        // From biometry::Identifier.
+        biometry::Operation<biometry::Identification>::Ptr identify_user(const biometry::Application& app, const biometry::Reason& reason) override;
+    };
+
+    class Verifier : public biometry::Verifier
+    {
+    public:
+        // From biometry::Identifier.
+        Operation<Verification>::Ptr verify_user(const Application& app, const User& user, const Reason& reason) override;
+    };
+
     /// @brief make_descriptor returns a descriptor instance describing a Dummy device;
     static Descriptor::Ptr make_descriptor();
 
@@ -39,9 +82,14 @@ public:
     Dummy();
 
     // From biometry::Device
-    TemplateStore& template_store() override;
-    Identifier& identifier() override;
-    Verifier& verifier() override;
+    biometry::TemplateStore& template_store() override;
+    biometry::Identifier& identifier() override;
+    biometry::Verifier& verifier() override;
+
+private:
+    TemplateStore template_store_;
+    Identifier identifier_;
+    Verifier verifier_;
 };
 }
 }

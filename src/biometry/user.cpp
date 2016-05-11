@@ -35,6 +35,10 @@ const biometry::User& biometry::User::current()
     return instance;
 }
 
+biometry::User::User(uid_t id) : id{id}
+{
+}
+
 bool biometry::operator<(const User& lhs, const User& rhs)
 {
     return lhs.id < rhs.id;
@@ -44,7 +48,6 @@ bool biometry::operator==(const User& lhs, const User& rhs)
 {
     return lhs.id == rhs.id;
 }
-
 
 std::ostream& biometry::operator<<(std::ostream& out, const User& user)
 {

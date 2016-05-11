@@ -23,23 +23,48 @@
 
 #include <biometry/device_registry.h>
 
+biometry::Operation<biometry::TemplateStore::SizeQuery>::Ptr biometry::devices::Dummy::TemplateStore::size(const biometry::Application&, const biometry::User&)
+{
+    return std::make_shared<Dummy::Operation<biometry::TemplateStore::SizeQuery>>();
+}
+
+biometry::Operation<biometry::TemplateStore::Enrollment>::Ptr biometry::devices::Dummy::TemplateStore::enroll(const biometry::Application&, const biometry::User&)
+{
+    return std::make_shared<Dummy::Operation<biometry::TemplateStore::Enrollment>>();
+}
+
+biometry::Operation<biometry::TemplateStore::Clearance>::Ptr biometry::devices::Dummy::TemplateStore::clear(const biometry::Application&, const biometry::User&)
+{
+    return std::make_shared<Dummy::Operation<biometry::TemplateStore::Clearance>>();
+}
+
+biometry::Operation<biometry::Identification>::Ptr biometry::devices::Dummy::Identifier::identify_user(const biometry::Application&, const biometry::Reason&)
+{
+    return std::make_shared<Dummy::Operation<biometry::Identification>>();
+}
+
+biometry::Operation<biometry::Verification>::Ptr biometry::devices::Dummy::Verifier::verify_user(const Application&, const User&, const Reason&)
+{
+    return std::make_shared<Dummy::Operation<biometry::Verification>>();
+}
+
 biometry::devices::Dummy::Dummy()
 {
 }
 
 biometry::TemplateStore& biometry::devices::Dummy::template_store()
 {
-    util::not_implemented(__PRETTY_FUNCTION__);
+    return template_store_;
 }
 
 biometry::Identifier& biometry::devices::Dummy::identifier()
 {
-    util::not_implemented(__PRETTY_FUNCTION__);
+    return identifier_;
 }
 
 biometry::Verifier& biometry::devices::Dummy::verifier()
 {
-    util::not_implemented(__PRETTY_FUNCTION__);
+    return verifier_;
 }
 
 namespace

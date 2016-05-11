@@ -41,6 +41,8 @@ add_library(
   cmds/list_devices.cpp
   cmds/run.h
   cmds/run.cpp
+  cmds/test.h
+  cmds/test.cpp
   cmds/version.h
   cmds/version.cpp
 
@@ -100,6 +102,8 @@ add_library(
   util/json_configuration_builder.cpp
   util/not_implemented.h
   util/not_implemented.cpp
+  util/not_reachable.h
+  util/not_reachable.cpp
   util/once.h
   util/streaming_configuration_builder.h
   util/synchronized.h

@@ -69,7 +69,7 @@ biometry::cmds::Run::Run(const BusFactory& bus_factory)
         auto configuration = builder.build_configuration();
 
         auto default_device = configuration["defaultDevice"];
-        auto default_device_descriptor = device_registry().at(default_device["id"].value().string());
+        auto default_device_descriptor = device_registry().at(default_device[std::string("id")].value().string());
 
         util::Configuration device_config; device_config["config"] = default_device["config"];
         auto device = default_device_descriptor->create(device_config);

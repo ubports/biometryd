@@ -23,6 +23,7 @@
 #include <biometry/operation.h>
 
 #include <iostream>
+#include <string>
 
 namespace biometry
 {
@@ -32,30 +33,40 @@ class TracingObserver : public biometry::Operation<T>::Observer
 public:
     typedef typename biometry::Operation<T>::Observer Super;
 
+    TracingObserver(std::size_t offset = 0, std::ostream& out = std::cout)
+        : indent(offset, ' '),
+          out{out}
+    {
+    }
+
     void on_started()
     {
-        std::cout << __PRETTY_FUNCTION__ << std::endl;
+        out << indent << __FUNCTION__ << std::endl;
     }
 
     void on_progress(const typename Super::Progress&)
     {
-        std::cout << __PRETTY_FUNCTION__ << std::endl;
+        out << indent << __FUNCTION__ << std::endl;
     }
 
     void on_canceled(const typename Super::Reason&)
     {
-        std::cout << __PRETTY_FUNCTION__ << std::endl;
+        out << indent << __FUNCTION__ << std::endl;
     }
 
     void on_failed(const typename Super::Error&)
     {
-        std::cout << __PRETTY_FUNCTION__ << std::endl;
+        out << indent << __FUNCTION__ << std::endl;
     }
 
     void on_succeeded(const typename Super::Result&)
     {
-        std::cout << __PRETTY_FUNCTION__ << std::endl;
+        out << indent << __FUNCTION__ << std::endl;
     }
+
+private:
+    std::string indent;
+    std::ostream& out;
 };
 }
 
