@@ -43,7 +43,7 @@ add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/plugins.qmltypes
 # can test the module within the build env.
 configure_file(qmldir qmldir COPYONLY)
 
-set(PLUGIN_DIR ${CMAKE_INSTALL_LIBDIR}/biometryd/qml/Biometryd)
+set(PLUGIN_DIR ${CMAKE_INSTALL_LIBDIR}/qt5/qml/Biometryd)
 
 install(
     TARGETS biometryd-qml
