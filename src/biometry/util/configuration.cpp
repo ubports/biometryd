@@ -18,6 +18,7 @@
  */
 
 #include <biometry/util/configuration.h>
+#include <biometry/util/not_reachable.h>
 
 #include <boost/format.hpp>
 #include <boost/optional.hpp>
@@ -37,6 +38,11 @@ const biometry::util::Configuration::Node& null()
 biometry::util::Configuration::Node::Node(const Variant &value)
     : value_{value}
 {
+}
+
+bool biometry::util::Configuration::Node::is_null() const
+{
+    return value_.type() == Variant::Type::none;
 }
 
 const biometry::Variant& biometry::util::Configuration::Node::value() const
@@ -60,9 +66,40 @@ biometry::util::Configuration::Children& biometry::util::Configuration::Node::ch
     return children_;
 }
 
+biometry::util::Configuration::Node& biometry::util::Configuration::Node::operator()(const std::string& name, const std::function<void()>& catcher)
+{
+    try
+    {
+        return children_.at(name);
+    }
+    catch(...) { catcher(); }
+
+    util::not_reachable(__FUNCTION__, __FILE__, __LINE__);
+}
+
+const biometry::util::Configuration::Node& biometry::util::Configuration::Node::operator()(const std::string& name, const std::function<void()>& catcher) const
+{
+    try
+    {
+        return children_.at(name);
+    }
+    catch (...) { catcher(); }
+
+    util::not_reachable(__FUNCTION__, __FILE__, __LINE__);
+}
+
 biometry::util::Configuration::Node& biometry::util::Configuration::Node::operator[](const std::string& name)
 {
     return children_[name];
+}
+
+const biometry::util::Configuration::Node& biometry::util::Configuration::Node::operator[](const std::string& name) const
+{
+    auto it = children_.find(name);
+    if (it != children_.end())
+        return it->second;
+
+    return null();
 }
 
 const biometry::util::Configuration::Children& biometry::util::Configuration::children() const
@@ -73,6 +110,28 @@ const biometry::util::Configuration::Children& biometry::util::Configuration::ch
 biometry::util::Configuration::Children& biometry::util::Configuration::children()
 {
     return children_;
+}
+
+biometry::util::Configuration::Node& biometry::util::Configuration::operator()(const std::string& name, const std::function<void()>& catcher)
+{
+    try
+    {
+        return children_.at(name);
+    }
+    catch(...) { catcher(); }
+
+    util::not_reachable(__FUNCTION__, __FILE__, __LINE__);
+}
+
+const biometry::util::Configuration::Node& biometry::util::Configuration::operator()(const std::string& name, const std::function<void()>& catcher) const
+{
+    try
+    {
+        return children_.at(name);
+    }
+    catch (...) { catcher(); }
+
+    util::not_reachable(__FUNCTION__, __FILE__, __LINE__);
 }
 
 biometry::util::Configuration::Node& biometry::util::Configuration::operator[](const std::string& name)

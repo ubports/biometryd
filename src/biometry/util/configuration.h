@@ -49,6 +49,9 @@ public:
         /// initializing the contained value to value.
         Node(const Variant& value = Variant{});
 
+        /// @brief operator bool returns true if the contained value is not empty.
+        bool is_null() const;
+
         /// @brief value returns an immutable reference to the contained value.
         virtual const Variant& value() const;
         /// @brief value adjusts the contained value.
@@ -58,9 +61,20 @@ public:
         virtual const Children& children() const;
         /// @brief children returns a mutable reference to the children of this node.
         virtual Children& children();
+        /// @brief Returns a mutable reference to the child with the given name or throws.
+        ///
+        /// catcher is invoked in the catch block such that API users can wrap up the original exception
+        /// in a custom type easily.
+        Node& operator()(const std::string& name, const std::function<void()>& catcher);
+        /// @brief Returns an immutable reference to the child with the given name.
+        ///
+        /// catcher is invoked in the catch block such that API users can wrap up the original exception
+        /// in a custom type easily.
+        const Node& operator()(const std::string& name, const std::function<void()>& catcher) const;
         /// @brief Returns a mutable reference to the child with the given name.
         Node& operator[](const std::string& name);
-
+        /// @brief Returns a mutable reference to the child with the given name.
+        const Node& operator[](const std::string& name) const;
     private:
         Variant value_; ///< mutable value of the Node.
         Children children_; ///< mutable set of all children_ of this Node.
@@ -70,6 +84,16 @@ public:
     virtual const Children& children() const;
     /// @brief children returns a mutable reference to the children of this node.
     virtual Children& children();
+    /// @brief Returns a mutable reference to the child with the given name or throws.
+    ///
+    /// catcher is invoked in the catch block such that API users can wrap up the original exception
+    /// in a custom type easily.
+    Node& operator()(const std::string& name, const std::function<void()>& catcher);
+    /// @brief Returns an immutable reference to the child with the given name.
+    ///
+    /// catcher is invoked in the catch block such that API users can wrap up the original exception
+    /// in a custom type easily.
+    const Node& operator()(const std::string& name, const std::function<void()>& catcher) const;
     /// @brief Returns a mutable reference to the child with the given name.
     Node& operator[](const std::string& name);
     /// @brief Returns a mutable reference to the child with the given name.
