@@ -41,7 +41,8 @@ Package: libbiometryd0
 Architecture: any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends},
-Depends: ${misc:Depends},
+Depends: biometryd-bin,
+         ${misc:Depends},
          ${shlibs:Depends},
 Description: biometryd mediates/multiplexes to biometric devices - runtime library
  biometryd mediates and multiplexes access to biometric devices present on the system,
