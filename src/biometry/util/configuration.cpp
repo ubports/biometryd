@@ -40,9 +40,9 @@ biometry::util::Configuration::Node::Node(const Variant &value)
 {
 }
 
-bool biometry::util::Configuration::Node::is_null() const
+biometry::util::Configuration::Node::operator bool() const
 {
-    return value_.type() == Variant::Type::none;
+    return value_.type() != Variant::Type::none;
 }
 
 const biometry::Variant& biometry::util::Configuration::Node::value() const
@@ -101,6 +101,16 @@ const biometry::util::Configuration::Node& biometry::util::Configuration::Node::
 
     return null();
 }
+
+/*biometry::util::Configuration::Node& biometry::util::Configuration::Node::operator[](const char* name)
+{
+    return (*this)[std::string{name}];
+}
+
+const biometry::util::Configuration::Node& biometry::util::Configuration::Node::operator[](const char* name) const
+{
+    return (*this)[std::string{name}];
+}*/
 
 const biometry::util::Configuration::Children& biometry::util::Configuration::children() const
 {

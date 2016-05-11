@@ -37,6 +37,16 @@ namespace biometry
 {
 namespace cmds
 {
+// biometryd test --help
+// NAME:
+//     test - executes runtime tests for a device
+//
+// USAGE:
+//     test [command options] [arguments...]
+//
+// OPTIONS:
+//     --config          configuration file for the test
+//     --user            The numeric user id for testing purposes
 class BIOMETRY_DLL_PUBLIC Test : public util::cli::CommandWithFlagsAndAction
 {
 public:

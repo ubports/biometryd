@@ -73,7 +73,7 @@ biometry::cmds::Test::Test()
                 ("device",  throw_configuration_invalid)
                 ["config"];
 
-        if (not id.is_null())
+        if (id)
         {
             Device::Descriptor::Ptr desc;
             std::shared_ptr<Device> device;

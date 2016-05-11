@@ -154,6 +154,26 @@ TEST_F(Daemon, invoking_config_command_succeeds)
                         core::posix::wait::Flags::untraced)));
 }
 
+TEST_F(Daemon, invoking_test_command_succeeds)
+{
+    auto d = []()
+    {
+        {std::remove("dummy.json"); std::ofstream out{"dummy.json"}; out << R"_({"device": {"id": "Dummy"}})_" << std::endl;}
+
+        biometry::Daemon daemon;
+        EXPECT_EQ(EXIT_SUCCESS, daemon.run({"test", "--config=dummy.json"}));
+
+        return testing::Test::HasFailure() ?
+                    core::posix::exit::Status::failure :
+                    core::posix::exit::Status::success;
+    };
+
+    auto cp = core::posix::fork(d, core::posix::StandardStream::stdin); cp.cin() << 'y' << std::endl;
+    EXPECT_TRUE(testing::did_finish_successfully(
+                    cp.wait_for(
+                        core::posix::wait::Flags::untraced)));
+}
+
 TEST_F(Daemon, invoking_run_succeeds)
 {
     auto json = R"_(

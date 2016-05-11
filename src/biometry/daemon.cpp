@@ -26,6 +26,7 @@
 #include <biometry/cmds/identify.h>
 #include <biometry/cmds/list_devices.h>
 #include <biometry/cmds/run.h>
+#include <biometry/cmds/test.h>
 #include <biometry/cmds/version.h>
 
 #include <boost/program_options.hpp>
@@ -46,6 +47,7 @@ biometry::Daemon::Daemon()
        .command(std::make_shared<cmds::Identify>())
        .command(std::make_shared<cmds::ListDevices>())
        .command(std::make_shared<cmds::Run>())
+       .command(std::make_shared<cmds::Test>())
        .command(std::make_shared<cmds::Version>());
 }
 

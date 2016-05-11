@@ -50,7 +50,7 @@ public:
         Node(const Variant& value = Variant{});
 
         /// @brief operator bool returns true if the contained value is not empty.
-        bool is_null() const;
+        explicit operator bool() const;
 
         /// @brief value returns an immutable reference to the contained value.
         virtual const Variant& value() const;
@@ -75,6 +75,11 @@ public:
         Node& operator[](const std::string& name);
         /// @brief Returns a mutable reference to the child with the given name.
         const Node& operator[](const std::string& name) const;
+
+        /// @brief Returns a mutable reference to the child with the given name.
+        // Node& operator[](const char* name);
+        /// @brief Returns a mutable reference to the child with the given name.
+        // const Node& operator[](const char* name) const;
     private:
         Variant value_; ///< mutable value of the Node.
         Children children_; ///< mutable set of all children_ of this Node.
