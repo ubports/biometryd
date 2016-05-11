@@ -31,6 +31,8 @@ add_library(
   
   "${CMAKE_CURRENT_BINARY_DIR}/daemon_configuration.cpp"
 
+  cmds/config.h
+  cmds/config.cpp
   cmds/enroll.h
   cmds/enroll.cpp
   cmds/identify.h

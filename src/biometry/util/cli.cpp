@@ -79,6 +79,14 @@ cli::Flag::Flag(const Name& name, const Description& description)
 {
 }
 
+cli::Command::FlagsWithInvalidValue::FlagsWithInvalidValue() : std::runtime_error{"Flags with invalid value"}
+{
+}
+
+cli::Command::FlagsMissing::FlagsMissing() : std::runtime_error{"Flags are missing in command invocation"}
+{
+}
+
 cli::Name cli::Command::name() const
 {
     return name_;
@@ -153,7 +161,13 @@ int cli::CommandWithSubcommands::run(const cli::Command::Context& ctxt)
     try
     {
         po::variables_map vm;
-        auto parsed = po::command_line_parser(ctxt.args).options(desc).positional(pdesc).allow_unregistered().run();
+        auto parsed = po::command_line_parser(ctxt.args)
+                .options(desc)
+                .positional(pdesc)
+                .style(po::command_line_style::unix_style)
+                .allow_unregistered()
+                .run();
+
         po::store(parsed, vm);
         po::notify(vm);
 
@@ -203,7 +217,7 @@ int cli::CommandWithFlagsAndAction::run(const Context& ctxt)
     try
     {
         po::variables_map vm;
-        auto parsed = po::command_line_parser(ctxt.args).options(cd).allow_unregistered().run();
+        auto parsed = po::command_line_parser(ctxt.args).options(cd).style(po::command_line_style::unix_style).allow_unregistered().run();
         po::store(parsed, vm);
         po::notify(vm);
 
@@ -217,7 +231,7 @@ int cli::CommandWithFlagsAndAction::run(const Context& ctxt)
         {
             ctxt.cin,
             ctxt.cout,
-            po::collect_unrecognized(parsed.options, po::include_positional)
+            po::collect_unrecognized(parsed.options, po::exclude_positional)
         });
     }
     catch (const po::error& e)

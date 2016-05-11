@@ -133,6 +133,27 @@ TEST_F(Daemon, invoking_list_devices_command_succeeds)
                         .wait_for(core::posix::wait::Flags::untraced)));
 }
 
+TEST_F(Daemon, invoking_config_command_succeeds)
+{
+    auto d = []()
+    {
+        biometry::Daemon daemon;
+        EXPECT_EQ(EXIT_SUCCESS, daemon.run({"config", "--flag=default_plugin_directory"}));
+
+        return testing::Test::HasFailure() ?
+                    core::posix::exit::Status::failure :
+                    core::posix::exit::Status::success;
+    };
+
+    auto cp = core::posix::fork(d, core::posix::StandardStream::stdout);
+    std::string result; cp.cout() >> result;
+
+    EXPECT_EQ(biometry::Daemon::Configuration::default_plugin_directory().string(), result);
+    EXPECT_TRUE(testing::did_finish_successfully(
+                    cp.wait_for(
+                        core::posix::wait::Flags::untraced)));
+}
+
 TEST_F(Daemon, invoking_run_succeeds)
 {
     auto json = R"_(
