@@ -37,7 +37,7 @@ class Device;
 class BIOMETRY_DLL_PUBLIC Service : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(biometry::qml::Device* defaultDevice READ defaultDevice)
+    Q_PROPERTY(biometry::qml::Device* defaultDevice READ defaultDevice CONSTANT)
 public:
     /// @brief Service initializes a new instance with impl and parent.
     Service(const std::shared_ptr<biometry::Service>& impl, QObject* parent = nullptr);

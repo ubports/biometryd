@@ -30,5 +30,8 @@ uid_t biometry::qml::User::uid() const
 
 void biometry::qml::User::setUid(uid_t id)
 {
-    id_ = id;
+    if (id_ == id)
+        return;
+
+    Q_EMIT(uidChanged(id_ = id));
 }
