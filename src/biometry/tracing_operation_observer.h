@@ -53,8 +53,8 @@ struct Printer<biometry::Dictionary>
     static std::ostream& print(std::ostream& out, const biometry::Dictionary& dict, std::size_t offset)
     {
         std::string indent(offset, ' ');
-        for (const auto& pair : dict)
-            out << indent << pair.first << " = " << pair.second << std::endl;
+        for (auto it = dict.begin(); it != dict.end(); ++it)
+            out << indent << it->first << " = " << it->second << (it != std::prev(dict.end()) ? "" : "");
 
         return out;
     }
@@ -66,7 +66,12 @@ struct Printer<biometry::Progress>
     static std::ostream& print(std::ostream& out, const biometry::Progress& progress, std::size_t offset)
     {
         std::string indent(offset, ' ');
-        out << indent << progress.percent << " complete, with details:" << std::endl;
+        out << indent << progress.percent << " complete";
+
+        if (progress.details.empty())
+            return out;
+
+        out << ":" << std::endl;
         Printer<biometry::Dictionary>::print(out, progress.details, offset + 2);
         return out;
     }
