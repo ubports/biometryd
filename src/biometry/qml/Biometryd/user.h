@@ -33,7 +33,7 @@ namespace qml
 class BIOMETRY_DLL_PUBLIC User : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(unsigned int uid READ uid WRITE setUid)
+    Q_PROPERTY(unsigned int uid READ uid WRITE setUid NOTIFY uidChanged)
 public:
     User(QObject* parent = nullptr);
 
@@ -42,6 +42,9 @@ public:
 
     /// @brief setId adjusts the numeric user id.
     Q_INVOKABLE void setUid(unsigned int id);
+
+    /// @brief uidChanged is emitted with the newly set id.
+    Q_SIGNAL void uidChanged(unsigned int id);
 private:
     /// @cond
     unsigned int id_{0};

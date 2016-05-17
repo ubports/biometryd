@@ -41,8 +41,8 @@ class TemplateStore;
 class BIOMETRY_DLL_PUBLIC Device : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(biometry::qml::TemplateStore* templateStore READ templateStore)
-    Q_PROPERTY(biometry::qml::Identifier* identifier READ identifier)
+    Q_PROPERTY(biometry::qml::TemplateStore* templateStore READ templateStore CONSTANT)
+    Q_PROPERTY(biometry::qml::Identifier* identifier READ identifier CONSTANT)
 public:
     /// @brief Device initializes a new instance with device and parent.
     Device(const std::shared_ptr<biometry::Device>& impl, QObject* parent);
