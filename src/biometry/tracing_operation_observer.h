@@ -20,13 +20,67 @@
 #ifndef BIOMETRYD_TRACING_OPERATION_OBSERVER_H_
 #define BIOMETRYD_TRACING_OPERATION_OBSERVER_H_
 
+#include <biometry/dictionary.h>
 #include <biometry/operation.h>
+#include <biometry/progress.h>
+#include <biometry/variant.h>
+#include <biometry/void.h>
 
 #include <iostream>
 #include <string>
 
 namespace biometry
 {
+namespace detail
+{
+// Printer helps in pretty printing a value with a given offset as in:
+//   [  offset * ' '  ]value;
+// We rely on this customization to make it easy to provide nicely formatted output
+// without the need to provide a full abstraction on top of a std::ostream while still being
+// able to only have one TracingObserver<T> without type specializations.
+template<typename T>
+struct Printer
+{
+    static std::ostream& print(std::ostream& out, const T& value, std::size_t offset)
+    {
+        return out << std::string(offset, ' ') << value;
+    }
+};
+
+template<>
+struct Printer<biometry::Dictionary>
+{
+    static std::ostream& print(std::ostream& out, const biometry::Dictionary& dict, std::size_t offset)
+    {
+        std::string indent(offset, ' ');
+        for (const auto& pair : dict)
+            out << indent << pair.first << " = " << pair.second << std::endl;
+
+        return out;
+    }
+};
+
+template<>
+struct Printer<biometry::Progress>
+{
+    static std::ostream& print(std::ostream& out, const biometry::Progress& progress, std::size_t offset)
+    {
+        std::string indent(offset, ' ');
+        out << indent << progress.percent << " complete, with details:" << std::endl;
+        Printer<biometry::Dictionary>::print(out, progress.details, offset + 2);
+        return out;
+    }
+};
+
+template<>
+struct Printer<biometry::Void>
+{
+    static std::ostream& print(std::ostream& out, const biometry::Void&, std::size_t)
+    {
+        return out;
+    }
+};
+}
 template<typename T>
 class TracingObserver : public biometry::Operation<T>::Observer
 {
@@ -34,40 +88,48 @@ public:
     typedef typename biometry::Operation<T>::Observer Super;
 
     TracingObserver(std::size_t offset = 0, std::ostream& out = std::cout)
-        : indent(offset, ' '),
+        : offset{offset},
+          indent(offset, ' '),
           out{out}
     {
     }
 
-    void on_started()
+    void on_started() override
     {
         out << indent << __FUNCTION__ << std::endl;
     }
 
-    void on_progress(const typename Super::Progress&)
+    void on_progress(const typename Super::Progress& progress) override
     {
-        out << indent << __FUNCTION__ << std::endl;
+        out << indent << __FUNCTION__<< ": " << std::endl;
+        detail::Printer<typename Super::Progress>::print(out, progress, offset + 2) << std::endl;
     }
 
-    void on_canceled(const typename Super::Reason&)
+    void on_canceled(const typename Super::Reason& reason) override
     {
-        out << indent << __FUNCTION__ << std::endl;
+        out << indent << __FUNCTION__ << ": " << std::endl;
+        detail::Printer<typename Super::Reason>::print(out, reason, offset + 2) << std::endl;
     }
 
-    void on_failed(const typename Super::Error&)
+    void on_failed(const typename Super::Error& error) override
     {
-        out << indent << __FUNCTION__ << std::endl;
+        out << indent << __FUNCTION__ << ": " << std::endl;
+        detail::Printer<typename Super::Error>::print(out, error, offset + 2) << std::endl;
     }
 
-    void on_succeeded(const typename Super::Result&)
+    void on_succeeded(const typename Super::Result& result) override
     {
         out << indent << __FUNCTION__ << std::endl;
+        detail::Printer<typename Super::Result>::print(out, result, offset + 2) << std::endl;
     }
 
 private:
+    std::size_t offset;
     std::string indent;
     std::ostream& out;
 };
+
+
 }
 
 #endif // BIOMETRYD_TRACING_OPERATION_OBSERVER_H_
