@@ -47,6 +47,7 @@ namespace cmds
 // OPTIONS:
 //     --config          configuration file for the test
 //     --user            The numeric user id for testing purposes
+//     --trials          Number of identification trials
 class BIOMETRY_DLL_PUBLIC Test : public util::cli::CommandWithFlagsAndAction
 {
 public:
