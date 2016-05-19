@@ -66,6 +66,7 @@ public:
 private:
     Optional<boost::filesystem::path> config;
     User user;
+    std::uint32_t trials;
 };
 }
 }

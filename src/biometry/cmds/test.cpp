@@ -45,11 +45,12 @@ biometry::cmds::Test::CouldNotInstiantiateDevice::CouldNotInstiantiateDevice()
 }
 
 biometry::cmds::Test::Test()
-    : CommandWithFlagsAndAction{cli::Name{"test"}, cli::Usage{"executes runtime tests for a device"}, cli::Description{"executes runtime tests for a device"}},
-      user{biometry::User::current()}
+    : CommandWithFlagsAndAction{cli::Name{"test"}, cli::Usage{"executes runtime tests for a device"}, cli::Description{"executes runtime tests for a device"}}
 {
     flag(cli::make_flag(cli::Name{"config"}, cli::Description{"configuration file for the test"}, config));
-    flag(cli::make_flag(cli::Name{"user"}, cli::Description{"The numeric user id for testing purposes"}, user));
+    flag(cli::make_flag(cli::Name{"user"}, cli::Description{"The numeric user id for testing purposes"}, user = biometry::User::current()));
+    flag(cli::make_flag(cli::Name{"trials"}, cli::Description{"Number of identification trials"}, trials = 20));
+
     action([this](const cli::Command::Context& ctxt)
     {
         if (not config) throw cli::Command::FlagsMissing{};
@@ -119,8 +120,14 @@ int biometry::cmds::Test::test_device(const User& user, const cli::Command::Cont
         std::make_shared<biometry::TracingObserver<biometry::TemplateStore::SizeQuery>>(2, ctxt.cout));
 
     ctxt.cout << "Identifying user:" << std::endl;
-    device->identifier().identify_user(biometry::Application::system(), biometry::Reason{"testing"})->start_with_observer(
-        std::make_shared<biometry::TracingObserver<biometry::Identification>>(2, ctxt.cout));
+
+    for (std::uint32_t i = 0; i < trials; i++)
+    {
+        ctxt.cout << "  Trial " << i << ": " << std::endl;
+        device->identifier().identify_user(biometry::Application::system(), biometry::Reason{"testing"})
+            ->start_with_observer(
+                std::make_shared<biometry::TracingObserver<biometry::Identification>>(4, ctxt.cout));
+    }
 
     return EXIT_SUCCESS;
 }
