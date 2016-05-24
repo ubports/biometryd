@@ -30,7 +30,7 @@ QRect biometry::qml::Converter::convert(const biometry::Rectangle& rect)
         static_cast<int>(rect.top_left.x),
         static_cast<int>(rect.top_left.y),
         static_cast<int>(rect.bottom_right.x - rect.top_left.x),
-        static_cast<int>(rect.bottom_right.y - rect.bottom_right.y)
+        static_cast<int>(rect.bottom_right.y - rect.top_left.y)
     };
 }
 
