@@ -19,8 +19,12 @@
 
 #include <biometry/daemon.h>
 
+#include <biometry/util/cli.h>
+
+namespace cli = biometry::util::cli;
+
 int main(int argc, char** argv)
 {
     biometry::Daemon biometryd;
-    return biometryd.run(argc, argv);
+    return biometryd.run(cli::args(argc, argv));
 }

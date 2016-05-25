@@ -1,1 +1,2 @@
 usr/bin/biometryd
+etc/dbus-1/system.d/

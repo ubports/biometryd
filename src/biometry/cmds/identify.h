@@ -20,8 +20,12 @@
 #ifndef BIOMETRYD_CMDS_IDENTIFY_H_
 #define BIOMETRYD_CMDS_IDENTIFY_H_
 
-#include <biometry/daemon.h>
+#include <biometry/util/cli.h>
+
+#include <biometry/optional.h>
 #include <biometry/user.h>
+
+#include <boost/filesystem.hpp>
 
 #include <functional>
 #include <iostream>
@@ -32,18 +36,15 @@ namespace biometry
 namespace cmds
 {
 /// @brief Identify requests identification of the user.
-class Identify : public biometry::Daemon::Command
+class Identify : public util::cli::CommandWithFlagsAndAction
 {
 public:
     /// @brief Enroll creates a new instance, initializing flags to default values.
     Identify();
 
-    // From Daemon::Command.
-    Info info() const override;
-    int run() override;
-
 private:
-    TypedFlag<std::string>::Ptr device;
+    std::string device;
+    Optional<boost::filesystem::path> config;
 };
 }
 }

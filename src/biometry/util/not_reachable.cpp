@@ -17,13 +17,16 @@
  *
  */
 
-#include <util/atomic_counter.h>
+#include <biometry/util/not_reachable.h>
 
-util::AtomicCounter::AtomicCounter(uint64_t value) : counter{value}
+#include <boost/format.hpp>
+
+biometry::util::NotReachable::NotReachable(const std::string& function, const std::string& file, std::uint32_t line)
+    : std::logic_error{(boost::format{"Code should not be reachable: %1% in %2%:%3%"} % function % file % line).str()}
 {
 }
 
-std::uint64_t util::AtomicCounter::increment()
+void biometry::util::not_reachable(const std::string& function, const std::string& file, std::uint32_t line)
 {
-    return counter++;
+    throw NotReachable{function, file, line};
 }

@@ -18,6 +18,7 @@
  */
 
 #include <biometry/devices/plugin/loader.h>
+#include <biometry/devices/plugin/verifier.h>
 #include <biometry/devices/plugin/interface.h>
 
 #include <boost/format.hpp>
@@ -74,6 +75,16 @@ struct Fd
 };
 }
 
+plugin::ElfDescriptorLoader::FailedToInitializeElf::FailedToInitializeElf()
+    : std::runtime_error{(boost::format("Failed to initialize elf: %1%") % elf_errmsg(-1)).str()}
+{
+}
+
+plugin::ElfDescriptorLoader::NotAnElfObject::NotAnElfObject()
+    : std::runtime_error{"Not an elf object"}
+{
+}
+
 plugin::ElfDescriptorLoader::NoSuchSection::NoSuchSection(const std::string& section)
     : std::runtime_error{"Failed to resolve section: " + section}
 {
@@ -88,10 +99,10 @@ plugin::Descriptor plugin::ElfDescriptorLoader::load_with_name(const boost::file
 
     Elf* e{nullptr};
     if (not (e = elf_begin(fd.handle, ELF_C_READ, nullptr)))
-        throw std::runtime_error{(boost::format("Failed to initialize elf: %1%") % elf_errmsg(-1)).str()};
+        throw FailedToInitializeElf{};
 
     if (elf_kind(e) != ELF_K_ELF)
-        throw std::runtime_error{(boost::format("%1% is not an ELF object") % p).str()};
+        throw NotAnElfObject{};
 
     std::size_t shstrndx{0};
     if (elf_getshdrstrndx(e, &shstrndx) != 0)
@@ -121,13 +132,6 @@ plugin::Descriptor plugin::ElfDescriptorLoader::load_with_name(const boost::file
 
 std::shared_ptr<biometry::Device> plugin::ElfDescriptorVerifierLoader::verify_and_load(const std::shared_ptr<util::DynamicLibrary::Api>& api, const boost::filesystem::path& path) const
 {
-    ElfDescriptorLoader loader;
-    auto desc = loader.load_with_name(path, BIOMETRYD_DEVICES_PLUGIN_DESCRIPTOR_SECTION);
-
-    // TODO(tvoss): Make this a little more sophisticated and probably factor out
-    // policy for handling version mismatches into its own class.
-    if (desc.version.host.major != biometry::build::version_major)
-        throw std::runtime_error{"API/ABI might be broken"};
-
+    MajorVersionVerifier{}.verify(ElfDescriptorLoader{}.load_with_name(path, BIOMETRYD_DEVICES_PLUGIN_DESCRIPTOR_SECTION));
     return NonVerifyingLoader{}.verify_and_load(api, path);
 }

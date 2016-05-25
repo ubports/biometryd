@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef UTIL_DYNAMIC_LIBRARY_H_
-#define UTIL_DYNAMIC_LIBRARY_H_
+#ifndef BIOMETRY_UTIL_DYNAMIC_LIBRARY_H_
+#define BIOMETRY_UTIL_DYNAMIC_LIBRARY_H_
 
 #include <biometry/do_not_copy_or_move.h>
 #include <biometry/visibility.h>
@@ -27,6 +27,8 @@
 
 #include <string>
 
+namespace biometry
+{
 namespace util
 {
 /// @brief DynamicLibrary abstracts dl* operations, and enables integration testing
@@ -105,13 +107,9 @@ private:
 
 namespace glibc
 {
-std::shared_ptr<DynamicLibrary::Api> dl_api();
+BIOMETRY_DLL_PUBLIC std::shared_ptr<DynamicLibrary::Api> dl_api();
 }
-
-namespace bionic
-{
-std::shared_ptr<DynamicLibrary::Api> dl_api();
 }
 }
 
-#endif // UTIL_DYNAMIC_LIBRARY_H_
+#endif // BIOMETRY_UTIL_DYNAMIC_LIBRARY_H_

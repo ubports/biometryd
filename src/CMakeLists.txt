@@ -1,2 +1,2 @@
 add_subdirectory(biometry)
-add_subdirectory(util)
+# add_subdirectory(util)

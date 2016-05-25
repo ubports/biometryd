@@ -22,27 +22,16 @@
 
 #include <iostream>
 
+namespace cli = biometry::util::cli;
+
 biometry::cmds::ListDevices::ListDevices()
+    : CommandWithFlagsAndAction{cli::Name{"list-devices"}, cli::Usage{"list-devices"}, cli::Description{"lists all known devices"}}
 {
-
-}
-
-biometry::Daemon::Command::Info biometry::cmds::ListDevices::info() const
-{
-    return Info
+    action([](const cli::Command::Context& ctxt)
     {
-        Name{"list-devices"},
-        Usage{"list-devices"},
-        Description{"lists all known devices"},
-        {}
-    };
-}
-
-int biometry::cmds::ListDevices::run()
-{
-    std::cout << "Known devices:" << std::endl;
-    for (const auto& pair : biometry::device_registry())
-        std::cout << " - " << pair.second->name() << "\t" << pair.second->description() << std::endl;
-
-    return 0;
+        ctxt.cout << "Known devices:" << std::endl;
+        for (const auto& pair : biometry::device_registry())
+            ctxt.cout << " - " << pair.first << "\t" << pair.second->description() << std::endl;
+        return 0;
+    });
 }

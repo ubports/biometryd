@@ -17,35 +17,31 @@
  *
  */
 
-#include <biometry/cmds/help.h>
+#include <biometry/util/dispatcher.h>
 
-biometry::cmds::Help::Help(const CommandEnumerator& enumerator) : enumerator{enumerator}
+namespace
 {
+struct AsioStrandDispatcher : public biometry::util::Dispatcher
+{
+public:
+    AsioStrandDispatcher(const std::shared_ptr<biometry::Runtime>& rt)
+        : rt{rt},
+          strand{rt->service()}
+    {
+    }
+
+    void dispatch(const Task &task) override
+    {
+        strand.post(task);
+    }
+
+private:
+    std::shared_ptr<biometry::Runtime> rt;
+    boost::asio::io_service::strand strand;
+};
 }
 
-biometry::Daemon::Command::Info biometry::cmds::Help::info() const
+std::shared_ptr<biometry::util::Dispatcher> biometry::util::create_dispatcher_for_runtime(const std::shared_ptr<biometry::Runtime>& rt)
 {
-    return Info
-    {
-        Name{"help"},
-        Usage{"help"},
-        Description{"print a help message and exit"},
-        {}
-    };
-}
-
-int biometry::cmds::Help::run()
-{
-    std::cout << "Usage: biometryd [COMMAND] \n"
-                 "\n"
-                 "biometryd mediates access to biometric devices. \n"
-                 "\n"
-                 "Commands:\n";
-
-    enumerator([](const Command::Ptr& command)
-    {
-        std::cout << "  " << command->info().name << "\t" << command->info().description << std::endl;
-    });
-
-    return 0;
+    return std::make_shared<AsioStrandDispatcher>(rt);
 }

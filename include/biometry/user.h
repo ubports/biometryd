@@ -36,6 +36,9 @@ struct BIOMETRY_DLL_PUBLIC User
     /// @brief current returns an instance of User corresponding to the currently active user.
     static const User& current();
 
+    /// @brief User initializes a new instance with the given id.
+    User(uid_t id = root().id);
+
     uid_t id; ///< @brief The numeric id of the user.
 };
 

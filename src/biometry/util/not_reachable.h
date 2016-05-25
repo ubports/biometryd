@@ -17,39 +17,28 @@
  *
  */
 
-#ifndef UTIL_ATOMIC_COUNTER_H_
-#define UTIL_ATOMIC_COUNTER_H_
+#ifndef BIOMETRY_UTIL_NOT_REACHABLE_H_
+#define BIOMETRY_UTIL_NOT_REACHABLE_H_
 
 #include <biometry/visibility.h>
 
-#include <cstdint>
+#include <stdexcept>
+#include <string>
 
-#include <atomic>
-
+namespace biometry
+{
 namespace util
 {
-/// @brief AtomicCounter models an atomic counter.
-class BIOMETRY_DLL_PUBLIC AtomicCounter
+/// @brief NotReachable is thrown from not_reachable.
+struct BIOMETRY_DLL_PUBLIC NotReachable : public std::logic_error
 {
-public:
-    /// @brief AtomicCounter initializes a new instance to the given value.
-    explicit AtomicCounter(std::uint64_t value = 0);
-
-    /// @brief increment increments the value of the counter and returns the previously stored value.
-    std::uint64_t increment();
-
-private:
-    /// @cond
-    std::atomic<std::uint64_t> counter;
-    /// @endcond
+    /// @brief NotImplemented initializes a new instance for the given function name.
+    NotReachable(const std::string& function, const std::string& file, std::uint32_t line);
 };
 
-template<typename Tag>
-inline AtomicCounter& counter()
-{
-    static AtomicCounter instance;
-    return instance;
+/// @brief not_implemented throws NotImplemented.
+BIOMETRY_DLL_PUBLIC [[noreturn]] void not_reachable(const std::string& function, const std::string& file, std::uint32_t line);
 }
 }
 
-#endif // UTIL_ATOMIC_COUNTER_H_
+#endif // BIOMETRY_UTIL_NOT_REACHABLE_H_

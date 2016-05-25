@@ -17,12 +17,14 @@
  *
  */
 
-#ifndef UTIL_SYNCHRONIZED_H_
-#define UTIL_SYNCHRONIZED_H_
+#ifndef BIOMETRY_UTIL_SYNCHRONIZED_H_
+#define BIOMETRY_UTIL_SYNCHRONIZED_H_
 
 #include <mutex>
 #include <type_traits>
 
+namespace biometry
+{
 namespace util
 {
 /// @brief Synchronized<T> bundles together a value and a mutex guarding it.
@@ -50,5 +52,6 @@ private:
     T value;
 };
 }
+}
 
-#endif // UTIL_SYNCHRONIZED_H_
+#endif // BIOMETRY_UTIL_SYNCHRONIZED_H_

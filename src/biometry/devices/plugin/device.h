@@ -31,7 +31,15 @@ namespace devices
 {
 namespace plugin
 {
+/// @brief make_descriptor returns a descriptor instance describing a plugin device;
+BIOMETRY_DLL_PUBLIC biometry::Device::Descriptor::Ptr make_descriptor();
+
+/// @brief id is the unique name for registering the device type with the device registry.
+static constexpr const char* id{"Plugin"};
+
+/// @cond
 using Device = biometry::devices::Forwarding;
+/// @endcond
 
 /// @brief load returns a biometry::Device implementation that has been loaded from a shared object located at path,
 /// relying on api to open the library and resolve symbols.

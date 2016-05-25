@@ -23,6 +23,7 @@
 #include <biometry/do_not_copy_or_move.h>
 #include <biometry/operation.h>
 #include <biometry/progress.h>
+#include <biometry/user.h>
 
 #include <set>
 

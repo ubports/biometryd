@@ -27,11 +27,15 @@
 
 namespace biometry
 {
-/// @brief Point models a point in a 2d space.
+/// @brief Point models a point in a normalized space [0,1]^2.
 struct BIOMETRY_DLL_PUBLIC Point
 {
-    std::uint32_t x;
-    std::uint32_t y;
+    /// @brief Point initializes a new instance with x, y.
+    /// @ŧhrows std::runtime_error if x or y is not in [0,1].
+    Point(double x = 0.f, double y = 0.f);
+
+    double x;
+    double y;
 };
 
 /// @brief Rectangle models a rectangular region in a 2d space,

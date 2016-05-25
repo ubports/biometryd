@@ -55,7 +55,7 @@ struct VerifyingEchoService : public testing::EchoService
 
         static biometry::Point point()
         {
-            return biometry::Point{42, 42};
+            return biometry::Point{0.42, 0.42};
         }
 
         static biometry::Rectangle rectangle()
@@ -84,14 +84,14 @@ struct VerifyingEchoService : public testing::EchoService
             {
                 biometry::Variant::b(true),
                 biometry::Variant::i(42),
-                biometry::Variant::d(42.),
+                biometry::Variant::d(0.42),
                 biometry::Variant::r(Reference::rectangle()),
                 biometry::Variant::s("42"),
                 biometry::Variant::v(
                 {
                     biometry::Variant::b(true),
                     biometry::Variant::i(42),
-                    biometry::Variant::d(42.),
+                    biometry::Variant::d(0.42),
                     biometry::Variant::r(Reference::rectangle()),
                     biometry::Variant::s("42")
                 })

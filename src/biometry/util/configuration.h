@@ -17,20 +17,23 @@
  *
  */
 
-#ifndef UTIL_CONFIGURATION_H_
-#define UTIL_CONFIGURATION_H_
+#ifndef BIOMETRY_UTIL_CONFIGURATION_H_
+#define BIOMETRY_UTIL_CONFIGURATION_H_
 
 #include <biometry/do_not_copy_or_move.h>
-#include <util/variant.h>
+#include <biometry/variant.h>
+#include <biometry/visibility.h>
 
 #include <boost/filesystem.hpp>
 
 #include <map>
 #include <string>
 
+namespace biometry
+{
 namespace util
 {
-class Configuration
+class BIOMETRY_DLL_PUBLIC Configuration
 {
 public:
     /// @cond
@@ -46,6 +49,9 @@ public:
         /// initializing the contained value to value.
         Node(const Variant& value = Variant{});
 
+        /// @brief operator bool returns true if the contained value is not empty.
+        explicit operator bool() const;
+
         /// @brief value returns an immutable reference to the contained value.
         virtual const Variant& value() const;
         /// @brief value adjusts the contained value.
@@ -55,9 +61,25 @@ public:
         virtual const Children& children() const;
         /// @brief children returns a mutable reference to the children of this node.
         virtual Children& children();
+        /// @brief Returns a mutable reference to the child with the given name or throws.
+        ///
+        /// catcher is invoked in the catch block such that API users can wrap up the original exception
+        /// in a custom type easily.
+        Node& operator()(const std::string& name, const std::function<void()>& catcher);
+        /// @brief Returns an immutable reference to the child with the given name.
+        ///
+        /// catcher is invoked in the catch block such that API users can wrap up the original exception
+        /// in a custom type easily.
+        const Node& operator()(const std::string& name, const std::function<void()>& catcher) const;
         /// @brief Returns a mutable reference to the child with the given name.
         Node& operator[](const std::string& name);
+        /// @brief Returns a mutable reference to the child with the given name.
+        const Node& operator[](const std::string& name) const;
 
+        /// @brief Returns a mutable reference to the child with the given name.
+        // Node& operator[](const char* name);
+        /// @brief Returns a mutable reference to the child with the given name.
+        // const Node& operator[](const char* name) const;
     private:
         Variant value_; ///< mutable value of the Node.
         Children children_; ///< mutable set of all children_ of this Node.
@@ -67,14 +89,26 @@ public:
     virtual const Children& children() const;
     /// @brief children returns a mutable reference to the children of this node.
     virtual Children& children();
+    /// @brief Returns a mutable reference to the child with the given name or throws.
+    ///
+    /// catcher is invoked in the catch block such that API users can wrap up the original exception
+    /// in a custom type easily.
+    Node& operator()(const std::string& name, const std::function<void()>& catcher);
+    /// @brief Returns an immutable reference to the child with the given name.
+    ///
+    /// catcher is invoked in the catch block such that API users can wrap up the original exception
+    /// in a custom type easily.
+    const Node& operator()(const std::string& name, const std::function<void()>& catcher) const;
     /// @brief Returns a mutable reference to the child with the given name.
     Node& operator[](const std::string& name);
+    /// @brief Returns a mutable reference to the child with the given name.
+    const Node& operator[](const std::string& name) const;
 private:
     Children children_; ///< mutable set of all children_ of this Node.
 };
 
 /// @brief ConfigurationBuilder models loading of configuration from arbitrary sources.
-class ConfigurationBuilder : public biometry::DoNotCopyOrMove
+class BIOMETRY_DLL_PUBLIC ConfigurationBuilder : public biometry::DoNotCopyOrMove
 {
 public:
     /// @brief build_configuration returns a Configuration instance.
@@ -86,19 +120,7 @@ protected:
     ConfigurationBuilder() = default;
     /// @endcond
 };
-
-/// @brief JsonConfigurationBuilder implements ConfigurationBuilder for sources in JSON format.
-class JsonConfigurationBuilder : public ConfigurationBuilder
-{
-public:
-    /// @brief JsonConfigurationBuilder creates a new instance for the given path.
-    JsonConfigurationBuilder(const boost::filesystem::path& path);
-    /// build_configuration returns a Configuration assembled from a JSON-formatted file.
-    Configuration build_configuration() override;
-
-private:
-    boost::filesystem::path path;
-};
+}
 }
 
-#endif // UTIL_CONFIGURATION_H_
+#endif // BIOMETRY_UTIL_CONFIGURATION_H_

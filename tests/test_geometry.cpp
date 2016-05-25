@@ -23,35 +23,35 @@
 
 TEST(Point, equality_operator_works)
 {
-    biometry::Point p1{42, 43}; biometry::Point p2(p1);
+    biometry::Point p1{0.42, 0.43}; biometry::Point p2(p1);
     EXPECT_EQ(p2, p1);
-    biometry::Point p3{43, 42};
+    biometry::Point p3{0.43, 0.42};
     EXPECT_NE(p3, p1);
 }
 
 TEST(Point, stream_insertion_works)
 {
-    biometry::Point p1{42, 42};
+    biometry::Point p1{0.42, 0.42};
     std::stringstream ss; ss << p1;
-    EXPECT_EQ("(42,42)", ss.str());
+    EXPECT_EQ("(0.42,0.42)", ss.str());
 }
 
 TEST(Rectangle, equality_operator_works)
 {
-    biometry::Point p1{42, 43}; biometry::Point p2(p1);
+    biometry::Point p1{0.42, 0.43}; biometry::Point p2(p1);
     biometry::Rectangle r1{p1, p2}; biometry::Rectangle r2(r1);
     EXPECT_EQ(r2, r1);
-    biometry::Point p3{43, 42};
+    biometry::Point p3{0.43, 0.42};
     biometry::Rectangle r3{p1, p3};
     EXPECT_NE(r3, r1);
 }
 
 TEST(Rectangle, stream_insertion_works)
 {
-    biometry::Point p1{42, 43}; biometry::Point p2(p1);
+    biometry::Point p1{0.42, 0.43}; biometry::Point p2(p1);
     biometry::Rectangle r1{p1, p2};
     std::stringstream ss; ss << r1;
-    EXPECT_EQ("((42,43),(42,43))", ss.str());
+    EXPECT_EQ("((0.42,0.43),(0.42,0.43))", ss.str());
 }
 
 

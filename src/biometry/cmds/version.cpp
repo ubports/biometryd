@@ -20,25 +20,16 @@
 #include <biometry/version.h>
 #include <biometry/cmds/version.h>
 
+namespace cli = biometry::util::cli;
+
 biometry::cmds::Version::Version()
+    : CommandWithFlagsAndAction{cli::Name{"version"}, cli::Usage{"version"}, cli::Description{"print the version of the daemon"}}
 {
-}
-
-biometry::Daemon::Command::Info biometry::cmds::Version::info() const
-{
-    return Info
+    action([](const cli::Command::Context& ctxt)
     {
-        Name{"version"},
-        Usage{"version"},
-        Description{"print the version of the daemon"},
-        {}
-    };
-}
-
-int biometry::cmds::Version::run()
-{
-    std::uint32_t major, minor, patch;
-    biometry::version(major, minor, patch);
-    std::cout << "biometryd " << major << "." << minor << "." << patch << std::endl;
-    return 0;
+        std::uint32_t major, minor, patch;
+        biometry::version(major, minor, patch);
+        ctxt.cout << "biometryd " << major << "." << minor << "." << patch << std::endl;
+        return 0;
+    });
 }

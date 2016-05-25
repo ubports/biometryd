@@ -26,7 +26,7 @@
 #include <biometry/dbus/skeleton/identifier.h>
 #include <biometry/dbus/skeleton/template_store.h>
 
-#include <util/once.h>
+#include <biometry/util/once.h>
 
 #include <core/dbus/object.h>
 #include <core/dbus/service.h>

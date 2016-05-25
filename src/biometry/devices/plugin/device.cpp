@@ -19,9 +19,47 @@
 
 #include <biometry/devices/plugin/device.h>
 
+#include <biometry/util/configuration.h>
+
 namespace plugin = biometry::devices::plugin;
 
 std::shared_ptr<biometry::Device> plugin::load(const std::shared_ptr<util::DynamicLibrary::Api>& api, const boost::filesystem::path& path, const Loader& loader)
 {
     return loader.verify_and_load(api, path);
+}
+
+#include <biometry/device_registry.h>
+
+namespace
+{
+struct PluginDescriptor : public biometry::Device::Descriptor
+{
+    std::shared_ptr<biometry::Device> create(const biometry::util::Configuration& config) override
+    {
+        auto api = biometry::util::glibc::dl_api();
+        biometry::devices::plugin::ElfDescriptorVerifierLoader loader;
+        return biometry::devices::plugin::load(api, config["path"].value().string(), loader);
+    }
+
+    std::string name() const override
+    {
+        return "Plugin";
+    }
+
+    std::string author() const override
+    {
+        return "Thomas Voß (thomas.voss@canonical.com)";
+    }
+
+    std::string description() const override
+    {
+        return "Plugin loads device implementations from shared modules.";
+    }
+};
+}
+
+/// @brief make_descriptor returns a descriptor instance describing a plugin device;
+biometry::Device::Descriptor::Ptr plugin::make_descriptor()
+{
+    return std::make_shared<PluginDescriptor>();
 }

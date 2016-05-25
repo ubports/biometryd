@@ -20,19 +20,16 @@
 #ifndef BIOMETRYD_CMDS_LIST_DEVICES_H_
 #define BIOMETRYD_CMDS_LIST_DEVICES_H_
 
-#include <biometry/daemon.h>
+#include <biometry/util/cli.h>
 
 namespace biometry
 {
 namespace cmds
 {
-class ListDevices : public biometry::Daemon::Command
+class ListDevices : public util::cli::CommandWithFlagsAndAction
 {
 public:
     ListDevices();
-
-    Info info() const override;
-    int run() override;
 };
 }
 }
