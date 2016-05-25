@@ -26,7 +26,7 @@ TEST(FingerprintReaderGuidanceHints, to_and_from_dictionary_works)
     biometry::devices::FingerprintReader::GuidedEnrollment::Hints g1;
     g1.is_main_cluster_identified = true;
     g1.suggested_next_direction = biometry::devices::FingerprintReader::Direction::east;
-    g1.masks = std::vector<biometry::Rectangle>{biometry::Rectangle{{42, 42}, {43, 43}}};
+    g1.masks = std::vector<biometry::Rectangle>{biometry::Rectangle{{0.42, 0.42}, {0.43, 0.43}}};
 
     auto dict = g1.to_dictionary();
 
