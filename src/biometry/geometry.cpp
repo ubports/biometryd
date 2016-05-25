@@ -20,6 +20,20 @@
 #include <biometry/geometry.h>
 
 #include <iostream>
+#include <stdexcept>
+
+namespace
+{
+double ensure_bounds(double value)
+{
+    if (value < 0 || value > 1) throw std::runtime_error{"Bounds exceeded"};
+    return value;
+}
+}
+
+biometry::Point::Point(double x, double y) : x{ensure_bounds(x)}, y{ensure_bounds(y)}
+{
+}
 
 bool biometry::operator==(const biometry::Point& lhs, const biometry::Point& rhs)
 {

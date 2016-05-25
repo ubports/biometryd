@@ -47,8 +47,8 @@ TEST(Variant, constructors_yield_correct_type_and_value)
 {
     {const bool rv = true; biometry::Variant v{rv}; EXPECT_EQ(biometry::Variant::Type::boolean, v.type()); EXPECT_EQ(rv, v.boolean());}
     {const std::int64_t rv = 42; biometry::Variant v{rv}; EXPECT_EQ(biometry::Variant::Type::integer, v.type()); EXPECT_EQ(rv, v.integer());}
-    {const double rv = 42.f; biometry::Variant v{rv}; EXPECT_EQ(biometry::Variant::Type::floating_point, v.type()); EXPECT_EQ(rv, v.floating_point());}
-    {const biometry::Rectangle rv = {biometry::Point{42, 42}, biometry::Point{42, 42}}; biometry::Variant v{rv}; EXPECT_EQ(biometry::Variant::Type::rectangle, v.type()); EXPECT_EQ(rv, v.rectangle());}
+    {const double rv = 0.42; biometry::Variant v{rv}; EXPECT_EQ(biometry::Variant::Type::floating_point, v.type()); EXPECT_EQ(rv, v.floating_point());}
+    {const biometry::Rectangle rv = {biometry::Point{0.42, 0.42}, biometry::Point{0.42, 0.42}}; biometry::Variant v{rv}; EXPECT_EQ(biometry::Variant::Type::rectangle, v.type()); EXPECT_EQ(rv, v.rectangle());}
     {const std::string rv = "42"; biometry::Variant v{rv}; EXPECT_EQ(biometry::Variant::Type::string, v.type()); EXPECT_EQ(rv, v.string());}
     {const std::vector<std::uint8_t> rv = {4, 2}; biometry::Variant v{rv}; EXPECT_EQ(biometry::Variant::Type::blob, v.type()); EXPECT_EQ(rv, v.blob());}
     {const std::vector<biometry::Variant> rv = {biometry::Variant(std::int64_t(4)), biometry::Variant("2")}; biometry::Variant v{rv}; EXPECT_EQ(biometry::Variant::Type::vector, v.type()); EXPECT_EQ(rv, v.vector());}
@@ -58,9 +58,9 @@ TEST(Variant, named_constructors_yield_correct_type_and_value)
 {
     {const bool rv = true; auto v = biometry::Variant::b(rv); EXPECT_EQ(biometry::Variant::Type::boolean, v.type()); EXPECT_EQ(rv, v.boolean());}
     {const std::int64_t rv = 42; auto v = biometry::Variant::i(rv); EXPECT_EQ(biometry::Variant::Type::integer, v.type()); EXPECT_EQ(rv, v.integer());}
-    {const double rv = 42.f; auto v = biometry::Variant::d(rv); EXPECT_EQ(biometry::Variant::Type::floating_point, v.type()); EXPECT_EQ(rv, v.floating_point());}
+    {const double rv = 0.42; auto v = biometry::Variant::d(rv); EXPECT_EQ(biometry::Variant::Type::floating_point, v.type()); EXPECT_EQ(rv, v.floating_point());}
     {const std::string rv = "42"; auto v = biometry::Variant::s(rv); EXPECT_EQ(biometry::Variant::Type::string, v.type()); EXPECT_EQ(rv, v.string());}
-    {const biometry::Rectangle rv = {biometry::Point{42, 42}, biometry::Point{42, 42}}; auto v = biometry::Variant::r(rv); EXPECT_EQ(biometry::Variant::Type::rectangle, v.type()); EXPECT_EQ(rv, v.rectangle());}
+    {const biometry::Rectangle rv = {biometry::Point{0.42, 0.42}, biometry::Point{0.42, 0.42}}; auto v = biometry::Variant::r(rv); EXPECT_EQ(biometry::Variant::Type::rectangle, v.type()); EXPECT_EQ(rv, v.rectangle());}
     {const std::vector<std::uint8_t> rv = {4, 2}; auto v = biometry::Variant::bl(rv); EXPECT_EQ(biometry::Variant::Type::blob, v.type()); EXPECT_EQ(rv, v.blob());}
     {const std::vector<biometry::Variant> rv = {biometry::Variant::i(4), biometry::Variant::s("2")}; biometry::Variant v{rv}; EXPECT_EQ(biometry::Variant::Type::vector, v.type()); EXPECT_EQ(rv, v.vector());}
 }

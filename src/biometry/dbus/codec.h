@@ -84,8 +84,8 @@ struct TypeMapper<biometry::Point>
     static std::string signature()
     {
         return DBUS_STRUCT_BEGIN_CHAR_AS_STRING
-                + TypeMapper<std::uint32_t>::signature()
-                + TypeMapper<std::uint32_t>::signature()
+                + TypeMapper<double>::signature()
+                + TypeMapper<double>::signature()
                 + DBUS_STRUCT_END_CHAR_AS_STRING;
     }
 };
@@ -204,8 +204,8 @@ template<> struct Codec<biometry::Point>
     {
         auto sw = out.open_structure();
         {
-            sw.push_uint32(in.x);
-            sw.push_uint32(in.y);
+            sw.push_floating_point(in.x);
+            sw.push_floating_point(in.y);
         }
         out.close_structure(std::move(sw));
     }
@@ -213,8 +213,8 @@ template<> struct Codec<biometry::Point>
     static void decode_argument(Message::Reader& in, biometry::Point& out)
     {
         auto sr = in.pop_structure();
-        out.x = sr.pop_uint32();
-        out.y = sr.pop_uint32();
+        out.x = sr.pop_floating_point();
+        out.y = sr.pop_floating_point();
     }
 };
 
