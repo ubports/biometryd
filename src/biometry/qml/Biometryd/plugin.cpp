@@ -321,9 +321,22 @@ void biometry::qml::Plugin::registerTypes(const char *uri)
                 uri, Plugin::major, Plugin::minor, "Biometryd",
                 [](QQmlEngine*, QJSEngine*) -> QObject*
                 {
-                    return qgetenv("BIOMETRYD_QML_ENABLE_TESTING") != QByteArray{"1"} ?
-                        new biometry::qml::Service{biometry::dbus::Service::create_stub()} :
-                        new biometry::qml::Service{std::make_shared<for_testing::Service>()};
+                    biometry::qml::Service* result{nullptr};
+
+                    // Trying to create a stub will reach out over the bus to the remote end.
+                    // If the remote service is not available, the function throws and we fall back
+                    // to a testing implementation again.
+                    try
+                    {
+                        result = new biometry::qml::Service{biometry::dbus::Service::create_stub()};
+                    }
+                    catch(...)
+                    {
+                        result = new biometry::qml::Service{std::make_shared<for_testing::Service>()};
+                        result->setAvailable(qgetenv("BIOMETRYD_QML_ENABLE_TESTING") == QByteArray{"1"});
+                    }
+
+                    return result;
                 });
 
     qmlRegisterSingletonType<biometry::qml::FingerprintReader>(uri, Plugin::major, Plugin::minor, "FingerprintReader", [](QQmlEngine*, QJSEngine*) -> QObject*

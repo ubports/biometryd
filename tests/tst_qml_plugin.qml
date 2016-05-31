@@ -69,6 +69,8 @@ TestCase {
     }
 
     function test_defaultDeviceIsAvailable() {
+        console.log("Biometryd.available:", Biometryd.available);
+
         var ts = Biometryd.defaultDevice.templateStore;
         var id = Biometryd.defaultDevice.identifier;
     }
