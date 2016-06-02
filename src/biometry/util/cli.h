@@ -39,6 +39,30 @@ namespace util
 {
 namespace cli
 {
+/// @brief ProgressBar prints a progress bar on the terminal.
+///
+/// Looks like:
+/// Prefix[===============----------] xxx.xx %
+///         |--------------- width ------------|
+class BIOMETRY_DLL_PUBLIC ProgressBar
+{
+public:
+    /// @brief ProgressBar initializes an instance with out, prefix and width.
+    ProgressBar(std::ostream& out, const std::string& prefix = std::string{}, std::uint32_t width = 80);
+    /// @brief ~ProgressBar cleans up and inserts a std::endl into out.
+    ~ProgressBar();
+
+    /// @brief update updates the terminal output for the given percentage.
+    void update(double percentage);
+
+private:
+    /// @cond
+    std::string prefix;
+    std::uint32_t width;
+    std::ostream& out;
+    /// @endcond
+};
+
 template<std::size_t max>
 class BIOMETRY_DLL_PUBLIC SizeConstrainedString
 {
