@@ -27,9 +27,12 @@
 #include <biometry/tracing_operation_observer.h>
 #include <biometry/user.h>
 
+#include <biometry/util/benchmark.h>
 #include <biometry/util/configuration.h>
 #include <biometry/util/json_configuration_builder.h>
 #include <biometry/util/streaming_configuration_builder.h>
+
+#include <iomanip>
 
 namespace cli = biometry::util::cli;
 
@@ -106,6 +109,8 @@ biometry::cmds::Test::Test()
 
 int biometry::cmds::Test::test_device(const User& user, const cli::Command::Context& ctxt, const std::shared_ptr<Device>& device)
 {
+    static std::ofstream dev_null{"/dev/null"};
+
     ctxt.cout << std::endl;
     ctxt.cout << "Clearing template store:" << std::endl;
     device->template_store().clear(biometry::Application::system(), user)->start_with_observer(
@@ -119,15 +124,20 @@ int biometry::cmds::Test::test_device(const User& user, const cli::Command::Cont
     device->template_store().size(biometry::Application::system(), user)->start_with_observer(
         std::make_shared<biometry::TracingObserver<biometry::TemplateStore::SizeQuery>>(2, ctxt.cout));
 
-    ctxt.cout << "Identifying user:" << std::endl;
+    biometry::util::cli::ProgressBar pb{ctxt.cout, "Identifying user: ", 17};
 
-    for (std::uint32_t i = 0; i < trials; i++)
+    auto stats = biometry::util::Benchmark{[device, &ctxt]()
     {
-        ctxt.cout << "  Trial " << i << ": " << std::endl;
         device->identifier().identify_user(biometry::Application::system(), biometry::Reason{"testing"})
             ->start_with_observer(
-                std::make_shared<biometry::TracingObserver<biometry::Identification>>(4, ctxt.cout));
-    }
+                std::make_shared<biometry::TracingObserver<biometry::Identification>>(4, dev_null));
+    }}.trials(25).on_progress([&pb](std::size_t current, std::size_t total) { pb.update(current/static_cast<double>(total)); }).run();
+
+    ctxt.cout << std::endl
+              << "    min:      " << std::setw(6) << std::right << std::fixed << std::setprecision(2) << stats.min()                 << " [µs]" << std::endl
+              << "    mean:     " << std::setw(6) << std::right << std::fixed << std::setprecision(2) << stats.mean()                << " [µs]" << std::endl
+              << "    std.dev.: " << std::setw(6) << std::right << std::fixed << std::setprecision(2) << std::sqrt(stats.variance()) << " [µs]" << std::endl
+              << "    max:      " << std::setw(6) << std::right << std::fixed << std::setprecision(2) << stats.max()                 << " [µs]" << std::endl;
 
     return EXIT_SUCCESS;
 }

@@ -22,6 +22,8 @@
 #include <boost/format.hpp>
 #include <boost/program_options.hpp>
 
+#include <iomanip>
+
 namespace cli = biometry::util::cli;
 namespace po = boost::program_options;
 
@@ -54,6 +56,28 @@ void add_to_desc_for_flags(po::options_description& desc, const std::set<cli::Fl
         desc.add_options()(flag->name().as_string().c_str(), v, flag->description().as_string().c_str());
     }
 }
+}
+
+biometry::util::cli::ProgressBar::ProgressBar(std::ostream& out, const std::string& prefix, std::uint32_t width)
+    : prefix{prefix}, width{width}, out{out}
+{
+}
+
+biometry::util::cli::ProgressBar::~ProgressBar()
+{
+    out << std::endl;
+}
+
+void biometry::util::cli::ProgressBar::update(double percentage)
+{
+    struct CursorState
+    {
+        CursorState(std::ostream& out) : out{out} { out << "\33[?25l"; }
+        ~CursorState()                            { out << "\33[?25h"; }
+        std::ostream& out;
+    } cs{out};
+
+    out << "\r" << prefix << "[" << std::setw(width) << std::left << std::setfill(' ') << std::string(percentage * width, '=') << "] " << std::setw(5) << std::fixed << std::setprecision(2) << percentage * 100 << " %" << std::flush;
 }
 
 std::vector<std::string> cli::args(int argc, char **argv)

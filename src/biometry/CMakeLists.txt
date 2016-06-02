@@ -90,6 +90,8 @@ add_library(
 
   util/atomic_counter.h
   util/atomic_counter.cpp
+  util/benchmark.h
+  util/benchmark.cpp
   util/cli.h
   util/cli.cpp
   util/configuration.h
@@ -105,6 +107,8 @@ add_library(
   util/not_reachable.h
   util/not_reachable.cpp
   util/once.h
+  util/statistics.h
+  util/statistics.cpp
   util/streaming_configuration_builder.h
   util/synchronized.h
 
