@@ -155,7 +155,7 @@ TEST_F(Daemon, invoking_config_command_succeeds)
 }
 
 TEST_F(Daemon, invoking_test_command_succeeds)
-{
+{        
     auto d = []()
     {
         {std::remove("dummy.json"); std::ofstream out{"dummy.json"}; out << R"_({"device": {"id": "Dummy"}})_" << std::endl;}
