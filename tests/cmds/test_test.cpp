@@ -48,12 +48,6 @@ struct CmdTest : public ::testing::Test
 };
 }
 
-TEST_F(CmdTest, throws_flags_missing_if_config_not_given)
-{
-    biometry::cmds::Test test;
-    EXPECT_THROW(test.run(cli::Command::Context{std::cin, std::cout, {}}), cli::Command::FlagsMissing);
-}
-
 TEST_F(CmdTest, throws_configuration_invalid_if_device_is_not_given)
 {
     {std::remove("invalid.json"); std::ofstream out{"invalid.json"}; out << R"_({ "device": {}})_" << std::endl;}

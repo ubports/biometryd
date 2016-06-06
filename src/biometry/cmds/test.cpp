@@ -23,9 +23,12 @@
 #include <biometry/device_registry.h>
 #include <biometry/identifier.h>
 #include <biometry/reason.h>
+#include <biometry/service.h>
 #include <biometry/template_store.h>
 #include <biometry/tracing_operation_observer.h>
 #include <biometry/user.h>
+
+#include <biometry/dbus/service.h>
 
 #include <biometry/util/benchmark.h>
 #include <biometry/util/configuration.h>
@@ -35,6 +38,31 @@
 #include <iomanip>
 
 namespace cli = biometry::util::cli;
+
+namespace
+{
+std::shared_ptr<biometry::Device> device_from_config_file(const boost::filesystem::path& file)
+{
+    using StreamingJsonConfigurationBuilder = biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>;
+    StreamingJsonConfigurationBuilder builder{StreamingJsonConfigurationBuilder::make_streamer(file)};
+
+    const auto configuration = builder.build_configuration();
+
+    static const auto throw_configuration_invalid = [](){ std::throw_with_nested(biometry::cmds::Test::ConfigurationInvalid{});};
+
+    const auto id = configuration
+            ("device",  throw_configuration_invalid)
+            ("id",      throw_configuration_invalid);
+    biometry::util::Configuration config; config["config"] = configuration
+            ("device",  throw_configuration_invalid)
+            ["config"];
+
+    try
+    {
+        return biometry::device_registry().at(id.value().string())->create(config);
+    } catch(...) { std::throw_with_nested(biometry::cmds::Test::CouldNotInstiantiateDevice{});}
+}
+}
 
 biometry::cmds::Test::ConfigurationInvalid::ConfigurationInvalid()
     : std::runtime_error{"Configuration is invalid"}
@@ -56,52 +84,19 @@ biometry::cmds::Test::Test()
 
     action([this](const cli::Command::Context& ctxt)
     {
-        if (not config) throw cli::Command::FlagsMissing{};
+        auto device = config ? device_from_config_file(*config) : biometry::dbus::Service::create_stub()->default_device();
 
-        using StreamingJsonConfigurationBuilder = util::StreamingConfigurationBuilder<util::JsonConfigurationBuilder>;
-        StreamingJsonConfigurationBuilder builder
-        {
-            config ?
-                StreamingJsonConfigurationBuilder::make_streamer(config.get()) :
-                StreamingJsonConfigurationBuilder::make_streamer(std::cin)
-        };
+        ctxt.cout
+                << "We are about to execute a test run for a biometric device."                         << std::endl
+                << "Please note that we are executing the test in a production"                         << std::endl
+                << "environment and you should consider the test to be harmful to the"                  << std::endl
+                << "device configuration:"                                                              << std::endl
+                << "  User:        " << user                                                            << std::endl
+                << "  Config:      " << (Test::config ? (*Test::config).string() : "Default device")    << std::endl
+                << "Would you really like to proceed (y/n)?";
 
-        const auto configuration = builder.build_configuration();
-
-        static const auto throw_configuration_invalid = [](){ std::throw_with_nested(ConfigurationInvalid{});};
-
-        const auto id = configuration
-                ("device",  throw_configuration_invalid)
-                ("id",      throw_configuration_invalid);
-        util::Configuration config; config["config"] = configuration
-                ("device",  throw_configuration_invalid)
-                ["config"];
-
-        if (id)
-        {
-            Device::Descriptor::Ptr desc;
-            std::shared_ptr<Device> device;
-            try
-            {
-                device = (desc = device_registry().at(id.value().string()))->create(config);
-            } catch(...) { std::throw_with_nested(CouldNotInstiantiateDevice{});}
-
-            ctxt.cout
-                    << "We are about to execute a test run for a biometric device." << std::endl
-                    << "Please note that we are executing the test in a production" << std::endl
-                    << "environment and you should consider the test to be harmful to the" << std::endl
-                    << "device configuration for device with:" << std::endl
-                    << "  Name:        " << desc->name() << std::endl
-                    << "  Description: " << desc->description() << std::endl
-                    << "  Author:      " << desc->author() << std::endl
-                    << "and configuration:" << std::endl
-                    << "  User:        " << user << std::endl
-                    << "  Config:      " << *Test::config << std::endl
-                    << "Would you really like to proceed (y/n)?";
-
-            static constexpr const char yes{'y'}; char answer; ctxt.cin >> answer;
-            return answer == yes ? test_device(user, ctxt, device) : EXIT_FAILURE;
-        } else {throw std::runtime_error{"Invalid configuration."};}
+        static constexpr const char yes{'y'}; char answer; ctxt.cin >> answer;
+        return answer == yes ? test_device(user, ctxt, device) : EXIT_FAILURE;
 
         return EXIT_FAILURE;
     });
