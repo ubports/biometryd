@@ -99,7 +99,7 @@ void biometry::dbus::stub::Operation<T>::start_with_observer(const typename Obse
 
     auto obs = biometry::dbus::skeleton::Observer<T>::create_for_object(bus, service->add_object_for_path(path), observer);
 
-    auto result = object->transact_method<
+    auto result = object->invoke_method_synchronously<
             biometry::dbus::interface::Operation::Methods::StartWithObserver,
             biometry::dbus::interface::Operation::Methods::StartWithObserver::ResultType
     >(path);
@@ -113,7 +113,7 @@ void biometry::dbus::stub::Operation<T>::start_with_observer(const typename Obse
 template<typename T>
 void biometry::dbus::stub::Operation<T>::cancel()
 {
-    auto result = object->transact_method<
+    auto result = object->invoke_method_synchronously<
             biometry::dbus::interface::Operation::Methods::Cancel,
             biometry::dbus::interface::Operation::Methods::Cancel::ResultType
     >();
