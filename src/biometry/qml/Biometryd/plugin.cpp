@@ -152,7 +152,7 @@ struct Enrollment : public biometry::Operation<biometry::TemplateStore::Enrollme
                                 biometry::Rectangle{biometry::Point{50/100.f, 50/100.f}, biometry::Point{90/100.f, 90/100.f}} };
 
                 observer->on_progress(biometry::Progress{biometry::Percent::from_raw_value(i/100.f), hints.to_dictionary()});
-                std::this_thread::sleep_for(std::chrono::milliseconds{15});
+                std::this_thread::sleep_for(std::chrono::milliseconds{50});
             }
 
             template_counter()++;
@@ -187,7 +187,7 @@ struct Identification : public biometry::Operation<biometry::Identification>,
                 }
 
                 observer->on_progress(biometry::Progress{biometry::Percent::from_raw_value(i/100.f), biometry::Dictionary{}});
-                std::this_thread::sleep_for(std::chrono::milliseconds{15});
+                std::this_thread::sleep_for(std::chrono::milliseconds{50});
             }
 
             observer->on_succeeded(biometry::User{42});
