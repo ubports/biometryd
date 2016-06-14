@@ -51,6 +51,26 @@ TEST(DispatchingDevice, calls_into_dispatcher_for_template_store_size_query)
     op->start_with_observer(mock_observer);
 }
 
+TEST(DispatchingDevice, calls_into_dispatcher_for_template_store_list)
+{
+    using namespace testing;
+    auto mock_observer = std::make_shared<NiceMock<MockObserver<biometry::TemplateStore::List>>>();
+
+    auto template_store = std::make_shared<NiceMock<MockTemplateStore>>();
+    ON_CALL(*template_store, list(_, _)).WillByDefault(Return(std::make_shared<NiceMock<MockOperation<biometry::TemplateStore::List>>>()));
+
+    auto device = std::make_shared<NiceMock<MockDevice>>();
+    ON_CALL(*device, template_store()).WillByDefault(ReturnRef(*template_store));
+
+    auto dispatcher = std::make_shared<NiceMock<MockDispatcher>>();
+    EXPECT_CALL(*dispatcher, dispatch(_)).Times(1).WillOnce(Invoke([](const biometry::util::Dispatcher::Task& task) { task(); }));
+
+    auto dispatching = std::make_shared<biometry::devices::Dispatching>(dispatcher, device);
+    auto op = dispatching->template_store().list(biometry::Application::system(), biometry::User::current());
+
+    op->start_with_observer(mock_observer);
+}
+
 TEST(DispatchingDevice, calls_into_dispatcher_for_template_store_size_enrollment)
 {
     using namespace testing;
@@ -67,6 +87,26 @@ TEST(DispatchingDevice, calls_into_dispatcher_for_template_store_size_enrollment
 
     auto dispatching = std::make_shared<biometry::devices::Dispatching>(dispatcher, device);
     auto op = dispatching->template_store().enroll(biometry::Application::system(), biometry::User::current());
+
+    op->start_with_observer(mock_observer);
+}
+
+TEST(DispatchingDevice, calls_into_dispatcher_for_template_store_removal)
+{
+    using namespace testing;
+    auto mock_observer = std::make_shared<NiceMock<MockObserver<biometry::TemplateStore::Removal>>>();
+
+    auto template_store = std::make_shared<NiceMock<MockTemplateStore>>();
+    ON_CALL(*template_store, remove(_, _, _)).WillByDefault(Return(std::make_shared<NiceMock<MockOperation<biometry::TemplateStore::Removal>>>()));
+
+    auto device = std::make_shared<NiceMock<MockDevice>>();
+    ON_CALL(*device, template_store()).WillByDefault(ReturnRef(*template_store));
+
+    auto dispatcher = std::make_shared<NiceMock<MockDispatcher>>();
+    EXPECT_CALL(*dispatcher, dispatch(_)).Times(1).WillOnce(Invoke([](const biometry::util::Dispatcher::Task& task) { task(); }));
+
+    auto dispatching = std::make_shared<biometry::devices::Dispatching>(dispatcher, device);
+    auto op = dispatching->template_store().remove(biometry::Application::system(), biometry::User::current(), 42);
 
     op->start_with_observer(mock_observer);
 }

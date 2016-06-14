@@ -36,6 +36,9 @@ class User;
 class TemplateStore : public DoNotCopyOrMove
 {
 public:
+    /// @brief TemplateId is a numeric uniquely identifying a biometric template.
+    typedef std::uint64_t TemplateId;
+
     /// @brief SizeQuery bundles the types passed to an observer of a size operation.
     struct SizeQuery
     {
@@ -45,13 +48,31 @@ public:
         typedef std::uint32_t Result;        ///< Describes the result of a SizeQuery operation.
     };
 
+    /// @brief List bundles the types passed to an observer of a size operation.
+    struct List
+    {
+        typedef biometry::Progress Progress;    ///< Progress information about the completion status of an operation.
+        typedef std::string Reason;             ///< Details about cancelation of an operation.
+        typedef std::string Error;              ///< Describes error conditions.
+        typedef std::vector<TemplateId >Result; ///< Describes the result of a List operation.
+    };
+
     /// @brief Enrollment bundles the types passed to an observer of enrollment operations.
     struct Enrollment
     {
         typedef biometry::Progress Progress; ///< Progress information about the completion status of an operation.
         typedef std::string Reason;          ///< Details about cancelation of an operation.
         typedef std::string Error;           ///< Describes error conditions.
-        typedef Void Result;                 ///< Describes the result of an enrollment operation.
+        typedef TemplateId Result;           ///< Describes the result of an Enrollment operation.
+    };
+
+    /// @brief Remove bundles the types passed to an observer of a removal operation.
+    struct Removal
+    {
+        typedef biometry::Progress Progress; ///< Progress information about the completion status of an operation.
+        typedef std::string Reason;          ///< Details about cancelation of an operation.
+        typedef std::string Error;           ///< Describes error conditions.
+        typedef TemplateId Result;           ///< Describes the result of an Enrollment operation.
     };
 
     /// @brief Clearance bundles the types passed to an observer of clearance operations.
@@ -60,7 +81,7 @@ public:
         typedef biometry::Progress Progress; ///< Progress information about the completion status of an operation.
         typedef std::string Reason;          ///< Details about cancelation of an operation.
         typedef std::string Error;           ///< Describes error conditions.
-        typedef Void Result;                 ///< Describes the result of an enrollment operation.
+        typedef Void Result;                 ///< Describes the result of a Clearance operation.
     };
 
     /// @brief size() returns the number of templates known for user.
@@ -68,10 +89,21 @@ public:
     /// @param user The user for which we want to query the number of known templates.
     virtual Operation<SizeQuery>::Ptr size(const Application& app, const User& user) = 0;
 
+    /// @brief list returns an operation that yields the list of all templates enrolled for app and user.
+    /// @param app The application requesting the information.
+    /// @param user The user for which we want to query all enrolled templates.
+    virtual Operation<List>::Ptr list(const Application& app, const User& user) = 0;
+
     /// @brief enroll returns an operation that represents the enrollment of a new template for a user.
     /// @param app The application requesting the enrollment operation.
     /// @param user The user for which we want to enroll the new template.
     virtual Operation<Enrollment>::Ptr enroll(const Application& app, const User& user) = 0;
+
+    /// @brief remove returns an operation that represents the removal of an individual template.
+    /// @param app The application requesting the removal operation.
+    /// @param user The user for which we want to remove a specific template.
+    /// @param id The id of the template that should be removed.
+    virtual Operation<Removal>::Ptr remove(const Application& app, const User& user, TemplateId id) = 0;
 
     /// @brief clear returns an operation that represents removal of all templates associated to user.
     /// @param app The application requesting the clear operation.
