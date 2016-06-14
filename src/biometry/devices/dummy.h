@@ -57,7 +57,9 @@ public:
     public:
         // From biometry::TemplateStore.
         biometry::Operation<biometry::TemplateStore::SizeQuery>::Ptr size(const biometry::Application& app, const biometry::User& user) override;
+        biometry::Operation<biometry::TemplateStore::List>::Ptr list(const biometry::Application& app, const biometry::User& user) override;
         biometry::Operation<biometry::TemplateStore::Enrollment>::Ptr enroll(const biometry::Application& app, const biometry::User& user) override;
+        biometry::Operation<biometry::TemplateStore::Removal>::Ptr remove(const biometry::Application& app, const biometry::User& user, biometry::TemplateStore::TemplateId id) override;
         biometry::Operation<biometry::TemplateStore::Clearance>::Ptr clear(const biometry::Application& app, const biometry::User& user) override;
     };
 

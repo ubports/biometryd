@@ -46,9 +46,19 @@ struct NullTemplateStore : public biometry::TemplateStore
         return biometry::Operation<SizeQuery>::Ptr{};
     }
 
+    biometry::Operation<biometry::TemplateStore::List>::Ptr list(const biometry::Application&, const biometry::User&) override
+    {
+        return biometry::Operation<List>::Ptr{};
+    }
+
     biometry::Operation<Enrollment>::Ptr enroll(const biometry::Application&, const biometry::User&) override
     {
         return biometry::Operation<Enrollment>::Ptr{};
+    }
+
+    biometry::Operation<Removal>::Ptr remove(const biometry::Application&, const biometry::User&, biometry::TemplateStore::TemplateId) override
+    {
+        return biometry::Operation<Removal>::Ptr{};
     }
 
     biometry::Operation<Clearance>::Ptr clear(const biometry::Application&, const biometry::User&) override

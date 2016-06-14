@@ -55,12 +55,16 @@ public:
     // From biometry::Identifier.
     // biometry::Operation<biometry::TemplateStore::Enrollment>
     Operation<SizeQuery>::Ptr size(const Application&, const User&) override;
+    Operation<List>::Ptr list(const Application& app, const User& user) override;
     Operation<Enrollment>::Ptr enroll(const Application&, const User&) override;
+    Operation<Removal>::Ptr remove(const Application& app, const User& user, TemplateStore::TemplateId id) override;
     Operation<Clearance>::Ptr clear(const Application&, const User&) override;
 
 private:
     typedef util::Synchronized<std::unordered_map<core::dbus::types::ObjectPath, Operation<SizeQuery>::Ptr>> SizeOps;
+    typedef util::Synchronized<std::unordered_map<core::dbus::types::ObjectPath, Operation<List>::Ptr>> ListOps;
     typedef util::Synchronized<std::unordered_map<core::dbus::types::ObjectPath, Operation<Enrollment>::Ptr>> EnrollOps;
+    typedef util::Synchronized<std::unordered_map<core::dbus::types::ObjectPath, Operation<Removal>::Ptr>> RemoveOps;
     typedef util::Synchronized<std::unordered_map<core::dbus::types::ObjectPath, Operation<Clearance>::Ptr>> ClearOps;
 
     /// @brief TemplateStore creates a new instance for the given remote service and object.
@@ -76,8 +80,10 @@ private:
     struct
     {
         SizeOps size;
-        EnrollOps enroll;
-        ClearOps clear;
+        ListOps list;
+        EnrollOps enroll;        
+        RemoveOps remove;
+        ClearOps clear;        
     } ops;
 };
 }
