@@ -62,7 +62,9 @@ public:
 
 private:
     typedef util::Synchronized<std::unordered_map<core::dbus::types::ObjectPath, Operation<SizeQuery>::Ptr>> SizeOps;
+    typedef util::Synchronized<std::unordered_map<core::dbus::types::ObjectPath, Operation<List>::Ptr>> ListOps;
     typedef util::Synchronized<std::unordered_map<core::dbus::types::ObjectPath, Operation<Enrollment>::Ptr>> EnrollOps;
+    typedef util::Synchronized<std::unordered_map<core::dbus::types::ObjectPath, Operation<Removal>::Ptr>> RemoveOps;
     typedef util::Synchronized<std::unordered_map<core::dbus::types::ObjectPath, Operation<Clearance>::Ptr>> ClearOps;
 
     /// @brief TemplateStore creates a new instance for the given remote service and object.
@@ -78,8 +80,10 @@ private:
     struct
     {
         SizeOps size;
-        EnrollOps enroll;
-        ClearOps clear;
+        ListOps list;
+        EnrollOps enroll;        
+        RemoveOps remove;
+        ClearOps clear;        
     } ops;
 };
 }

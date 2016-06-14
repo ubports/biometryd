@@ -95,6 +95,27 @@ biometry::dbus::skeleton::TemplateStore::TemplateStore(
         this->bus->send(reply);
     });
 
+    object->install_method_handler<biometry::dbus::interface::TemplateStore::Methods::List>([this](const core::dbus::Message::Ptr& msg)
+    {
+        biometry::User user; biometry::Application app = biometry::Application::system();
+        auto reader = msg->reader(); reader >> app >> user;
+        auto op = list(app, user);
+
+        core::dbus::types::ObjectPath op_path
+        {
+            (boost::format{"%1%/operation/list/%2%"} % this->object->path().as_string() % util::counter<TemplateStore>().increment()).str()
+        };
+
+        ops.list.synchronized([this, op_path, op](ListOps::ValueType& ops)
+        {
+            ops[op_path] = skeleton::Operation<List>::create_for_object(this->bus, this->service->add_object_for_path(op_path), op);
+        });
+
+        auto reply = core::dbus::Message::make_method_return(msg);
+        reply->writer() << op_path;
+        this->bus->send(reply);
+    });
+
     object->install_method_handler<biometry::dbus::interface::TemplateStore::Methods::Enroll>([this](const core::dbus::Message::Ptr& msg)
     {
         biometry::User user; biometry::Application app = biometry::Application::system();
@@ -109,6 +130,27 @@ biometry::dbus::skeleton::TemplateStore::TemplateStore(
         ops.enroll.synchronized([this, op_path, op](EnrollOps::ValueType& ops)
         {
             ops[op_path] = skeleton::Operation<Enrollment>::create_for_object(this->bus, this->service->add_object_for_path(op_path), op);
+        });
+
+        auto reply = core::dbus::Message::make_method_return(msg);
+        reply->writer() << op_path;
+        this->bus->send(reply);
+    });
+
+    object->install_method_handler<biometry::dbus::interface::TemplateStore::Methods::Remove>([this](const core::dbus::Message::Ptr& msg)
+    {
+        biometry::User user; biometry::Application app = biometry::Application::system(); biometry::TemplateStore::TemplateId id{0};
+        auto reader = msg->reader(); reader >> app >> user >> id;
+        auto op = remove(app, user, id);
+
+        core::dbus::types::ObjectPath op_path
+        {
+            (boost::format{"%1%/operation/remove/%2%"} % this->object->path().as_string() % util::counter<TemplateStore>().increment()).str()
+        };
+
+        ops.remove.synchronized([this, op_path, op](RemoveOps::ValueType& ops)
+        {
+            ops[op_path] = skeleton::Operation<Removal>::create_for_object(this->bus, this->service->add_object_for_path(op_path), op);
         });
 
         auto reply = core::dbus::Message::make_method_return(msg);

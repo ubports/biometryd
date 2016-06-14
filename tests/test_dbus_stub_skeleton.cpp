@@ -134,7 +134,9 @@ TEST_F(TestDbusStubSkeleton, stub_skeleton_service_can_talk_with_one_another)
 
         auto template_store = std::make_shared<NiceMock<MockTemplateStore>>();
         ON_CALL(*template_store, size(_, _)).WillByDefault(Return(std::make_shared<MockOperation<biometry::TemplateStore::SizeQuery>>()));
+        ON_CALL(*template_store, list(_, _)).WillByDefault(Return(std::make_shared<MockOperation<biometry::TemplateStore::List>>()));
         ON_CALL(*template_store, enroll(_, _)).WillByDefault(Return(std::make_shared<MockOperation<biometry::TemplateStore::Enrollment>>()));
+        ON_CALL(*template_store, remove(_, _, _)).WillByDefault(Return(std::make_shared<MockOperation<biometry::TemplateStore::Removal>>()));
         ON_CALL(*template_store, clear(_, _)).WillByDefault(Return(std::make_shared<MockOperation<biometry::TemplateStore::Clearance>>()));
 
         auto device = std::make_shared<NiceMock<MockDevice>>();
@@ -154,16 +156,19 @@ TEST_F(TestDbusStubSkeleton, stub_skeleton_service_can_talk_with_one_another)
         auto app = biometry::Application::system();
         auto reason = biometry::Reason::unknown();
         auto user = biometry::User::current();
+        auto id = biometry::TemplateStore::TemplateId{42};
 
         auto scope = stub_scope();
         auto service = biometry::dbus::stub::Service::create_for_bus(scope->bus);
         auto device = service->default_device();
 
         auto f1 = start<biometry::TemplateStore::SizeQuery>(device->template_store().size(app, user));
-        auto f2 = start<biometry::TemplateStore::Enrollment>(device->template_store().enroll(app, user));
-        auto f3 = start<biometry::TemplateStore::Clearance>(device->template_store().clear(app, user));
+        auto f2 = start<biometry::TemplateStore::List>(device->template_store().list(app, user));
+        auto f3 = start<biometry::TemplateStore::Enrollment>(device->template_store().enroll(app, user));
+        auto f4 = start<biometry::TemplateStore::Removal>(device->template_store().remove(app, user, id));
+        auto f5 = start<biometry::TemplateStore::Clearance>(device->template_store().clear(app, user));
 
-        auto f4 = start<biometry::Identification>(device->identifier().identify_user(app, reason));
+        auto f6 = start<biometry::Identification>(device->identifier().identify_user(app, reason));
 
         return ::testing::Test::HasFailure() ? core::posix::exit::Status::failure : core::posix::exit::Status::success;
     };
