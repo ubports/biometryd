@@ -44,9 +44,19 @@ biometry::Operation<biometry::TemplateStore::SizeQuery>::Ptr biometry::dbus::ske
     return impl.get().size(app, user);
 }
 
+biometry::Operation<biometry::TemplateStore::List>::Ptr biometry::dbus::skeleton::TemplateStore::list(const biometry::Application& app, const biometry::User& user)
+{
+    return impl.get().list(app, user);
+}
+
 biometry::Operation<biometry::TemplateStore::Enrollment>::Ptr biometry::dbus::skeleton::TemplateStore::enroll(const biometry::Application& app, const biometry::User& user)
 {
     return impl.get().enroll(app, user);
+}
+
+biometry::Operation<biometry::TemplateStore::Removal>::Ptr biometry::dbus::skeleton::TemplateStore::remove(const biometry::Application& app, const biometry::User& user, biometry::TemplateStore::TemplateId id)
+{
+    return impl.get().remove(app, user, id);
 }
 
 biometry::Operation<biometry::TemplateStore::Clearance>::Ptr biometry::dbus::skeleton::TemplateStore::clear(const biometry::Application& app, const biometry::User& user)

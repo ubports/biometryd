@@ -71,9 +71,19 @@ biometry::Operation<biometry::TemplateStore::SizeQuery>::Ptr biometry::devices::
     return std::make_shared<DispatchingOperation<biometry::TemplateStore::SizeQuery>>(dispatcher, impl->template_store().size(app, user));
 }
 
+biometry::Operation<biometry::TemplateStore::List>::Ptr biometry::devices::Dispatching::TemplateStore::list(const biometry::Application& app, const biometry::User& user)
+{
+    return std::make_shared<DispatchingOperation<biometry::TemplateStore::List>>(dispatcher, impl->template_store().list(app, user));
+}
+
 biometry::Operation<biometry::TemplateStore::Enrollment>::Ptr biometry::devices::Dispatching::TemplateStore::enroll(const biometry::Application& app, const biometry::User& user)
 {
     return std::make_shared<DispatchingOperation<biometry::TemplateStore::Enrollment>>(dispatcher, impl->template_store().enroll(app, user));
+}
+
+biometry::Operation<biometry::TemplateStore::Removal>::Ptr biometry::devices::Dispatching::TemplateStore::remove(const biometry::Application& app, const biometry::User& user, biometry::TemplateStore::TemplateId id)
+{
+    return std::make_shared<DispatchingOperation<biometry::TemplateStore::Removal>>(dispatcher, impl->template_store().remove(app, user, id));
 }
 
 biometry::Operation<biometry::TemplateStore::Clearance>::Ptr biometry::devices::Dispatching::TemplateStore::clear(const biometry::Application& app, const biometry::User& user)

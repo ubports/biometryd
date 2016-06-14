@@ -44,7 +44,9 @@ public:
     // From biometry::Identifier.
     // biometry::Operation<biometry::TemplateStore::Enrollment>
     Operation<SizeQuery>::Ptr size(const Application&, const User&) override;
+    Operation<TemplateStore::List>::Ptr list(const Application& app, const User& user) override;
     Operation<Enrollment>::Ptr enroll(const Application&, const User&) override;
+    Operation<TemplateStore::Removal>::Ptr remove(const Application& app, const User& user, TemplateStore::TemplateId id) override;
     Operation<Clearance>::Ptr clear(const Application&, const User&) override;
 
 private:

@@ -193,6 +193,23 @@ struct TemplateStore
             }
         };
 
+        struct List
+        {
+            static inline const std::string& name()
+            {
+                static const std::string s{"List"};
+                return s;
+            }
+
+            typedef biometry::dbus::interface::TemplateStore Interface;
+            typedef core::dbus::types::ObjectPath ResultType;
+
+            inline static const std::chrono::milliseconds default_timeout()
+            {
+                return std::chrono::seconds{1};
+            }
+        };
+
         struct Enroll
         {
             static inline const std::string& name()
@@ -201,6 +218,23 @@ struct TemplateStore
                 return s;
             }
 
+
+            typedef biometry::dbus::interface::TemplateStore Interface;
+            typedef core::dbus::types::ObjectPath ResultType;
+
+            inline static const std::chrono::milliseconds default_timeout()
+            {
+                return std::chrono::seconds{1};
+            }
+        };
+
+        struct Remove
+        {
+            static inline const std::string& name()
+            {
+                static const std::string s{"Remove"};
+                return s;
+            }
 
             typedef biometry::dbus::interface::TemplateStore Interface;
             typedef core::dbus::types::ObjectPath ResultType;

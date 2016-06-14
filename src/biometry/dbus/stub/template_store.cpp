@@ -44,6 +44,16 @@ biometry::Operation<biometry::TemplateStore::SizeQuery>::Ptr biometry::dbus::stu
     return Operation<SizeQuery>::create_for_object_and_service(bus, service, service->object_for_path(result.value()));
 }
 
+biometry::Operation<biometry::TemplateStore::List>::Ptr biometry::dbus::stub::TemplateStore::list(const biometry::Application& app, const biometry::User& user)
+{
+    auto result = object->transact_method<
+            biometry::dbus::interface::TemplateStore::Methods::List,
+            biometry::dbus::interface::TemplateStore::Methods::List::ResultType
+    >(app, user);
+
+    return Operation<List>::create_for_object_and_service(bus, service, service->object_for_path(result.value()));
+}
+
 biometry::Operation<biometry::TemplateStore::Enrollment>::Ptr biometry::dbus::stub::TemplateStore::enroll(const biometry::Application& app, const biometry::User& user)
 {
     auto result = object->transact_method<
@@ -52,6 +62,16 @@ biometry::Operation<biometry::TemplateStore::Enrollment>::Ptr biometry::dbus::st
     >(app, user);
 
     return Operation<Enrollment>::create_for_object_and_service(bus, service, service->object_for_path(result.value()));
+}
+
+biometry::Operation<biometry::TemplateStore::Removal>::Ptr biometry::dbus::stub::TemplateStore::remove(const biometry::Application& app, const biometry::User& user, biometry::TemplateStore::TemplateId id)
+{
+    auto result = object->transact_method<
+            biometry::dbus::interface::TemplateStore::Methods::Remove,
+            biometry::dbus::interface::TemplateStore::Methods::Remove::ResultType
+    >(app, user, id);
+
+    return Operation<Removal>::create_for_object_and_service(bus, service, service->object_for_path(result.value()));
 }
 
 biometry::Operation<biometry::TemplateStore::Clearance>::Ptr biometry::dbus::stub::TemplateStore::clear(const biometry::Application& app, const biometry::User& user)
