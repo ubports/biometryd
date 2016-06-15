@@ -126,6 +126,43 @@ struct SizeQuery : public biometry::Operation<biometry::TemplateStore::SizeQuery
     bool canceled{false};
 };
 
+struct List : public biometry::Operation<biometry::TemplateStore::List>,
+              public std::enable_shared_from_this<for_testing::List>
+{
+    void start_with_observer(const typename Observer::Ptr& observer) override
+    {
+        auto thiz = shared_from_this();
+        Dispatcher::instance().dispatch([observer, thiz]()
+        {
+            observer->on_started();
+
+            for (std::size_t i = 1; i <= 100; i++)
+            {
+                if (thiz->canceled)
+                {
+                    observer->on_canceled("Canceled due to request from client");
+                    return;
+                }
+
+                observer->on_progress(biometry::Progress{biometry::Percent::from_raw_value(i/100.f), biometry::Dictionary{}});
+                std::this_thread::sleep_for(std::chrono::milliseconds{15});
+            }
+
+            std::vector<biometry::TemplateStore::TemplateId> ids{template_counter()};
+            std::iota(ids.begin(), ids.end(), 0);
+
+            observer->on_succeeded(ids);
+        });
+    }
+
+    void cancel() override
+    {
+        canceled = true;
+    }
+
+    bool canceled{false};
+};
+
 struct Enrollment : public biometry::Operation<biometry::TemplateStore::Enrollment>,
                         public std::enable_shared_from_this<for_testing::Enrollment>
 {
@@ -155,8 +192,7 @@ struct Enrollment : public biometry::Operation<biometry::TemplateStore::Enrollme
                 std::this_thread::sleep_for(std::chrono::milliseconds{50});
             }
 
-            template_counter()++;
-            observer->on_succeeded(biometry::Void{});
+            observer->on_succeeded(biometry::TemplateStore::TemplateId{template_counter()++});
         });
     }
 
@@ -200,6 +236,45 @@ struct Identification : public biometry::Operation<biometry::Identification>,
     }
 
     bool canceled{false};
+};
+
+struct Removal : public biometry::Operation<biometry::TemplateStore::Removal>,
+                       public std::enable_shared_from_this<for_testing::Removal>
+{
+    Removal(biometry::TemplateStore::TemplateId id) : canceled{false}, id{id}
+    {
+    }
+
+    void start_with_observer(const typename Observer::Ptr& observer) override
+    {
+        auto thiz = shared_from_this();
+        Dispatcher::instance().dispatch([observer, thiz, this]()
+        {
+            observer->on_started();
+
+            for (std::size_t i = 1; i <= 100; i++)
+            {
+                if (thiz->canceled)
+                {
+                    observer->on_canceled("Canceled due to request from client");
+                    return;
+                }
+
+                observer->on_progress(biometry::Progress{biometry::Percent::from_raw_value(i/100.f), biometry::Dictionary{}});
+                std::this_thread::sleep_for(std::chrono::milliseconds{15});
+            }
+
+            observer->on_succeeded(id);
+        });
+    }
+
+    void cancel() override
+    {
+        canceled = true;
+    }
+
+    bool canceled{false};
+    biometry::TemplateStore::TemplateId id;
 };
 
 struct Clearance : public biometry::Operation<biometry::TemplateStore::Clearance>,
@@ -246,7 +321,7 @@ struct TemplateStore : public biometry::TemplateStore
 
     biometry::Operation<biometry::TemplateStore::List>::Ptr list(const biometry::Application&, const biometry::User&) override
     {
-        return biometry::Operation<List>::Ptr{};
+        return std::make_shared<for_testing::List>();
     }
 
     biometry::Operation<Enrollment>::Ptr enroll(const biometry::Application&, const biometry::User&) override
@@ -254,9 +329,9 @@ struct TemplateStore : public biometry::TemplateStore
         return std::make_shared<for_testing::Enrollment>();
     }
 
-    biometry::Operation<Removal>::Ptr remove(const biometry::Application&, const biometry::User&, biometry::TemplateStore::TemplateId) override
+    biometry::Operation<Removal>::Ptr remove(const biometry::Application&, const biometry::User&, biometry::TemplateStore::TemplateId id) override
     {
-        return biometry::Operation<Removal>::Ptr{};
+        return std::make_shared<for_testing::Removal>(id);
     }
 
     biometry::Operation<Clearance>::Ptr clear(const biometry::Application&, const biometry::User&) override
@@ -323,7 +398,9 @@ void biometry::qml::Plugin::registerTypes(const char *uri)
 
     qmlRegisterUncreatableType<biometry::qml::Operation>(uri, Plugin::major, Plugin::minor, "Operation", "Rely on Biometryd.instance");
     qmlRegisterUncreatableType<biometry::qml::SizeQuery>(uri, Plugin::major, Plugin::minor, "SizeQuery", "Rely on Biometryd.instance");
+    qmlRegisterUncreatableType<biometry::qml::List>(uri, Plugin::major, Plugin::minor, "List", "Rely on Biometryd.instance");
     qmlRegisterUncreatableType<biometry::qml::Enrollment>(uri, Plugin::major, Plugin::minor, "Enrollment", "Rely on Biometryd.instance");
+    qmlRegisterUncreatableType<biometry::qml::Removal>(uri, Plugin::major, Plugin::minor, "Removal", "Rely on Biometryd.instance");
     qmlRegisterUncreatableType<biometry::qml::Clearance>(uri, Plugin::major, Plugin::minor, "Clearance", "Rely on Biometryd.instance");
     qmlRegisterUncreatableType<biometry::qml::TemplateStore>(uri, Plugin::major, Plugin::minor, "TemplateStore", "Rely on Biometryd.instance");
 

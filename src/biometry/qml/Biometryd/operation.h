@@ -74,6 +74,25 @@ struct Result<biometry::TemplateStore::SizeQuery::Result>
         return QVariant{sq};
     }
 };
+
+template<>
+struct Result<biometry::TemplateStore::TemplateId>
+{
+    static QVariant to_variant(const biometry::TemplateStore::TemplateId& id)
+    {
+        return QVariant{qulonglong{id}};
+    }
+};
+
+template<>
+struct Result<std::vector<biometry::TemplateStore::TemplateId>>
+{
+    static QVariant to_variant(const std::vector<biometry::TemplateStore::TemplateId>& ids)
+    {
+        QVariantList lids; for (const auto& id : ids) lids.push_back(Result<biometry::TemplateStore::TemplateId>::to_variant(id));
+        return QVariant::fromValue(lids);
+    }
+};
 }
 /// @brief Observer monitors an Operation.
 class BIOMETRY_DLL_PUBLIC Observer : public QObject

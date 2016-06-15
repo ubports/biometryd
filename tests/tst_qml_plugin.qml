@@ -87,7 +87,17 @@ TestCase {
         }
 
         {
+            var op = ts.list(user); op.start(observer);
+            spy.wait(5000);
+        }
+
+        {
             op = ts.size(user); op.start(observer);
+            spy.wait(5000);
+        }
+
+        {
+            op = ts.remove(user, 42); op.start(observer);
             spy.wait(5000);
         }
 
