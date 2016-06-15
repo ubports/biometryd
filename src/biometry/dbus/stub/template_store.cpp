@@ -36,7 +36,7 @@ biometry::dbus::stub::TemplateStore::Ptr biometry::dbus::stub::TemplateStore::cr
 
 biometry::Operation<biometry::TemplateStore::SizeQuery>::Ptr biometry::dbus::stub::TemplateStore::size(const biometry::Application& app, const biometry::User& user)
 {
-    auto result = object->transact_method<
+    auto result = object->invoke_method_synchronously<
             biometry::dbus::interface::TemplateStore::Methods::Size,
             biometry::dbus::interface::TemplateStore::Methods::Size::ResultType
     >(app, user);
@@ -46,7 +46,7 @@ biometry::Operation<biometry::TemplateStore::SizeQuery>::Ptr biometry::dbus::stu
 
 biometry::Operation<biometry::TemplateStore::List>::Ptr biometry::dbus::stub::TemplateStore::list(const biometry::Application& app, const biometry::User& user)
 {
-    auto result = object->transact_method<
+    auto result = object->invoke_method_synchronously<
             biometry::dbus::interface::TemplateStore::Methods::List,
             biometry::dbus::interface::TemplateStore::Methods::List::ResultType
     >(app, user);
@@ -56,7 +56,7 @@ biometry::Operation<biometry::TemplateStore::List>::Ptr biometry::dbus::stub::Te
 
 biometry::Operation<biometry::TemplateStore::Enrollment>::Ptr biometry::dbus::stub::TemplateStore::enroll(const biometry::Application& app, const biometry::User& user)
 {
-    auto result = object->transact_method<
+    auto result = object->invoke_method_synchronously<
             biometry::dbus::interface::TemplateStore::Methods::Enroll,
             biometry::dbus::interface::TemplateStore::Methods::Enroll::ResultType
     >(app, user);
@@ -66,7 +66,7 @@ biometry::Operation<biometry::TemplateStore::Enrollment>::Ptr biometry::dbus::st
 
 biometry::Operation<biometry::TemplateStore::Removal>::Ptr biometry::dbus::stub::TemplateStore::remove(const biometry::Application& app, const biometry::User& user, biometry::TemplateStore::TemplateId id)
 {
-    auto result = object->transact_method<
+    auto result = object->invoke_method_synchronously<
             biometry::dbus::interface::TemplateStore::Methods::Remove,
             biometry::dbus::interface::TemplateStore::Methods::Remove::ResultType
     >(app, user, id);
@@ -76,7 +76,7 @@ biometry::Operation<biometry::TemplateStore::Removal>::Ptr biometry::dbus::stub:
 
 biometry::Operation<biometry::TemplateStore::Clearance>::Ptr biometry::dbus::stub::TemplateStore::clear(const biometry::Application& app, const biometry::User& user)
 {
-    auto result = object->transact_method<
+    auto result = object->invoke_method_synchronously<
             biometry::dbus::interface::TemplateStore::Methods::Clear,
             biometry::dbus::interface::TemplateStore::Methods::Clear::ResultType
     >(app, user);

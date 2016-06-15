@@ -33,7 +33,7 @@ biometry::dbus::stub::Identifier::Ptr biometry::dbus::stub::Identifier::create_f
 
 biometry::Operation<biometry::Identification>::Ptr biometry::dbus::stub::Identifier::identify_user(const Application& app, const Reason& reason)
 {
-    auto result = object->transact_method<
+    auto result = object->invoke_method_synchronously<
             biometry::dbus::interface::Identifier::Methods::IdentifyUser,
             biometry::dbus::interface::Identifier::Methods::IdentifyUser::ResultType
     >(app, reason);

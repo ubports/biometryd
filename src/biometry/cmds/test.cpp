@@ -36,11 +36,62 @@
 #include <biometry/util/streaming_configuration_builder.h>
 
 #include <iomanip>
+#include <future>
+#include <stdexcept>
 
 namespace cli = biometry::util::cli;
 
 namespace
 {
+template<typename T>
+class SyncingObserver : public biometry::Operation<T>::Observer
+{
+public:
+    typedef typename biometry::Operation<T>::Observer Super;
+
+    SyncingObserver(std::ostream& out, const std::string& name, std::uint32_t width = 80)
+        : pb{out, name, width},
+          future{promise.get_future()}
+    {
+    }
+
+    typename Super::Result sync()
+    {
+        return future.get();
+    }
+
+    // From biometry::Operation<T>::Observer
+    void on_started() override
+    {
+        pb.update(0);
+    }
+
+    void on_progress(const typename Super::Progress& progress) override
+    {
+        pb.update(*progress.percent);
+    }
+
+    void on_canceled(const typename Super::Reason& reason) override
+    {
+        promise.set_exception(std::make_exception_ptr(std::runtime_error{reason}));
+    }
+
+    void on_failed(const typename Super::Error& error) override
+    {
+        promise.set_exception(std::make_exception_ptr(std::runtime_error{error}));
+    }
+
+    void on_succeeded(const typename Super::Result& result) override
+    {
+        promise.set_value(result);
+    }
+
+private:
+    biometry::util::cli::ProgressBar pb;
+    std::promise<typename Super::Result> promise;
+    std::future<typename Super::Result> future{promise.get_future()};
+};
+
 std::shared_ptr<biometry::Device> device_from_config_file(const boost::filesystem::path& file)
 {
     using StreamingJsonConfigurationBuilder = biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>;
@@ -107,25 +158,33 @@ int biometry::cmds::Test::test_device(const User& user, const cli::Command::Cont
     static std::ofstream dev_null{"/dev/null"};
 
     ctxt.cout << std::endl;
-    ctxt.cout << "Clearing template store:" << std::endl;
-    device->template_store().clear(biometry::Application::system(), user)->start_with_observer(
-        std::make_shared<biometry::TracingObserver<biometry::TemplateStore::Clearance>>(2, ctxt.cout));
+    {
+        auto observer = std::make_shared<SyncingObserver<biometry::TemplateStore::Clearance>>(ctxt.cout, "Clearing template store: ", 17);
+        device->template_store().clear(biometry::Application::system(), user)->start_with_observer(observer);
+        try { observer->sync(); } catch(...) { ctxt.cout << "  Failed to clear template store, proceeding though..." << std::endl; };
+    }
 
-    ctxt.cout << "Enrolling template:" << std::endl;
-    device->template_store().enroll(biometry::Application::system(), user)->start_with_observer(
-        std::make_shared<biometry::TracingObserver<biometry::TemplateStore::Enrollment>>(2, ctxt.cout));
+    {
+        auto observer = std::make_shared<SyncingObserver<biometry::TemplateStore::Enrollment>>(ctxt.cout, "Enrolling new template:  ", 17);
+        device->template_store().enroll(biometry::Application::system(), user)->start_with_observer(observer);
+        try { observer->sync(); } catch(...) { ctxt.cout << "  Failed to enroll template, aborting ..." << std::endl; return EXIT_FAILURE; };
+    }
 
-    ctxt.cout << "Querying template count:" << std::endl;
-    device->template_store().size(biometry::Application::system(), user)->start_with_observer(
-        std::make_shared<biometry::TracingObserver<biometry::TemplateStore::SizeQuery>>(2, ctxt.cout));
+    {
+        auto observer = std::make_shared<SyncingObserver<biometry::TemplateStore::SizeQuery>>(ctxt.cout, "Querying template count: ", 17);
+        device->template_store().size(biometry::Application::system(), user)->start_with_observer(observer);
+        try { observer->sync(); } catch(...) { ctxt.cout << "  Failed to query template count, aborting ..." << std::endl; return EXIT_FAILURE; };
+    }
 
-    biometry::util::cli::ProgressBar pb{ctxt.cout, "Identifying user: ", 17};
+    biometry::util::cli::ProgressBar pb{ctxt.cout, "Identifying user:        ", 17};
 
     auto stats = biometry::util::Benchmark{[device, &ctxt]()
     {
+        auto observer = std::make_shared<SyncingObserver<biometry::Identification>>(dev_null, "  Trial: ");
         device->identifier().identify_user(biometry::Application::system(), biometry::Reason{"testing"})
-            ->start_with_observer(
-                std::make_shared<biometry::TracingObserver<biometry::Identification>>(4, dev_null));
+            ->start_with_observer(observer);
+        try { observer->sync(); } catch(...) { ctxt.cout << "  Failed to identify user." << std::endl; };
+
     }}.trials(25).on_progress([&pb](std::size_t current, std::size_t total) { pb.update(current/static_cast<double>(total)); }).run();
 
     ctxt.cout << std::endl
