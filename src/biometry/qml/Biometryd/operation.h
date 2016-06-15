@@ -30,11 +30,17 @@
 #include <biometry/qml/Biometryd/converter.h>
 #include <biometry/qml/Biometryd/fingerprint_reader.h>
 
+#include <QCoreApplication>
 #include <QDebug>
+#include <QEvent>
+#include <QPointer>
 #include <QObject>
 #include <QVariantMap>
 #include <QRect>
 #include <QVector>
+
+#include <functional>
+#include <memory>
 
 namespace biometry
 {
@@ -94,6 +100,69 @@ struct Result<std::vector<biometry::TemplateStore::TemplateId>>
     }
 };
 }
+
+/// @brief DispatcherWithContext dispatches tasks onto the QCoreApplication main loop.
+template<typename Context>
+class BIOMETRY_DLL_PUBLIC DispatcherWithContext : public QObject
+{
+private:
+    /// @brief Task is the actual event used for transporting dispatched tasks
+    /// from one thread to the other.
+    class Task : public QEvent
+    {
+    public:
+        /// @brief type returns the QEvent::Type assigned to DispatcherWithContext<T>::Task.
+        static QEvent::Type type()
+        {
+            static const QEvent::Type t = static_cast<QEvent::Type>(QEvent::registerEventType());
+            return t;
+        }
+
+        /// @brief Task initializes a new instance with the given null-ary void functor.
+        Task(const std::function<void()>& f) : QEvent{Task::type()}, f{f}
+        {
+        }
+
+        /// @brief run puts the contained functor to execution.
+        void run()
+        {
+            f();
+        }
+
+    private:
+        std::function<void()> f;
+    };
+
+public:
+    /// @brief Dispatcher initializes a default instance.
+    DispatcherWithContext() = default;
+
+    /// @brief event processes events of type Task.
+    bool event(QEvent* ev) override
+    {
+        if (ev->type() == Task::type())
+        {
+            reinterpret_cast<Task*>(ev)->run();
+            return true;
+        }
+
+        return QObject::event(ev);
+    }
+
+    /// @brief finalize schedules deletion of this instance onto the QCoreApplication main loop.
+    void finalize()
+    {
+        QCoreApplication::instance()->postEvent(this, new Task{[this]() { delete this; }});
+    }
+
+    /// @brief dispatch enqueues the given task for execution on the QCoreApplication
+    /// main loop.
+    void dispatch(const std::shared_ptr<Context>& ctxt, const std::function<void()>& task)
+    {
+        QCoreApplication::instance()->postEvent(this, new Task{[ctxt, task]() { task();}});
+    }    
+};
+
 /// @brief Observer monitors an Operation.
 class BIOMETRY_DLL_PUBLIC Observer : public QObject
 {
@@ -151,21 +220,34 @@ class TypedOperation : public Operation
 {
 public:
 
-    class Observer : public biometry::Operation<T>::Observer
+    class Observer : public biometry::Operation<T>::Observer, public std::enable_shared_from_this<Observer>
     {
     public:
+        typedef std::shared_ptr<Observer> Ptr;
+
         using typename biometry::Operation<T>::Observer::Progress;
         using typename biometry::Operation<T>::Observer::Reason;
         using typename biometry::Operation<T>::Observer::Error;
-        using typename biometry::Operation<T>::Observer::Result;
+        using typename biometry::Operation<T>::Observer::Result;                
 
-        Observer(qml::Observer* observer) : observer{observer}
+        static Ptr create(qml::Observer* observer)
         {
+            return Ptr{new Observer{observer}};
+        }
+
+        ~Observer()
+        {
+            // observer is owned by the QML Engine. With that,
+            // we only need to take care of our dispatcher instance.
+            dispatcher->finalize();
         }
 
         void on_started() override
         {
-            QMetaObject::invokeMethod(observer, "started", Qt::QueuedConnection);
+            dispatcher->dispatch(Observer::shared_from_this(), [this]()
+            {
+                if (observer) QMetaObject::invokeMethod(observer, "started", Qt::AutoConnection);
+            });
         }
 
         void on_progress(const Progress& progress) override
@@ -191,31 +273,50 @@ public:
                 vm[biometry::devices::FingerprintReader::GuidedEnrollment::Hints::key_masks] =
                         Converter::convert(*hints.masks);
 
-            QMetaObject::invokeMethod(observer, "progressed", Qt::QueuedConnection,
-                                      Q_ARG(double, *progress.percent),
-                                      Q_ARG(QVariantMap, vm));
+            dispatcher->dispatch(Observer::shared_from_this(), [this, progress, vm]()
+            {
+                if (observer) QMetaObject::invokeMethod(observer, "progressed", Qt::AutoConnection,
+                                                        Q_ARG(double, *progress.percent),
+                                                        Q_ARG(QVariantMap, vm));
+            });
         }
 
         void on_canceled(const Reason& reason) override
         {
-            QMetaObject::invokeMethod(observer, "canceled", Qt::QueuedConnection,
-                                      Q_ARG(QString, QString::fromStdString(reason)));
+            dispatcher->dispatch(Observer::shared_from_this(), [this, reason]()
+            {
+                if (observer) QMetaObject::invokeMethod(observer, "canceled", Qt::AutoConnection,
+                                                        Q_ARG(QString, QString::fromStdString(reason)));
+            });
         }
 
         void on_failed(const Error& error) override
         {
-            QMetaObject::invokeMethod(observer, "failed", Qt::QueuedConnection,
-                                      Q_ARG(QString, QString::fromStdString(error)));
+            dispatcher->dispatch(Observer::shared_from_this(), [this, error]()
+            {
+                if (observer) QMetaObject::invokeMethod(observer, "failed", Qt::AutoConnection,
+                                                        Q_ARG(QString, QString::fromStdString(error)));
+            });
         }
 
         void on_succeeded(const Result& result) override
         {
-            QMetaObject::invokeMethod(observer, "succeeded", Qt::QueuedConnection,
-                                      Q_ARG(QVariant, traits::Result<Result>::to_variant(result)));
+            dispatcher->dispatch(Observer::shared_from_this(), [this, result]()
+            {
+                if (observer) QMetaObject::invokeMethod(observer, "succeeded", Qt::AutoConnection,
+                                                        Q_ARG(QVariant, traits::Result<Result>::to_variant(result)));
+            });
         }
 
     private:
-        qml::Observer* observer;
+        Observer(qml::Observer* observer)
+            : observer{observer},
+              dispatcher{new DispatcherWithContext<Observer>{}}
+        {
+        }
+
+        QPointer<qml::Observer> observer;
+        DispatcherWithContext<Observer>* dispatcher;
     };
 
     /// @brief TypedOperation initializes a new instance with the given impl and parent.
@@ -230,7 +331,7 @@ public:
     {
         try
         {
-            impl->start_with_observer(std::make_shared<Observer>(observer));
+            impl->start_with_observer(Observer::create(observer));
             return true;
         }
         catch(...)
