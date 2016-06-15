@@ -158,9 +158,19 @@ biometry::Operation<biometry::TemplateStore::SizeQuery>::Ptr biometry::devices::
     return impl.get().size(app, user);
 }
 
+biometry::Operation<biometry::TemplateStore::List>::Ptr biometry::devices::FingerprintReader::TemplateStore::list(const Application& app, const User& user)
+{
+    return impl.get().list(app, user);
+}
+
 biometry::Operation<biometry::TemplateStore::Enrollment>::Ptr biometry::devices::FingerprintReader::TemplateStore::enroll(const Application& app, const User& user)
 {
     return impl.get().enroll(app, user);
+}
+
+biometry::Operation<biometry::TemplateStore::Removal>::Ptr biometry::devices::FingerprintReader::TemplateStore::remove(const Application& app, const User& user, TemplateId id)
+{
+    return impl.get().remove(app, user, id);
 }
 
 biometry::Operation<biometry::TemplateStore::Clearance>::Ptr biometry::devices::FingerprintReader::TemplateStore::clear(const Application& app, const User& user)

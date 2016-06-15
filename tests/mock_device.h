@@ -75,7 +75,9 @@ struct MockObserver : public biometry::Operation<T>::Observer
 struct MockTemplateStore : public biometry::TemplateStore
 {
     MOCK_METHOD2(size, biometry::Operation<SizeQuery>::Ptr(const biometry::Application&, const biometry::User&));
+    MOCK_METHOD2(list, biometry::Operation<List>::Ptr(const biometry::Application&, const biometry::User&));
     MOCK_METHOD2(enroll, biometry::Operation<Enrollment>::Ptr (const biometry::Application&, const biometry::User&));
+    MOCK_METHOD3(remove, biometry::Operation<Removal>::Ptr(const biometry::Application&, const biometry::User&, biometry::TemplateStore::TemplateId));
     MOCK_METHOD2(clear, biometry::Operation<Clearance>::Ptr(const biometry::Application&, const biometry::User&));
 };
 

@@ -17,34 +17,29 @@
  *
  */
 
-#include <biometry/dbus/service.h>
-#include <biometry/dbus/stub/service.h>
+#include <biometry/util/statistics.h>
 
-#include <biometry/runtime.h>
-
-#include <core/dbus/bus.h>
-#include <core/dbus/asio/executor.h>
-
-namespace
+biometry::util::Statistics& biometry::util::Statistics::update(double observation)
 {
-std::shared_ptr<biometry::Runtime> runtime()
-{
-    static auto rt = biometry::Runtime::create();
-    return rt;
+    accumulator(observation); return *this;
 }
 
-core::dbus::Bus::Ptr bus()
+double biometry::util::Statistics::min() const
 {
-    auto bus = std::make_shared<core::dbus::Bus>(core::dbus::WellKnownBus::system);
-    bus->install_executor(core::dbus::asio::make_executor(bus, runtime()->service()));
-
-    runtime()->start();
-
-    return bus;
-}
+    return boost::accumulators::min(accumulator);
 }
 
-std::shared_ptr<biometry::Service> biometry::dbus::Service::create_stub()
-{    
-    return biometry::dbus::stub::Service::create_for_bus(bus());
+double biometry::util::Statistics::mean() const
+{
+    return boost::accumulators::mean(accumulator);
+}
+
+double biometry::util::Statistics::variance() const
+{
+    return boost::accumulators::variance(accumulator);
+}
+
+double biometry::util::Statistics::max() const
+{
+    return boost::accumulators::max(accumulator);
 }

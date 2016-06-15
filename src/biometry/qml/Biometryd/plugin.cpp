@@ -244,9 +244,19 @@ struct TemplateStore : public biometry::TemplateStore
         return std::make_shared<for_testing::SizeQuery>();
     }
 
+    biometry::Operation<biometry::TemplateStore::List>::Ptr list(const biometry::Application&, const biometry::User&) override
+    {
+        return biometry::Operation<List>::Ptr{};
+    }
+
     biometry::Operation<Enrollment>::Ptr enroll(const biometry::Application&, const biometry::User&) override
     {
         return std::make_shared<for_testing::Enrollment>();
+    }
+
+    biometry::Operation<Removal>::Ptr remove(const biometry::Application&, const biometry::User&, biometry::TemplateStore::TemplateId) override
+    {
+        return biometry::Operation<Removal>::Ptr{};
     }
 
     biometry::Operation<Clearance>::Ptr clear(const biometry::Application&, const biometry::User&) override

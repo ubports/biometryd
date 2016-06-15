@@ -36,7 +36,7 @@ biometry::TemplateStore& biometry::dbus::stub::Device::template_store()
 {
     return *template_store_([this]()
     {
-        auto result = object_->transact_method<
+        auto result = object_->invoke_method_synchronously<
                 biometry::dbus::interface::Device::Methods::TemplateStore,
                 biometry::dbus::interface::Device::Methods::TemplateStore::ResultType
         >();
@@ -49,7 +49,7 @@ biometry::Identifier& biometry::dbus::stub::Device::identifier()
 {
     return *identifier_([this]()
     {
-        auto result = object_->transact_method<
+        auto result = object_->invoke_method_synchronously<
                 biometry::dbus::interface::Device::Methods::Identifier,
                 biometry::dbus::interface::Device::Methods::Identifier::ResultType
         >();

@@ -28,9 +28,19 @@ biometry::Operation<biometry::TemplateStore::SizeQuery>::Ptr biometry::devices::
     return std::make_shared<Dummy::Operation<biometry::TemplateStore::SizeQuery>>();
 }
 
+biometry::Operation<biometry::TemplateStore::List>::Ptr biometry::devices::Dummy::TemplateStore::list(const biometry::Application&, const biometry::User&)
+{
+    return std::make_shared<Dummy::Operation<biometry::TemplateStore::List>>();
+}
+
 biometry::Operation<biometry::TemplateStore::Enrollment>::Ptr biometry::devices::Dummy::TemplateStore::enroll(const biometry::Application&, const biometry::User&)
 {
     return std::make_shared<Dummy::Operation<biometry::TemplateStore::Enrollment>>();
+}
+
+biometry::Operation<biometry::TemplateStore::Removal>::Ptr biometry::devices::Dummy::TemplateStore::remove(const biometry::Application&, const biometry::User&, biometry::TemplateStore::TemplateId)
+{
+    return std::make_shared<Dummy::Operation<biometry::TemplateStore::Removal>>();
 }
 
 biometry::Operation<biometry::TemplateStore::Clearance>::Ptr biometry::devices::Dummy::TemplateStore::clear(const biometry::Application&, const biometry::User&)

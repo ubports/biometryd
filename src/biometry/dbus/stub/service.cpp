@@ -32,7 +32,7 @@ biometry::dbus::stub::Service::Ptr biometry::dbus::stub::Service::create_for_bus
 // From biometry::Service.
 std::shared_ptr<biometry::Device> biometry::dbus::stub::Service::default_device() const
 {
-    auto result = object->transact_method<
+    auto result = object->invoke_method_synchronously<
             biometry::dbus::interface::Service::Methods::DefaultDevice,
             biometry::dbus::interface::Service::Methods::DefaultDevice::ResultType
     >();
