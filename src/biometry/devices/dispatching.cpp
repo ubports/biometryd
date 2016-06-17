@@ -47,11 +47,8 @@ public:
 
     void cancel() override
     {
-        auto i = impl;
-        dispatcher->dispatch([i]()
-        {
-            i->cancel();
-        });
+        // We immediately forward cancel requests as we would be blocked by a stuck operation otherwise.
+        impl->cancel();
     }
 
 private:
