@@ -44,6 +44,7 @@ macro(BIOMETRYD_ADD_TEST test_name src)
     gtest_main)
 
   add_test(${test_name} ${CMAKE_CURRENT_BINARY_DIR}/${test_name} --gtest_filter=*-*requires*)
+  set_tests_properties(${test_name} PROPERTIES ENVIRONMENT "BIOMETRYD_DBUS_SKELETON_IS_RUNNING_UNDER_TESTING=1")
 endmacro(BIOMETRYD_ADD_TEST)
 
 add_library(biometryd_devices_plugin_dl SHARED biometryd_devices_plugin_dl.cpp)

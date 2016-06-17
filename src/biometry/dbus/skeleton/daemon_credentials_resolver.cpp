@@ -25,8 +25,15 @@
 #include <core/dbus/macros.h>
 #include <core/dbus/object.h>
 
+#include <core/posix/this_process.h>
+
 namespace
 {
+bool is_running_in_a_testing_environment()
+{
+    return core::posix::this_process::env::get("BIOMETRYD_DBUS_SKELETON_IS_RUNNING_UNDER_TESTING", "0") == "1";
+}
+
 struct DBus
 {
     static const std::string& name()
@@ -70,7 +77,9 @@ struct DBus
         {
             object->invoke_method_asynchronously_with_callback<GetConnectionAppArmorSecurityContext, std::string>([handler](const core::dbus::Result<std::string>& result)
             {
-                biometry::Optional<std::string> label; handler((not result.is_error() ? label = result.value() : label));
+                biometry::Optional<std::string> label; handler((not result.is_error() ?
+                                                                        label = result.value() :
+                                                                        is_running_in_a_testing_environment() ? label = "unconfined" : label));
             }, name);
         }
 
