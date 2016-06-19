@@ -61,7 +61,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'biometryd'
-copyright = u'2016, Thomas Voß'
+copyright = u'2016, Canonical Ltd.'
 author = u'Thomas Voß'
 
 # The version info for the project you're documenting, acts as replacement for
