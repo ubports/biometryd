@@ -13,6 +13,11 @@ client library as well as QML bindings. Other languages, runtimes and
 toolkits can easily consume Biomtryd by either leveraging theq
 aforementioned client bindings or by directly consuming the DBus API.
 
+The following diagram gives an overview of the main interfaces as
+further described in this secion:
+
+![Biometryd overview](images/biometryd.png)
+
 ## Device
 
 A Device abstracts an arbitrary biometric device. It bundles together access to
@@ -48,13 +53,7 @@ interacting with a device.
 
 The overall system and access to its functionality is structured
 around the notion of an asynchronous operation.  An operation is a
-state machine with the following states:
-
- - ready
- - running
- - failed
- - cancelled
- - succeeded
+state machine as shown in: ![Operation state machine](images/state_machine.png)
 
 Client applications can start and cancel an operation, all other state
 transitions are triggered by the device implementation executing an

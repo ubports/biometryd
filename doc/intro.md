@@ -15,6 +15,7 @@ instead of dealing with handling actual template data.
 
 ## Coordinates
 
- - Project: https://launchpad.net/biometryd
-   - Code: https://launchpad.net/biometryd `bzr branch lp:biometryd`
-   - Bugs: https://bugs.launchpad.net/biometryd
+ - Project: <https://launchpad.net/biometryd>
+   - Code: <https://launchpad.net/biometryd>
+   - Docs: <http://biometryd.rtfd.io/>
+   - Bugs: <https://bugs.launchpad.net/biometryd>
