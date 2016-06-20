@@ -71,6 +71,7 @@ BIOMETRYD_ADD_TEST(test_user test_user.cpp)
 BIOMETRYD_ADD_TEST(test_verifier test_verifier.cpp)
 
 BIOMETRYD_ADD_TEST(test_cmds_config cmds/test_config.cpp)
+BIOMETRYD_ADD_TEST(test_cmds_run cmds/test_run.cpp)
 BIOMETRYD_ADD_TEST(test_cmds_test cmds/test_test.cpp)
 
 add_executable(test_qml_plugin test_qml_plugin.cpp)

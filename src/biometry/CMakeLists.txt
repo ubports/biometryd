@@ -107,6 +107,8 @@ add_library(
   util/not_reachable.h
   util/not_reachable.cpp
   util/once.h
+  util/property_store.h
+  util/property_store.cpp
   util/statistics.h
   util/statistics.cpp
   util/streaming_configuration_builder.h
