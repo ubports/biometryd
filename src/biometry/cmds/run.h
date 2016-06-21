@@ -21,8 +21,11 @@
 #define BIOMETRYD_CMDS_RUN_H_
 
 #include <biometry/util/cli.h>
+#include <biometry/util/property_store.h>
 
+#include <biometry/device.h>
 #include <biometry/optional.h>
+#include <biometry/visibility.h>
 
 #include <core/dbus/bus.h>
 
@@ -36,9 +39,21 @@ namespace biometry
 {
 namespace cmds
 {
-class Run : public util::cli::CommandWithFlagsAndAction
+class BIOMETRY_DLL_PUBLIC Run : public util::cli::CommandWithFlagsAndAction
 {
 public:
+    /// @brief ConfigurationOracle trys to make an educated on the device that the service is running on.
+    ///
+    /// The implementation right now is quite naive and just queries android properties to figure out a product name
+    class ConfigurationOracle
+    {
+    public:
+        /// @brief make_an_educated_guess returns a Device::Id instance if the oracle
+        /// succeeded in identifying a known device type and map it to an appropriate
+        /// default biometry::Device implementation.
+        Device::Id make_an_educated_guess(const util::PropertyStore& property_store) const;
+    };
+
     /// @brief BusFactory models creation of bus instances.
     typedef std::function<core::dbus::Bus::Ptr()> BusFactory;
 
@@ -46,10 +61,11 @@ public:
     static BusFactory system_bus_factory();
 
     /// @brief Run initializes a new instance with the given bus_factory.
-    Run(const BusFactory& bus_factory = system_bus_factory());
+    Run(const std::shared_ptr<biometry::util::PropertyStore>& property_store, const BusFactory& bus_factory = system_bus_factory());
 
 private:
     BusFactory bus_factory;
+    std::shared_ptr<biometry::util::PropertyStore> property_store;
     Optional<boost::filesystem::path> config;
 };
 }

@@ -11,3 +11,8 @@ install(
   FILES ${CMAKE_CURRENT_SOURCE_DIR}/com.ubuntu.biometryd.Service.conf
   DESTINATION /etc/dbus-1/system.d/
 )
+
+install(
+  FILES ${CMAKE_CURRENT_SOURCE_DIR}/biometryd.conf
+  DESTINATION /etc/init
+)

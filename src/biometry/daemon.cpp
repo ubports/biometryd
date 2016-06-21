@@ -46,7 +46,7 @@ biometry::Daemon::Daemon()
        .command(std::make_shared<cmds::Config>())
        .command(std::make_shared<cmds::Identify>())
        .command(std::make_shared<cmds::ListDevices>())
-       .command(std::make_shared<cmds::Run>())
+       .command(std::make_shared<cmds::Run>(std::make_shared<biometry::util::AndroidPropertyStore>()))
        .command(std::make_shared<cmds::Test>())
        .command(std::make_shared<cmds::Version>());
 }
