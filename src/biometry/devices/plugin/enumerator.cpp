@@ -72,7 +72,7 @@ std::size_t plugin::DirectoryEnumerator::enumerate(const Functor& f) const
     for (const auto& directory : directories)
     {
         if (not boost::filesystem::is_directory(directory))
-            return 0;
+            continue;
 
         MajorVersionVerifier verifier;
         ElfDescriptorLoader loader;
