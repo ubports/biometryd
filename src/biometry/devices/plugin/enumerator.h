@@ -27,6 +27,7 @@
 #include <boost/filesystem.hpp>
 
 #include <functional>
+#include <set>
 
 namespace biometry
 {
@@ -56,13 +57,13 @@ class BIOMETRY_DLL_PUBLIC DirectoryEnumerator : public Enumerator
 {
 public:
     /// @brief DirectoryEnumerator initializes a new instance with the given directory.
-    explicit DirectoryEnumerator(const boost::filesystem::path& directory);
+    explicit DirectoryEnumerator(const std::set<boost::filesystem::path>& directories);
 
     // From Enumerator.
     std::size_t enumerate(const Functor& f) const override;
 
 private:
-    boost::filesystem::path directory;
+    std::set<boost::filesystem::path> directories;
 };
 }
 }

@@ -39,7 +39,8 @@ public:
     /// @brief Flag enumerates all known configuration flags queryable by the command.
     enum class Flag
     {
-        default_plugin_directory ///< The default plugin installation directory.
+        default_plugin_directory, ///< The default plugin installation directory.
+        custom_plugin_directory   ///< The custom plugin installation directory.
     };
 
     /// @brief Config configures a new instance.
