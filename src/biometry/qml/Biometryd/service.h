@@ -37,16 +37,27 @@ class Device;
 class BIOMETRY_DLL_PUBLIC Service : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(bool available READ isAvailable NOTIFY availableChanged)
     Q_PROPERTY(biometry::qml::Device* defaultDevice READ defaultDevice CONSTANT)
 public:
     /// @brief Service initializes a new instance with impl and parent.
     Service(const std::shared_ptr<biometry::Service>& impl, QObject* parent = nullptr);
 
     /// @brief defaultDevice returns the default Device instance that should be used for identification.
-    biometry::qml::Device* defaultDevice() const;
+    Q_INVOKABLE biometry::qml::Device* defaultDevice() const;
+
+    /// @brief isAvailable returns true if the service is available.
+    Q_INVOKABLE bool isAvailable() const;
+
+    /// @brief setAavailable adjusts the value of available to value.
+    Q_INVOKABLE void setAvailable(bool available);
+
+    /// @brief availableChanged is emitted with the new value of available.
+    Q_SIGNAL void availableChanged(bool);
 
 private:
-    std::shared_ptr<biometry::Service> impl;
+    bool available_;
+    std::shared_ptr<biometry::Service> impl_;
     biometry::qml::Device* defaultDevice_;
 };
 }

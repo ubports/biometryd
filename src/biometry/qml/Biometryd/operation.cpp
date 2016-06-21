@@ -19,6 +19,13 @@
 
 #include <biometry/qml/Biometryd/operation.h>
 
+#include <QDebug>
+#include <QQmlEngine>
+
+biometry::qml::Observer::Observer(QObject*) : QObject{}
+{
+}
+
 biometry::qml::Operation::Operation(QObject* parent) : QObject{parent}
 {
 }
