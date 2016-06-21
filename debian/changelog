@@ -1,5 +1,17 @@
-biometryd (0.0.1) UNRELEASED; urgency=medium
+biometryd (0.0.1+16.10.20160621.1-0ubuntu1) yakkety; urgency=medium
 
+  [ Thomas Voß ]
   * Initial release.
+  * Verify incoming requests. (LP: #1593383)
+  * Immediately cancel operations instead of enqueuing cancellation.
+  * Only for landing purposes.
+  * cmds::Run now tries to make an educated guess for configuring the
+    default device.
+  * Also consider /custom/vendor/biometryd/plugins when scanning for
+    plugins.
 
- -- Thomas Voß <thomas.voss@canonical.com>  Thu, 28 Apr 2016 11:52:35 +0200
+  [ Ken VanDine ]
+  * Added COPYING file for the LGPL-3 and updated copyright for the
+    single file licensed under MIT
+
+ -- Thomas Voß <thomas.voss@canonical.com>  Tue, 21 Jun 2016 09:53:19 +0000
