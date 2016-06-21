@@ -22,6 +22,8 @@
 
 #include <biometry/template_store.h>
 
+#include <biometry/dbus/skeleton/credentials_resolver.h>
+#include <biometry/dbus/skeleton/request_verifier.h>
 #include <biometry/util/synchronized.h>
 
 #include <core/dbus/object.h>
@@ -46,8 +48,39 @@ public:
     // Safe us some typing
     typedef std::shared_ptr<TemplateStore> Ptr;
 
+    /// @brief RequestVerifier models verification of incoming requests.
+    class RequestVerifier : public biometry::dbus::skeleton::RequestVerifier
+    {
+    public:
+        /// @brief verify_size_request returns true if the application   identified by credentials
+        /// is permitted to query the number of enrolled templates for the app and user bundled in request.
+        virtual bool verify_size_request(const Credentials& requested, const Credentials& provided);
+
+        /// @brief verify_list_request returns true if the application identified by credentials is
+        /// allowed to list all templates for the user and app bundled in request.
+        virtual bool verify_list_request(const Credentials& requested, const Credentials& provided);
+
+        /// @brief verify_enroll_request returns true if the application identified by credentials is
+        /// allowed to enroll a new template for the app and user bundled in request.
+        virtual bool verify_enroll_request(const Credentials& requested, const Credentials& provided);
+
+        /// @brief verify_remove_request returns true if the application identified by credentials is
+        /// allowed to remove a template for the app and user bundled in request.
+        virtual bool verify_remove_request(const Credentials& requested, const Credentials& provided);
+
+        /// @brief verify_clear_request returns true if the application identified by credentials is
+        /// allowed to clear all templates for the app and user bundled in request.
+        virtual bool verify_clear_request(const Credentials& requested, const Credentials& provided);
+    };
+
     /// @brief create_for_bus returns a new skeleton::TemplateStore instance connected to bus, forwarding calls to impl.
-    static Ptr create_for_service_and_object(const core::dbus::Bus::Ptr& bus, const core::dbus::Service::Ptr& service, const core::dbus::Object::Ptr& object, const std::reference_wrapper<biometry::TemplateStore>& impl);
+    static Ptr create_for_service_and_object(
+            const core::dbus::Bus::Ptr& bus,
+            const core::dbus::Service::Ptr& service,
+            const core::dbus::Object::Ptr& object,
+            const std::reference_wrapper<biometry::TemplateStore>& impl,
+            const std::shared_ptr<RequestVerifier>& request_verifier,
+            const std::shared_ptr<CredentialsResolver>& credentials_resolver);
 
     /// @brief Frees up resources and uninstall message handlers.
     ~TemplateStore();
@@ -68,11 +101,17 @@ private:
     typedef util::Synchronized<std::unordered_map<core::dbus::types::ObjectPath, Operation<Clearance>::Ptr>> ClearOps;
 
     /// @brief TemplateStore creates a new instance for the given remote service and object.
-    TemplateStore(const core::dbus::Bus::Ptr& bus, const core::dbus::Service::Ptr& service, const core::dbus::Object::Ptr& object, const std::reference_wrapper<biometry::TemplateStore>& impl);
+    TemplateStore(const core::dbus::Bus::Ptr& bus,
+                  const core::dbus::Service::Ptr& service,
+                  const core::dbus::Object::Ptr& object,
+                  const std::reference_wrapper<biometry::TemplateStore>& impl,
+                  const std::shared_ptr<RequestVerifier>& request_verifier,
+                  const std::shared_ptr<CredentialsResolver>& credentials_resolver);
 
 
     std::reference_wrapper<biometry::TemplateStore> impl;
-
+    std::shared_ptr<RequestVerifier> request_verifier;
+    std::shared_ptr<CredentialsResolver> credentials_resolver;
     core::dbus::Bus::Ptr bus;
     core::dbus::Service::Ptr service;
     core::dbus::Object::Ptr object;

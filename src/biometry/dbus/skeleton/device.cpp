@@ -20,6 +20,7 @@
 #include <biometry/dbus/skeleton/device.h>
 
 #include <biometry/dbus/interface.h>
+#include <biometry/dbus/skeleton/daemon_credentials_resolver.h>
 #include <biometry/dbus/skeleton/template_store.h>
 
 #include <boost/format.hpp>
@@ -93,7 +94,8 @@ biometry::dbus::skeleton::Device::Device(
 
         template_store_([this, &path]()
         {
-            return TemplateStore::create_for_service_and_object(bus_, service_, service_->add_object_for_path(path), std::ref(template_store()));
+            return TemplateStore::create_for_service_and_object(bus_, service_, service_->add_object_for_path(path), std::ref(template_store()),
+                                                                std::make_shared<TemplateStore::RequestVerifier>(), std::make_shared<DaemonCredentialsResolver>(bus_));
         });
 
         auto reply = core::dbus::Message::make_method_return(msg);
@@ -107,7 +109,8 @@ biometry::dbus::skeleton::Device::Device(
 
         identifier_([this, &path]()
         {
-            return Identifier::create_for_service_and_object(bus_, service_, service_->add_object_for_path(path), std::ref(identifier()));
+            return Identifier::create_for_service_and_object(bus_, service_, service_->add_object_for_path(path), std::ref(identifier()),
+                                                             std::make_shared<Identifier::RequestVerifier>(), std::make_shared<DaemonCredentialsResolver>(bus_));
         });
 
         auto reply = core::dbus::Message::make_method_return(msg);
