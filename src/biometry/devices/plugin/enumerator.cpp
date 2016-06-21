@@ -60,51 +60,55 @@ struct PluginDeviceDescriptor : public biometry::Device::Descriptor
 };
 }
 
-plugin::DirectoryEnumerator::DirectoryEnumerator(const boost::filesystem::path& directory)
-    : directory{directory}
+plugin::DirectoryEnumerator::DirectoryEnumerator(const std::set<boost::filesystem::path>& directories)
+    : directories{directories}
 {
 }
 
 std::size_t plugin::DirectoryEnumerator::enumerate(const Functor& f) const
 {
-    if (not boost::filesystem::is_directory(directory))
-        return 0;
-
-    MajorVersionVerifier verifier;
-    ElfDescriptorLoader loader;
     std::size_t invocations{0};
 
-    for (boost::filesystem::directory_iterator it{directory}, itE; it !=  itE; ++it)
+    for (const auto& directory : directories)
     {
-        try
+        if (not boost::filesystem::is_directory(directory))
+            return 0;
+
+        MajorVersionVerifier verifier;
+        ElfDescriptorLoader loader;
+
+        for (boost::filesystem::directory_iterator it{directory}, itE; it !=  itE; ++it)
         {
-            auto desc = verifier.verify(loader.load_with_name(it->path(), BIOMETRYD_DEVICES_PLUGIN_DESCRIPTOR_SECTION));
-            f(std::make_shared<PluginDeviceDescriptor>(it->path(), desc));
-            ++invocations;
-        }
-        catch(const ElfDescriptorLoader::FailedToInitializeElf&)
-        {
-            // We silently ignore the exception here as we expect to encounter
-            // files missing a section describing a biometryd plugin. All other
-            // exceptions will be propagated, though.
-        }
-        catch(const ElfDescriptorLoader::NotAnElfObject&)
-        {
-            // We silently ignore the exception here as we expect to encounter
-            // files missing a section describing a biometryd plugin. All other
-            // exceptions will be propagated, though.
-        }
-        catch(const ElfDescriptorLoader::NoSuchSection&)
-        {
-            // We silently ignore the exception here as we expect to encounter
-            // files missing a section describing a biometryd plugin. All other
-            // exceptions will be propagated, though.
-        }
-        catch(const MajorVersionVerifier::MajorVersionMismatch&)
-        {
-            // We silently ignore major version mismatches as we expect to
-            // encounter plugins of different versions routinely. All other
-            // exceptions will be propagated, though.
+            try
+            {
+                auto desc = verifier.verify(loader.load_with_name(it->path(), BIOMETRYD_DEVICES_PLUGIN_DESCRIPTOR_SECTION));
+                f(std::make_shared<PluginDeviceDescriptor>(it->path(), desc));
+                ++invocations;
+            }
+            catch(const ElfDescriptorLoader::FailedToInitializeElf&)
+            {
+                // We silently ignore the exception here as we expect to encounter
+                // files missing a section describing a biometryd plugin. All other
+                // exceptions will be propagated, though.
+            }
+            catch(const ElfDescriptorLoader::NotAnElfObject&)
+            {
+                // We silently ignore the exception here as we expect to encounter
+                // files missing a section describing a biometryd plugin. All other
+                // exceptions will be propagated, though.
+            }
+            catch(const ElfDescriptorLoader::NoSuchSection&)
+            {
+                // We silently ignore the exception here as we expect to encounter
+                // files missing a section describing a biometryd plugin. All other
+                // exceptions will be propagated, though.
+            }
+            catch(const MajorVersionVerifier::MajorVersionMismatch&)
+            {
+                // We silently ignore major version mismatches as we expect to
+                // encounter plugins of different versions routinely. All other
+                // exceptions will be propagated, though.
+            }
         }
     }
 

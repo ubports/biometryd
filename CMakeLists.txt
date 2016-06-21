@@ -39,6 +39,10 @@ set(
     BIOMETRYD_DEFAULT_PLUGIN_DIRECTORY "${CMAKE_INSTALL_FULL_LIBDIR}/biometryd/plugins"
     CACHE STRING "Default plugin installation directory")
 
+set(
+    BIOMETRYD_CUSTOM_PLUGIN_DIRECTORY "/custom/vendor/biometryd/plugins"
+    CACHE STRING "Custom plugin installation directory")
+
 enable_testing()
 
 find_package(PkgConfig)

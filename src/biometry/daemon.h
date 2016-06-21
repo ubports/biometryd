@@ -32,7 +32,6 @@
 #include <set>
 #include <sstream>
 #include <string>
-#include <unordered_map>
 
 namespace biometry
 {
@@ -43,8 +42,17 @@ public:
     /// @brief Configuration bundles compile time configuration options of the daemon.
     struct Configuration
     {
-        /// @brief default_plugin_directory returns the path pointing to the default plugin directory.
+        /// @brief default_plugin_directory returns the default path under /usr
+        /// that is scanned for biometryd plugins.
         static boost::filesystem::path default_plugin_directory();
+
+        /// @brief custom_plugin_directory returns the default path under /custom
+        /// that is scanned for biometryd plugins.
+        static boost::filesystem::path custom_plugin_directory();
+
+        /// @brief default_plugin_directories returns the paths that should be scanned for
+        /// plugins.
+        static std::set<boost::filesystem::path> default_plugin_directories();
     };
 
     /// @brief Daemon creates a new instance, populating the map of known commands.

@@ -39,7 +39,7 @@ namespace cli = biometry::util::cli;
 namespace po = boost::program_options;
 
 biometry::Daemon::Daemon()
-    : device_registrar{biometry::devices::plugin::DirectoryEnumerator{Configuration::default_plugin_directory()}},
+    : device_registrar{biometry::devices::plugin::DirectoryEnumerator{Configuration::default_plugin_directories()}},
       cmd{cli::Name{"biometryd"}, cli::Usage{"biometryd"}, cli::Description{"biometryd"}}
 {
     cmd.command(std::make_shared<cmds::Enroll>())
