@@ -52,6 +52,7 @@ biometry::cmds::Config::Config()
             break;
         case Flag::custom_plugin_directory:
             ctxt.cout << biometry::Daemon::Configuration::custom_plugin_directory().string() << std::endl;
+            break;
         }
 
         return EXIT_SUCCESS;
