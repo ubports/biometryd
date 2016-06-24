@@ -1,5 +1,6 @@
 name: biometryd
 version: 0.0.1
+confinement: devmode
 summary: biometryd mediates/multiplexes to biometric devices
 description: biometryd mediates/multiplexes access to biometric devices
   biometryd mediates and multiplexes access to biometric devices present
@@ -20,6 +21,7 @@ parts:
       - -DCMAKE_VERBOSE_MAKEFILE=ON
     source: .
     build-packages:
+      - build-essential
       - cmake
       - doxygen
       - google-mock
