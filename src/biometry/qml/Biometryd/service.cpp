@@ -29,9 +29,23 @@ biometry::qml::Device* biometry::qml::Service::defaultDevice() const
     return defaultDevice_;
 }
 
+bool biometry::qml::Service::isAvailable() const
+{
+    return available_;
+}
+
+void biometry::qml::Service::setAvailable(bool available)
+{
+    if (available_ == available)
+        return;
+
+    Q_EMIT(availableChanged(available_ = available));
+}
+
 biometry::qml::Service::Service(const std::shared_ptr<biometry::Service>& impl, QObject* parent)
     : QObject{parent},
-      impl{impl},
+      available_{true},
+      impl_{impl},
       defaultDevice_{new Device{impl->default_device(), this}}
 {
 }

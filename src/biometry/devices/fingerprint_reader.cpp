@@ -92,19 +92,23 @@ private:
 
 void biometry::devices::FingerprintReader::GuidedEnrollment::Hints::from_dictionary(const biometry::Dictionary& dict)
 {
+    is_finger_present.reset();
+    if (dict.count(key_is_finger_present) > 0)
+        is_finger_present = dict.at(key_is_finger_present).boolean();
+
     is_main_cluster_identified.reset();
-    if (dict.count("is_main_cluster_identified") > 0)
-        is_main_cluster_identified = dict.at("is_main_cluster_identified").boolean();
+    if (dict.count(key_is_main_cluster_identified) > 0)
+        is_main_cluster_identified = dict.at(key_is_main_cluster_identified).boolean();
 
     suggested_next_direction.reset();
-    if (dict.count("suggested_next_direction") > 0)
-        suggested_next_direction = static_cast<biometry::devices::FingerprintReader::Direction>(dict.at("suggested_next_direction").integer());
+    if (dict.count(key_suggested_next_direction) > 0)
+        suggested_next_direction = static_cast<biometry::devices::FingerprintReader::Direction>(dict.at(key_suggested_next_direction).integer());
 
-    if (dict.count("masks") > 0)
+    if (dict.count(key_masks) > 0)
     {
         masks = std::vector<biometry::Rectangle>{};
 
-        auto v = dict.at("masks").vector();
+        auto v = dict.at(key_masks).vector();
 
         for (const auto& m : v)
             masks->push_back(m.rectangle());
@@ -117,11 +121,15 @@ void biometry::devices::FingerprintReader::GuidedEnrollment::Hints::from_diction
 biometry::Dictionary biometry::devices::FingerprintReader::GuidedEnrollment::Hints::to_dictionary() const
 {
     biometry::Dictionary dict;
+
+    if (is_finger_present)
+        dict[key_is_finger_present] = biometry::Variant::b(*is_finger_present);
+
     if (is_main_cluster_identified)
-        dict["is_main_cluster_identified"] = biometry::Variant::b(*is_main_cluster_identified);
+        dict[key_is_main_cluster_identified] = biometry::Variant::b(*is_main_cluster_identified);
 
     if (suggested_next_direction)
-       dict["suggested_next_direction"] = biometry::Variant::i(static_cast<std::uint64_t>(*suggested_next_direction));
+       dict[key_suggested_next_direction] = biometry::Variant::i(static_cast<std::uint64_t>(*suggested_next_direction));
 
    if (masks)
    {
@@ -129,7 +137,7 @@ biometry::Dictionary biometry::devices::FingerprintReader::GuidedEnrollment::Hin
        for (const auto& r : *masks)
            v.push_back(biometry::Variant::r(r));
 
-       dict["masks"] = biometry::Variant::v(v);
+       dict[key_masks] = biometry::Variant::v(v);
    }
 
    return dict;

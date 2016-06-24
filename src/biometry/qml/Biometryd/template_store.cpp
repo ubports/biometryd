@@ -35,9 +35,19 @@ biometry::qml::SizeQuery* biometry::qml::TemplateStore::size(User* user)
     return new biometry::qml::SizeQuery{impl.get().size(biometry::Application::system(), biometry::User{user->uid()}), this};
 }
 
+biometry::qml::List* biometry::qml::TemplateStore::list(User* user)
+{
+    return new biometry::qml::List{impl.get().list(biometry::Application::system(), biometry::User{user->uid()}), this};
+}
+
 biometry::qml::Enrollment* biometry::qml::TemplateStore::enroll(User* user)
 {
     return new biometry::qml::Enrollment{impl.get().enroll(biometry::Application::system(), biometry::User{user->uid()}), this};
+}
+
+biometry::qml::Removal* biometry::qml::TemplateStore::remove(User* user, qulonglong id)
+{
+    return new biometry::qml::Removal{impl.get().remove(biometry::Application::system(), biometry::User{user->uid()}, id), this};
 }
 
 biometry::qml::Clearance* biometry::qml::TemplateStore::clear(User* user)

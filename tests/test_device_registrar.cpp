@@ -40,7 +40,7 @@ struct MockPluginEnumerator : public biometry::devices::plugin::Enumerator
 TEST(DeviceRegistrar, cleans_out_device_registry)
 {
     {
-        biometry::DeviceRegistrar dr{biometry::devices::plugin::DirectoryEnumerator{testing::runtime_dir()}};
+        biometry::DeviceRegistrar dr{biometry::devices::plugin::DirectoryEnumerator{{testing::runtime_dir()}}};
         EXPECT_GE(biometry::device_registry().size(), 2);
     }
     EXPECT_EQ(0, biometry::device_registry().size());
@@ -58,13 +58,13 @@ TEST(DeviceRegistrar, calls_into_enumerator)
 
 TEST(DeviceRegistrar, adds_dummy_device)
 {
-    biometry::DeviceRegistrar dr{biometry::devices::plugin::DirectoryEnumerator{testing::runtime_dir()}};
+    biometry::DeviceRegistrar dr{biometry::devices::plugin::DirectoryEnumerator{{testing::runtime_dir()}}};
     EXPECT_EQ(1, biometry::device_registry().count(biometry::devices::Dummy::id));
 }
 
 TEST(DeviceRegistrar, adds_plugin_device)
 {
-    biometry::DeviceRegistrar dr{biometry::devices::plugin::DirectoryEnumerator{testing::runtime_dir()}};
+    biometry::DeviceRegistrar dr{biometry::devices::plugin::DirectoryEnumerator{{testing::runtime_dir()}}};
     EXPECT_EQ(1, biometry::device_registry().count(biometry::devices::plugin::id));
 }
 

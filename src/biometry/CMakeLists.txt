@@ -60,6 +60,11 @@ add_library(
   dbus/stub/observer.h
   dbus/stub/operation.h
 
+  dbus/skeleton/credentials_resolver.h
+  dbus/skeleton/daemon_credentials_resolver.h
+  dbus/skeleton/daemon_credentials_resolver.cpp
+  dbus/skeleton/request_verifier.h
+  dbus/skeleton/request_verifier.cpp
   dbus/skeleton/service.h
   dbus/skeleton/service.cpp
   dbus/skeleton/device.h
@@ -107,6 +112,8 @@ add_library(
   util/not_reachable.h
   util/not_reachable.cpp
   util/once.h
+  util/property_store.h
+  util/property_store.cpp
   util/statistics.h
   util/statistics.cpp
   util/streaming_configuration_builder.h

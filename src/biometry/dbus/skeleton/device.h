@@ -44,7 +44,11 @@ public:
     typedef std::shared_ptr<Device> Ptr;
 
     /// @brief create_for_bus returns a new skeleton::Device instance connected to bus, forwarding calls to impl.
-    static Ptr create_for_service_and_object(const core::dbus::Bus::Ptr& bus, const core::dbus::Service::Ptr& service, const core::dbus::Object::Ptr& object, const std::shared_ptr<biometry::Device>& impl);
+    static Ptr create_for_service_and_object(
+            const core::dbus::Bus::Ptr& bus,
+            const core::dbus::Service::Ptr& service,
+            const core::dbus::Object::Ptr& object,
+            const std::shared_ptr<biometry::Device>& impl);
 
     /// @brief Frees up resources and removes routes to message handlers.
     ~Device();

@@ -17,15 +17,17 @@
  *
  */
 
-#include <biometry/qml/Biometryd/operation.h>
+#include <biometry/dbus/skeleton/request_verifier.h>
 
-#include <QDebug>
-#include <QQmlEngine>
+#include <iostream>
+#include <tuple>
 
-biometry::qml::Observer::Observer(QObject*) : QObject{}
+bool biometry::dbus::skeleton::operator==(const RequestVerifier::Credentials& lhs, const RequestVerifier::Credentials& rhs)
 {
+    return std::tie(lhs.app, lhs.user) == std::tie(rhs.app, rhs.user);
 }
 
-biometry::qml::Operation::Operation(QObject* parent) : QObject{parent}
+std::ostream& biometry::dbus::skeleton::operator<<(std::ostream& out, const RequestVerifier::Credentials& credentials)
 {
+    return out << "[" << credentials.app.as_string() << ", " << credentials.user << "]";
 }

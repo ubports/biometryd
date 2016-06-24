@@ -129,7 +129,7 @@ TEST(MajorVersionVerifier, does_not_throw_when_verifying_plugin_with_major_host_
 
 TEST(DirectoryEnumerator, finds_biometryd_plugins)
 {
-    biometry::devices::plugin::DirectoryEnumerator enumerator{testing::runtime_dir()};
+    biometry::devices::plugin::DirectoryEnumerator enumerator{{testing::runtime_dir()}};
     EXPECT_GE(1, enumerator.enumerate([](const biometry::Device::Descriptor::Ptr& ptr)
     {
         static const biometry::util::Configuration the_empty_config;

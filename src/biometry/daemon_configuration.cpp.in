@@ -23,3 +23,13 @@ boost::filesystem::path biometry::Daemon::Configuration::default_plugin_director
 {
     return "@BIOMETRYD_DEFAULT_PLUGIN_DIRECTORY@";
 }
+
+boost::filesystem::path biometry::Daemon::Configuration::custom_plugin_directory()
+{
+    return "@BIOMETRYD_CUSTOM_PLUGIN_DIRECTORY@";
+}
+
+std::set<boost::filesystem::path> biometry::Daemon::Configuration::default_plugin_directories()
+{
+    return {Configuration::default_plugin_directory(), Configuration::custom_plugin_directory()};
+}

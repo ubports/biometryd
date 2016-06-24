@@ -17,15 +17,19 @@
  *
  */
 
-#include <biometry/qml/Biometryd/operation.h>
+#include <biometry/util/property_store.h>
 
-#include <QDebug>
-#include <QQmlEngine>
+#include <core/posix/exec.h>
 
-biometry::qml::Observer::Observer(QObject*) : QObject{}
+std::string biometry::util::AndroidPropertyStore::get(const std::string& key) const
 {
-}
+    core::posix::ChildProcess getprop = core::posix::exec("/usr/bin/getprop", {key}, {}, core::posix::StandardStream::stdout);
+    std::string value; getprop.cout() >> value;
 
-biometry::qml::Operation::Operation(QObject* parent) : QObject{parent}
-{
+    auto result = getprop.wait_for(core::posix::wait::Flags::untraced);
+
+    if (result.status == core::posix::wait::Result::Status::exited && result.detail.if_exited.status == core::posix::exit::Status::success)
+        return value;
+
+    throw std::out_of_range{key};
 }
