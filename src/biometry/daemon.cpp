@@ -39,14 +39,14 @@ namespace cli = biometry::util::cli;
 namespace po = boost::program_options;
 
 biometry::Daemon::Daemon()
-    : device_registrar{biometry::devices::plugin::DirectoryEnumerator{Configuration::default_plugin_directory()}},
+    : device_registrar{biometry::devices::plugin::DirectoryEnumerator{Configuration::default_plugin_directories()}},
       cmd{cli::Name{"biometryd"}, cli::Usage{"biometryd"}, cli::Description{"biometryd"}}
 {
     cmd.command(std::make_shared<cmds::Enroll>())
        .command(std::make_shared<cmds::Config>())
        .command(std::make_shared<cmds::Identify>())
        .command(std::make_shared<cmds::ListDevices>())
-       .command(std::make_shared<cmds::Run>())
+       .command(std::make_shared<cmds::Run>(std::make_shared<biometry::util::AndroidPropertyStore>()))
        .command(std::make_shared<cmds::Test>())
        .command(std::make_shared<cmds::Version>());
 }

@@ -41,7 +41,7 @@ public:
     enum class Direction
     {
         not_available   = 0,
-        sout_west       = 1,
+        south_west       = 1,
         south           = 2,
         south_east      = 3,
         north_west      = 4,
@@ -58,11 +58,39 @@ public:
     {
         struct Hints
         {
+            /// @cond
+            static constexpr const char* key_is_finger_present
+            {
+                "FingerprintReader::Hints::is_finger_present"
+            };
+
+            static constexpr const char* key_is_main_cluster_identified
+            {
+                "FingerprintReader::Hints::is_main_cluster_identified"
+            };
+
+            static constexpr const char* key_suggested_next_direction
+            {
+                "FingerprintReader::Hints::suggested_next_direction"
+            };
+
+            static constexpr const char* key_estimated_finger_size
+            {
+                "FingerprintReader::Hints::estimated_finger_size"
+            };
+
+            static constexpr const char* key_masks
+            {
+                "FingerprintReader::Hints::masks"
+            };
+            /// @endcond
+
             /// @brief from_dictionary decodes guidance data from dict.
             void from_dictionary(const Dictionary& dict);
             /// @brief to_dictionary encodes guidance data to dict.
             Dictionary to_dictionary() const;
 
+            Optional<bool> is_finger_present{}; ///< If set: true indicates that the user's finger is present.
             Optional<bool> is_main_cluster_identified{}; ///< If set: true indicates that the main cluster of the fingerprint has been identified.
             Optional<Direction> suggested_next_direction{}; ///< If set: Direction of the next touch.
             Optional<std::vector<Rectangle>> masks{}; ///< If set: A vector of rectangles marking all the regions that have been scanned and accepted.

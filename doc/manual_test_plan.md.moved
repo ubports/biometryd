@@ -6,7 +6,41 @@ Please note that individual landings might require specific testing steps in add
 
 We assume that testers use a freshly bootstrapped device.
 
-## Turbo
+## CLI
+
+### Testing Against a Running Service Instance
+
+Execute the following command line and follow the on-screen instructions:
+
+```bash
+> biometryd test
+```
+You should receive output similar to:
+
+```bash
+> biometryd test
+We are about to execute a test run for a biometric device.
+Please note that we are executing the test in a production
+environment and you should consider the test to be harmful to the
+device configuration:
+  User:        User[32011]
+  Config:      Default device
+Would you really like to proceed (y/n)?y
+
+Clearing template store: [=================] 100.00 %
+Enrolling new template:  [=================] 100.00 %
+Identifying user:        [=================] 100.00 %
+
+  min:      267488.00  [µs]
+  mean:     497875.12  [µs]
+  std.dev.: 198079.29  [µs]
+  max:      1172946.00 [µs]
+```
+
+## Fingerprint Reader With Guidance
+
+The following section provides testing instructions for fingerprint
+readers featuring guided enrollment processes.
 
 ### Enrolling a New Template
 

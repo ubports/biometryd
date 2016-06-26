@@ -30,7 +30,8 @@ namespace
 std::string enumerate_flags()
 {
     std::stringstream ss;
-    ss << biometry::cmds::Config::Flag::default_plugin_directory;
+    ss << biometry::cmds::Config::Flag::default_plugin_directory << ", "
+       << biometry::cmds::Config::Flag::custom_plugin_directory;
     return ss.str();
 }
 }
@@ -49,6 +50,9 @@ biometry::cmds::Config::Config()
         case Flag::default_plugin_directory:
             ctxt.cout << biometry::Daemon::Configuration::default_plugin_directory().string() << std::endl;
             break;
+        case Flag::custom_plugin_directory:
+            ctxt.cout << biometry::Daemon::Configuration::custom_plugin_directory().string() << std::endl;
+            break;
         }
 
         return EXIT_SUCCESS;
@@ -61,7 +65,11 @@ typedef boost::bimap<biometry::cmds::Config::Flag, std::string> Lut;
 typedef Lut::value_type Entry;
 const Lut& lut()
 {
-    static const auto entries = {Entry{biometry::cmds::Config::Flag::default_plugin_directory, "default_plugin_directory"}};
+    static const auto entries =
+    {
+        Entry{biometry::cmds::Config::Flag::default_plugin_directory, "default_plugin_directory"},
+        Entry{biometry::cmds::Config::Flag::custom_plugin_directory, "custom_plugin_directory"}
+    };
     static const Lut instance{entries.begin(), entries.end()};
     return instance;
 }

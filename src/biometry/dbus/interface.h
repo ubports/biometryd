@@ -32,6 +32,17 @@ namespace dbus
 {
 namespace interface
 {
+struct Errors
+{
+    struct NotPermitted
+    {
+        static inline std::string name()
+        {
+            return "com.ubuntu.biometryd.Error.NotPermitted";
+        }
+    };
+};
+
 struct Service
 {
     static inline std::string name()
@@ -42,7 +53,7 @@ struct Service
     static inline core::dbus::types::ObjectPath path()
     {
         return core::dbus::types::ObjectPath{"/"};
-    }
+    }    
 
     struct Methods
     {
@@ -60,7 +71,7 @@ struct Service
 
             inline static const std::chrono::milliseconds default_timeout()
             {
-                return std::chrono::seconds{1};
+                return std::chrono::seconds{5};
             }
         };
     };
@@ -91,7 +102,7 @@ struct Device
 
             inline static const std::chrono::milliseconds default_timeout()
             {
-                return std::chrono::seconds{1};
+                return std::chrono::seconds{5};
             }
         };
 
@@ -109,7 +120,7 @@ struct Device
 
             inline static const std::chrono::milliseconds default_timeout()
             {
-                return std::chrono::seconds{1};
+                return std::chrono::seconds{5};
             }
         };
 
@@ -127,7 +138,7 @@ struct Device
 
             inline static const std::chrono::milliseconds default_timeout()
             {
-                return std::chrono::seconds{1};
+                return std::chrono::seconds{5};
             }
         };
     };
@@ -158,7 +169,7 @@ struct Identifier
 
             inline static const std::chrono::milliseconds default_timeout()
             {
-                return std::chrono::seconds{1};
+                return std::chrono::seconds{5};
             }
         };
     };
@@ -189,7 +200,7 @@ struct TemplateStore
 
             inline static const std::chrono::milliseconds default_timeout()
             {
-                return std::chrono::seconds{1};
+                return std::chrono::seconds{5};
             }
         };
 
@@ -206,7 +217,7 @@ struct TemplateStore
 
             inline static const std::chrono::milliseconds default_timeout()
             {
-                return std::chrono::seconds{1};
+                return std::chrono::seconds{5};
             }
         };
 
@@ -224,7 +235,7 @@ struct TemplateStore
 
             inline static const std::chrono::milliseconds default_timeout()
             {
-                return std::chrono::seconds{1};
+                return std::chrono::seconds{5};
             }
         };
 
@@ -241,7 +252,7 @@ struct TemplateStore
 
             inline static const std::chrono::milliseconds default_timeout()
             {
-                return std::chrono::seconds{1};
+                return std::chrono::seconds{5};
             }
         };
 
@@ -259,7 +270,7 @@ struct TemplateStore
 
             inline static const std::chrono::milliseconds default_timeout()
             {
-                return std::chrono::seconds{1};
+                return std::chrono::seconds{5};
             }
         };
     };
@@ -310,7 +321,7 @@ struct Operation
 
             inline static const std::chrono::milliseconds default_timeout()
             {
-                return std::chrono::seconds{1};
+                return std::chrono::seconds{5};
             }
         };
 
@@ -327,7 +338,7 @@ struct Operation
 
             inline static const std::chrono::milliseconds default_timeout()
             {
-                return std::chrono::seconds{1};
+                return std::chrono::seconds{5};
             }
         };
     };

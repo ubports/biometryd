@@ -22,6 +22,8 @@
 
 #include <biometry/identifier.h>
 
+#include <biometry/dbus/skeleton/credentials_resolver.h>
+
 #include <core/dbus/object.h>
 #include <core/dbus/service.h>
 
@@ -46,8 +48,22 @@ public:
     // Safe us some typing.
     typedef std::shared_ptr<Identifier> Ptr;
 
+    /// @brief RequestVerifier models verification of incoming requests.
+    class RequestVerifier : public biometry::dbus::skeleton::RequestVerifier
+    {
+    public:
+        /// @brief verify_identify_user_request returns true if the requesting app identified by provided
+        /// is allowed to run the request described by requested.
+        virtual bool verify_identify_user_request(const Application& requested, const Credentials& provided);
+    };
+
     /// @brief create_for_bus returns a new skeleton::Identifier instance connected to bus, forwarding calls to impl.
-    static Ptr create_for_service_and_object(const core::dbus::Bus::Ptr& bus, const core::dbus::Service::Ptr& service, const core::dbus::Object::Ptr& object, const std::reference_wrapper<biometry::Identifier>& impl);
+    static Ptr create_for_service_and_object(const core::dbus::Bus::Ptr& bus,
+                                             const core::dbus::Service::Ptr& service,
+                                             const core::dbus::Object::Ptr& object,
+                                             const std::reference_wrapper<biometry::Identifier>& impl,
+                                             const std::shared_ptr<RequestVerifier>& request_verifier,
+                                             const std::shared_ptr<CredentialsResolver>& credentials_resolver);
 
     /// @brief Frees up resources and uninstalls method handlers.
     ~Identifier();
@@ -59,9 +75,16 @@ private:
     typedef biometry::util::Synchronized<std::unordered_map<core::dbus::types::ObjectPath, Operation<Identification>::Ptr>> IdentificationOps;
 
     /// @brief Service creates a new instance for the given remote service and object.
-    Identifier(const core::dbus::Bus::Ptr& bus, const core::dbus::Service::Ptr& service, const core::dbus::Object::Ptr& object, const std::reference_wrapper<biometry::Identifier>& impl);
+    Identifier(const core::dbus::Bus::Ptr& bus,
+               const core::dbus::Service::Ptr& service,
+               const core::dbus::Object::Ptr& object,
+               const std::reference_wrapper<biometry::Identifier>& impl,
+               const std::shared_ptr<RequestVerifier>& request_verifier,
+               const std::shared_ptr<CredentialsResolver>& credentials_resolver);
 
     std::reference_wrapper<biometry::Identifier> impl;
+    std::shared_ptr<RequestVerifier> request_verifier;
+    std::shared_ptr<CredentialsResolver> credentials_resolver;
 
     core::dbus::Bus::Ptr bus;
     core::dbus::Service::Ptr service;

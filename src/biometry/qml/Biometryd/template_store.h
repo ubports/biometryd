@@ -48,12 +48,32 @@ public:
     }
 };
 
+class BIOMETRY_DLL_PUBLIC List : public TypedOperation<biometry::TemplateStore::List>
+{
+    Q_OBJECT
+public:
+    List(const biometry::Operation<biometry::TemplateStore::List>::Ptr& impl, QObject* parent)
+        : TypedOperation<biometry::TemplateStore::List>{impl, parent}
+    {
+    }
+};
+
 class BIOMETRY_DLL_PUBLIC Enrollment : public TypedOperation<biometry::TemplateStore::Enrollment>
 {
     Q_OBJECT
 public:
     Enrollment(const biometry::Operation<biometry::TemplateStore::Enrollment>::Ptr& impl, QObject* parent)
         : TypedOperation<biometry::TemplateStore::Enrollment>{impl, parent}
+    {
+    }
+};
+
+class BIOMETRY_DLL_PUBLIC Removal : public TypedOperation<biometry::TemplateStore::Removal>
+{
+    Q_OBJECT
+public:
+    Removal(const biometry::Operation<biometry::TemplateStore::Removal>::Ptr& impl, QObject* parent)
+        : TypedOperation<biometry::TemplateStore::Removal>{impl, parent}
     {
     }
 };
@@ -80,8 +100,12 @@ public:
 
     /// @brief size returns an operation querying the size of templates enrolled for user.
     Q_INVOKABLE biometry::qml::SizeQuery* size(biometry::qml::User* user);
+    /// @brief size returns an operation querying all ids of templates enrolled for user.
+    Q_INVOKABLE biometry::qml::List* list(biometry::qml::User* user);
     /// @brief enroll returns an operation enrolling a new template for user.
     Q_INVOKABLE biometry::qml::Enrollment* enroll(biometry::qml::User* user);
+    /// @brief remove returns an operation removing the template with id for user.
+    Q_INVOKABLE biometry::qml::Removal* remove(biometry::qml::User* user, qulonglong id);
     /// @brief clear returns an operation removing all templates for app and user.
     Q_INVOKABLE biometry::qml::Clearance* clear(biometry::qml::User* user);
 
