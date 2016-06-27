@@ -119,7 +119,7 @@ biometry::cmds::Run::Run(const std::shared_ptr<biometry::util::PropertyStore>& p
         catch (...)
         {
             ctxt.cout << "Failed to instantiate device." << std::endl;
-            return EXIT_FAILURE;
+            return EXIT_SUCCESS;
         }
 
         auto runtime = Runtime::create();
