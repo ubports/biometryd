@@ -1,3 +1,10 @@
+biometryd (0.0.1+16.10.20160627.2-0ubuntu1) yakkety; urgency=medium
+
+  * If default device cannot be instantiated, exit cleanly with success
+    to prevent respawn watchdog from triggering.
+
+ -- Thomas Voß <thomas.voss@canonical.com>  Mon, 27 Jun 2016 13:59:40 +0000
+
 biometryd (0.0.1+16.10.20160621.1-0ubuntu1) yakkety; urgency=medium
 
   [ Thomas Voß ]
