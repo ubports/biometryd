@@ -50,7 +50,7 @@ TEST(CmdRun, queries_configuration_oracle_if_no_config_given)
     EXPECT_CALL(*mock, get("ro.product.device")).Times(1).WillOnce(Return("turbo"));
 
     biometry::cmds::Run run{mock, biometry::cmds::Run::system_bus_factory()};
-    EXPECT_EQ(EXIT_FAILURE, run.run(biometry::util::cli::Command::Context{std::cin, std::cout, {}}));
+    EXPECT_EQ(EXIT_SUCCESS, run.run(biometry::util::cli::Command::Context{std::cin, std::cout, {}}));
 }
 
 TEST(CmdRun, android_property_store_throws_if_getprop_missing)
