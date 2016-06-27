@@ -106,36 +106,35 @@ biometry::cmds::Run::Run(const std::shared_ptr<biometry::util::PropertyStore>& p
     action([this](const cli::Command::Context& ctxt)
     {
         auto trap = core::posix::trap_signals_for_all_subsequent_threads({core::posix::Signal::sig_term});
-        trap->signal_raised().connect([trap](const core::posix::Signal&)
+        trap->signal_raised().connect([trap](const core::posix::Signal&) mutable
         {
             trap->stop();
         });
-
-        std::shared_ptr<biometry::Device> device;
+        
         try
         {
-            device = create_default_device(config, *Run::property_store);
+            auto device = create_default_device(config, *Run::property_store);
+                    
+            auto runtime = Runtime::create();
+            runtime->start();
+        
+            auto bus = this->bus_factory();
+            bus->install_executor(core::dbus::asio::make_executor(bus, runtime->service()));
+
+            auto impl = std::make_shared<biometry::DispatchingService>(
+                biometry::util::create_dispatcher_for_runtime(runtime),device);
+            auto skeleton = biometry::dbus::skeleton::Service::create_for_bus(bus, impl);            
+
+            trap->run();
+
+            bus->stop();
+            runtime->stop();
         }
         catch (...)
         {
-            ctxt.cout << "Failed to instantiate device." << std::endl;
-            return EXIT_FAILURE;
+            ctxt.cout << "Failed to instantiate device...going to sleep" << std::endl;
+            trap->run();
         }
-
-        auto runtime = Runtime::create();
-        auto impl = std::make_shared<biometry::DispatchingService>(biometry::util::create_dispatcher_for_runtime(runtime), device);
-
-        runtime->start();
-
-        auto bus = this->bus_factory();
-        bus->install_executor(core::dbus::asio::make_executor(bus, runtime->service()));
-
-        auto skeleton = biometry::dbus::skeleton::Service::create_for_bus(bus, impl);
-
-        trap->run();
-
-        bus->stop();
-        runtime->stop();
 
         return EXIT_SUCCESS;
     });
