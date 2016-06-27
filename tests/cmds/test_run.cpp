@@ -19,7 +19,11 @@
 
 #include <biometry/cmds/run.h>
 
+#include <core/posix/fork.h>
+
 #include <gmock/gmock.h>
+
+#include <did_finish_successfully.h>
 
 #include <iostream>
 
@@ -46,11 +50,23 @@ TEST(CmdRun, queries_configuration_oracle_if_no_config_given)
 {
     using namespace ::testing;
 
-    auto mock = std::make_shared<MockPropertyStore>();
-    EXPECT_CALL(*mock, get("ro.product.device")).Times(1).WillOnce(Return("turbo"));
+    auto cp = core::posix::fork([]()
+    {
+        auto mock = std::make_shared<MockPropertyStore>();
+        EXPECT_CALL(*mock, get("ro.product.device")).Times(1).WillOnce(Return("turbo"));
 
-    biometry::cmds::Run run{mock, biometry::cmds::Run::system_bus_factory()};
-    EXPECT_EQ(EXIT_SUCCESS, run.run(biometry::util::cli::Command::Context{std::cin, std::cout, {}}));
+        biometry::cmds::Run run{mock, biometry::cmds::Run::system_bus_factory()};
+        EXPECT_EQ(EXIT_SUCCESS, run.run(biometry::util::cli::Command::Context{std::cin, std::cout, {}}));
+
+        return testing::Test::HasFailure() ?
+                core::posix::exit::Status::failure :
+                core::posix::exit::Status::success;
+    }, core::posix::StandardStream::empty);
+
+    std::this_thread::sleep_for(std::chrono::milliseconds{50});
+    
+    cp.send_signal_or_throw(core::posix::Signal::sig_term);
+    EXPECT_TRUE(testing::did_finish_successfully(cp.wait_for(core::posix::wait::Flags::untraced)));
 }
 
 TEST(CmdRun, android_property_store_throws_if_getprop_missing)
