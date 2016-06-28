@@ -6,6 +6,10 @@ option(
 
 if (BIOMETRYD_ENABLE_DOC_GENERATION)
 
+# Please note that we are creating documentation within the source tree
+# as we are hosting our documentation on readthedocs.org. For their build machinery to work
+# properly, we need to generate doxygen XML output within the source tree.
+  
 find_package(Doxygen)
 
 if (DOXYGEN_FOUND)
