@@ -1,3 +1,10 @@
+biometryd (0.0.1+16.10.20160628-0ubuntu1) yakkety; urgency=medium
+
+  * Add an initial snapcraft.yaml setup for biometryd.
+  * Add sphinx documentation.
+
+ -- Thomas Voß <thomas.voss@canonical.com>  Tue, 28 Jun 2016 06:20:19 +0000
+
 biometryd (0.0.1+16.10.20160627.2-0ubuntu1) yakkety; urgency=medium
 
   * If default device cannot be instantiated, exit cleanly with success
