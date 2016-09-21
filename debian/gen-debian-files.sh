@@ -88,4 +88,11 @@ outfile="${dir}"/libbiometryd${soversion}.install
 warning_msg "$infile"
 cat $warning "$infile" >"$outfile"
 
+# Symbols file for binary package
+infile="${dir}"/libbiometryd.symbols.in
+outfile="${dir}"/libbiometryd${soversion}.symbols
+warning_msg "$infile"
+cat $warning "$infile" >"$outfile"
+
+
 exit 0

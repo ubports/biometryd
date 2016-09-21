@@ -1,0 +1,697 @@
+libbiometry.so.0 libbiometryd0 #MINVER#
+ (c++)"biometry::Application::system()@Base" 0.0.1
+ (c++)"biometry::Application::Application(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)@Base" 0.0.1
+ (c++)"biometry::Application::Application()@Base" 0.0.1
+ (c++)"biometry::Application::Application(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)@Base" 0.0.1
+ (c++)"biometry::Application::Application()@Base" 0.0.1
+ (c++)"biometry::DeviceRegistrar::DeviceRegistrar(biometry::devices::plugin::Enumerator const&)@Base" 0.0.1
+ (c++)"biometry::DeviceRegistrar::DeviceRegistrar(biometry::devices::plugin::Enumerator const&)@Base" 0.0.1
+ (c++)"biometry::DeviceRegistrar::~DeviceRegistrar()@Base" 0.0.1
+ (c++)"biometry::DeviceRegistrar::~DeviceRegistrar()@Base" 0.0.1
+ (c++)"biometry::device_registry()@Base" 0.0.1
+ (c++)"biometry::DispatchingService::DispatchingService(std::shared_ptr<biometry::util::Dispatcher> const&, std::shared_ptr<biometry::Device> const&)@Base" 0.0.1
+ (c++)"biometry::DispatchingService::DispatchingService(std::shared_ptr<biometry::util::Dispatcher> const&, std::shared_ptr<biometry::Device> const&)@Base" 0.0.1
+ (c++)"biometry::DispatchingService::~DispatchingService()@Base" 0.0.1
+ (c++)"biometry::DispatchingService::~DispatchingService()@Base" 0.0.1
+ (c++)"biometry::DispatchingService::~DispatchingService()@Base" 0.0.1
+ (c++)"biometry::User::root()@Base" 0.0.1
+ (c++)"biometry::User::current()@Base" 0.0.1
+ (c++)"biometry::User::User(unsigned int)@Base" 0.0.1
+ (c++)"biometry::User::User(unsigned int)@Base" 0.0.1
+ (c++)"biometry::cmds::Run::system_bus_factory()@Base" 0.0.1
+ (c++)"biometry::cmds::Run::Run(std::shared_ptr<biometry::util::PropertyStore> const&, std::function<std::shared_ptr<core::dbus::Bus> ()> const&)@Base" 0.0.1
+ (c++)"biometry::cmds::Run::Run(std::shared_ptr<biometry::util::PropertyStore> const&, std::function<std::shared_ptr<core::dbus::Bus> ()> const&)@Base" 0.0.1
+ (c++)"biometry::cmds::Run::~Run()@Base" 0.0.1
+ (c++)"biometry::cmds::Run::~Run()@Base" 0.0.1
+ (c++)"biometry::cmds::Run::~Run()@Base" 0.0.1
+ (c++)"biometry::cmds::Test::test_device(biometry::User const&, biometry::util::cli::Command::Context const&, std::shared_ptr<biometry::Device> const&)@Base" 0.0.1
+ (c++)"biometry::cmds::Test::ConfigurationInvalid::ConfigurationInvalid()@Base" 0.0.1
+ (c++)"biometry::cmds::Test::ConfigurationInvalid::ConfigurationInvalid()@Base" 0.0.1
+ (c++)"biometry::cmds::Test::ConfigurationInvalid::~ConfigurationInvalid()@Base" 0.0.1
+ (c++)"biometry::cmds::Test::ConfigurationInvalid::~ConfigurationInvalid()@Base" 0.0.1
+ (c++)"biometry::cmds::Test::ConfigurationInvalid::~ConfigurationInvalid()@Base" 0.0.1
+ (c++)"biometry::cmds::Test::CouldNotInstiantiateDevice::CouldNotInstiantiateDevice()@Base" 0.0.1
+ (c++)"biometry::cmds::Test::CouldNotInstiantiateDevice::CouldNotInstiantiateDevice()@Base" 0.0.1
+ (c++)"biometry::cmds::Test::CouldNotInstiantiateDevice::~CouldNotInstiantiateDevice()@Base" 0.0.1
+ (c++)"biometry::cmds::Test::CouldNotInstiantiateDevice::~CouldNotInstiantiateDevice()@Base" 0.0.1
+ (c++)"biometry::cmds::Test::CouldNotInstiantiateDevice::~CouldNotInstiantiateDevice()@Base" 0.0.1
+ (c++)"biometry::cmds::Test::Test()@Base" 0.0.1
+ (c++)"biometry::cmds::Test::Test()@Base" 0.0.1
+ (c++)"biometry::cmds::Test::~Test()@Base" 0.0.1
+ (c++)"biometry::cmds::Test::~Test()@Base" 0.0.1
+ (c++)"biometry::cmds::Test::~Test()@Base" 0.0.1
+ (c++)"biometry::cmds::Config::Config()@Base" 0.0.1
+ (c++)"biometry::cmds::Config::Config()@Base" 0.0.1
+ (c++)"biometry::cmds::Config::~Config()@Base" 0.0.1
+ (c++)"biometry::cmds::Config::~Config()@Base" 0.0.1
+ (c++)"biometry::cmds::Config::~Config()@Base" 0.0.1
+ (c++)"biometry::cmds::operator<<(std::basic_ostream<char, std::char_traits<char> >&, biometry::cmds::Config::Flag)@Base" 0.0.1
+ (c++)"biometry::cmds::operator>>(std::basic_istream<char, std::char_traits<char> >&, biometry::cmds::Config::Flag&)@Base" 0.0.1
+ (c++)"biometry::dbus::stub::Service::create_for_bus(std::shared_ptr<core::dbus::Bus> const&)@Base" 0.0.1
+ (c++)"biometry::dbus::stub::Service::Service(std::shared_ptr<core::dbus::Bus> const&, std::shared_ptr<core::dbus::Service> const&, std::shared_ptr<core::dbus::Object> const&)@Base" 0.0.1
+ (c++)"biometry::dbus::stub::Service::Service(std::shared_ptr<core::dbus::Bus> const&, std::shared_ptr<core::dbus::Service> const&, std::shared_ptr<core::dbus::Object> const&)@Base" 0.0.1
+ (c++)"biometry::dbus::stub::Service::~Service()@Base" 0.0.1
+ (c++)"biometry::dbus::stub::Service::~Service()@Base" 0.0.1
+ (c++)"biometry::dbus::stub::Service::~Service()@Base" 0.0.1
+ (c++)"biometry::dbus::Service::create_stub()@Base" 0.0.1
+ (c++)"biometry::dbus::skeleton::Device::identifier()@Base" 0.0.1
+ (c++)"biometry::dbus::skeleton::Device::template_store()@Base" 0.0.1
+ (c++)"biometry::dbus::skeleton::Device::create_for_service_and_object(std::shared_ptr<core::dbus::Bus> const&, std::shared_ptr<core::dbus::Service> const&, std::shared_ptr<core::dbus::Object> const&, std::shared_ptr<biometry::Device> const&)@Base" 0.0.1
+ (c++)"biometry::dbus::skeleton::Device::verifier()@Base" 0.0.1
+ (c++)"biometry::dbus::skeleton::Device::Device(std::shared_ptr<core::dbus::Bus> const&, std::shared_ptr<core::dbus::Service> const&, std::shared_ptr<core::dbus::Object> const&, std::shared_ptr<biometry::Device> const&)@Base" 0.0.1
+ (c++)"biometry::dbus::skeleton::Device::Device(std::shared_ptr<core::dbus::Bus> const&, std::shared_ptr<core::dbus::Service> const&, std::shared_ptr<core::dbus::Object> const&, std::shared_ptr<biometry::Device> const&)@Base" 0.0.1
+ (c++)"biometry::dbus::skeleton::Device::~Device()@Base" 0.0.1
+ (c++)"biometry::dbus::skeleton::Device::~Device()@Base" 0.0.1
+ (c++)"biometry::dbus::skeleton::Device::~Device()@Base" 0.0.1
+ (c++)"biometry::dbus::skeleton::Service::create_for_bus(std::shared_ptr<core::dbus::Bus> const&, std::shared_ptr<biometry::Service> const&)@Base" 0.0.1
+ (c++)"biometry::dbus::skeleton::Service::Service(std::shared_ptr<core::dbus::Bus> const&, std::shared_ptr<core::dbus::Service> const&, std::shared_ptr<core::dbus::Object> const&, std::shared_ptr<biometry::Service> const&)@Base" 0.0.1
+ (c++)"biometry::dbus::skeleton::Service::Service(std::shared_ptr<core::dbus::Bus> const&, std::shared_ptr<core::dbus::Service> const&, std::shared_ptr<core::dbus::Object> const&, std::shared_ptr<biometry::Service> const&)@Base" 0.0.1
+ (c++)"biometry::dbus::skeleton::Service::~Service()@Base" 0.0.1
+ (c++)"biometry::dbus::skeleton::Service::~Service()@Base" 0.0.1
+ (c++)"biometry::dbus::skeleton::Service::~Service()@Base" 0.0.1
+ (c++)"biometry::util::Statistics::update(double)@Base" 0.0.1
+ (c++)"biometry::util::NotReachable::NotReachable(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned int)@Base" 0.0.1
+ (c++)"biometry::util::NotReachable::NotReachable(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned int)@Base" 0.0.1
+ (c++)"biometry::util::NotReachable::~NotReachable()@Base" 0.0.1
+ (c++)"biometry::util::NotReachable::~NotReachable()@Base" 0.0.1
+ (c++)"biometry::util::NotReachable::~NotReachable()@Base" 0.0.1
+ (c++)"biometry::util::AtomicCounter::increment()@Base" 0.0.1
+ (c++)"biometry::util::AtomicCounter::AtomicCounter(unsigned int)@Base" 0.0.1
+ (c++)"biometry::util::AtomicCounter::AtomicCounter(unsigned int)@Base" 0.0.1
+ (c++)"biometry::util::Configuration::Node::value(biometry::Variant const&)@Base" 0.0.1
+ (c++)"biometry::util::Configuration::Node::children()@Base" 0.0.1
+ (c++)"biometry::util::Configuration::Node::Node(biometry::Variant const&)@Base" 0.0.1
+ (c++)"biometry::util::Configuration::Node::Node(biometry::Variant const&)@Base" 0.0.1
+ (c++)"biometry::util::Configuration::Node::~Node()@Base" 0.0.1
+ (c++)"biometry::util::Configuration::Node::~Node()@Base" 0.0.1
+ (c++)"biometry::util::Configuration::Node::operator()(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::function<void ()> const&)@Base" 0.0.1
+ (c++)"biometry::util::Configuration::Node::operator[](std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)@Base" 0.0.1
+ (c++)"biometry::util::Configuration::children()@Base" 0.0.1
+ (c++)"biometry::util::Configuration::operator()(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::function<void ()> const&)@Base" 0.0.1
+ (c++)"biometry::util::Configuration::operator[](std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)@Base" 0.0.1
+ (c++)"biometry::util::not_reachable(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned int)@Base" 0.0.1
+ (c++)"biometry::util::DynamicLibrary::NoSuchSymbol::NoSuchSymbol(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, biometry::util::DynamicLibrary::Api::Error const&)@Base" 0.0.1
+ (c++)"biometry::util::DynamicLibrary::NoSuchSymbol::NoSuchSymbol(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, biometry::util::DynamicLibrary::Api::Error const&)@Base" 0.0.1
+ (c++)"biometry::util::DynamicLibrary::NoSuchSymbol::~NoSuchSymbol()@Base" 0.0.1
+ (c++)"biometry::util::DynamicLibrary::NoSuchSymbol::~NoSuchSymbol()@Base" 0.0.1
+ (c++)"biometry::util::DynamicLibrary::NoSuchSymbol::~NoSuchSymbol()@Base" 0.0.1
+ (c++)"biometry::util::DynamicLibrary::OpaqueTypeIsEmpty::OpaqueTypeIsEmpty()@Base" 0.0.1
+ (c++)"biometry::util::DynamicLibrary::OpaqueTypeIsEmpty::OpaqueTypeIsEmpty()@Base" 0.0.1
+ (c++)"biometry::util::DynamicLibrary::OpaqueTypeIsEmpty::~OpaqueTypeIsEmpty()@Base" 0.0.1
+ (c++)"biometry::util::DynamicLibrary::OpaqueTypeIsEmpty::~OpaqueTypeIsEmpty()@Base" 0.0.1
+ (c++)"biometry::util::DynamicLibrary::OpaqueTypeIsEmpty::~OpaqueTypeIsEmpty()@Base" 0.0.1
+ (c++)"biometry::util::DynamicLibrary::Api::Error::Error(biometry::util::DynamicLibrary::Api const&)@Base" 0.0.1
+ (c++)"biometry::util::DynamicLibrary::Api::Error::Error(biometry::util::DynamicLibrary::Api const&)@Base" 0.0.1
+ (c++)"biometry::util::DynamicLibrary::Api::Error::~Error()@Base" 0.0.1
+ (c++)"biometry::util::DynamicLibrary::Api::Error::~Error()@Base" 0.0.1
+ (c++)"biometry::util::DynamicLibrary::Api::Error::~Error()@Base" 0.0.1
+ (c++)"biometry::util::DynamicLibrary::DynamicLibrary(std::shared_ptr<biometry::util::DynamicLibrary::Api> const&, boost::filesystem::path const&)@Base" 0.0.1
+ (c++)"biometry::util::DynamicLibrary::DynamicLibrary(std::shared_ptr<biometry::util::DynamicLibrary::Api> const&, boost::filesystem::path const&)@Base" 0.0.1
+ (c++)"biometry::util::DynamicLibrary::~DynamicLibrary()@Base" 0.0.1
+ (c++)"biometry::util::DynamicLibrary::~DynamicLibrary()@Base" 0.0.1
+ (c++)"biometry::util::DynamicLibrary::~DynamicLibrary()@Base" 0.0.1
+ (c++)"biometry::util::AndroidPropertyStore::~AndroidPropertyStore()@Base" 0.0.1
+ (c++)"biometry::util::AndroidPropertyStore::~AndroidPropertyStore()@Base" 0.0.1
+ (c++)"biometry::util::AndroidPropertyStore::~AndroidPropertyStore()@Base" 0.0.1
+ (c++)"biometry::util::JsonConfigurationBuilder::build_configuration()@Base" 0.0.1
+ (c++)"biometry::util::JsonConfigurationBuilder::JsonConfigurationBuilder(std::basic_istream<char, std::char_traits<char> >&)@Base" 0.0.1
+ (c++)"biometry::util::JsonConfigurationBuilder::JsonConfigurationBuilder(std::basic_istream<char, std::char_traits<char> >&)@Base" 0.0.1
+ (c++)"biometry::util::JsonConfigurationBuilder::~JsonConfigurationBuilder()@Base" 0.0.1
+ (c++)"biometry::util::JsonConfigurationBuilder::~JsonConfigurationBuilder()@Base" 0.0.1
+ (c++)"biometry::util::JsonConfigurationBuilder::~JsonConfigurationBuilder()@Base" 0.0.1
+ (c++)"biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>::IfStreamer::in()@Base" 0.0.1
+ (c++)"biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>::IfStreamer::~IfStreamer()@Base" 0.0.1
+ (c++)"biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>::IfStreamer::~IfStreamer()@Base" 0.0.1
+ (c++)"biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>::IfStreamer::~IfStreamer()@Base" 0.0.1
+ (c++)"biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>::RefStreamer::in()@Base" 0.0.1
+ (c++)"biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>::RefStreamer::~RefStreamer()@Base" 0.0.1
+ (c++)"biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>::RefStreamer::~RefStreamer()@Base" 0.0.1
+ (c++)"biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>::RefStreamer::~RefStreamer()@Base" 0.0.1
+ (c++)"biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>::build_configuration()@Base" 0.0.1
+ (c++)"biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>::~StreamingConfigurationBuilder()@Base" 0.0.1
+ (c++)"biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>::~StreamingConfigurationBuilder()@Base" 0.0.1
+ (c++)"biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>::~StreamingConfigurationBuilder()@Base" 0.0.1
+ (c++)"biometry::util::create_dispatcher_for_runtime(std::shared_ptr<biometry::Runtime> const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::ProgressBar::update(double)@Base" 0.0.1
+ (c++)"biometry::util::cli::ProgressBar::ProgressBar(std::basic_ostream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned int)@Base" 0.0.1
+ (c++)"biometry::util::cli::ProgressBar::ProgressBar(std::basic_ostream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, unsigned int)@Base" 0.0.1
+ (c++)"biometry::util::cli::ProgressBar::~ProgressBar()@Base" 0.0.1
+ (c++)"biometry::util::cli::ProgressBar::~ProgressBar()@Base" 0.0.1
+ (c++)"biometry::util::cli::TypedReferenceFlag<biometry::User>::notify(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::TypedReferenceFlag<biometry::User>::~TypedReferenceFlag()@Base" 0.0.1
+ (c++)"biometry::util::cli::TypedReferenceFlag<biometry::User>::~TypedReferenceFlag()@Base" 0.0.1
+ (c++)"biometry::util::cli::TypedReferenceFlag<biometry::User>::~TypedReferenceFlag()@Base" 0.0.1
+ (c++)"biometry::util::cli::TypedReferenceFlag<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >::notify(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::TypedReferenceFlag<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >::~TypedReferenceFlag()@Base" 0.0.1
+ (c++)"biometry::util::cli::TypedReferenceFlag<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >::~TypedReferenceFlag()@Base" 0.0.1
+ (c++)"biometry::util::cli::TypedReferenceFlag<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >::~TypedReferenceFlag()@Base" 0.0.1
+ (c++)"biometry::util::cli::TypedReferenceFlag<unsigned int>::notify(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::TypedReferenceFlag<unsigned int>::~TypedReferenceFlag()@Base" 0.0.1
+ (c++)"biometry::util::cli::TypedReferenceFlag<unsigned int>::~TypedReferenceFlag()@Base" 0.0.1
+ (c++)"biometry::util::cli::TypedReferenceFlag<unsigned int>::~TypedReferenceFlag()@Base" 0.0.1
+ (c++)"biometry::util::cli::SizeConstrainedString<15ul>::SizeConstrainedString(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::SizeConstrainedString<15ul>::SizeConstrainedString(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::SizeConstrainedString<60ul>::SizeConstrainedString(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::SizeConstrainedString<60ul>::SizeConstrainedString(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::CommandWithSubcommands::run(biometry::util::cli::Command::Context const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::CommandWithSubcommands::flag(std::shared_ptr<biometry::util::cli::Flag> const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::CommandWithSubcommands::help(std::basic_ostream<char, std::char_traits<char> >&)@Base" 0.0.1
+ (c++)"biometry::util::cli::CommandWithSubcommands::command(std::shared_ptr<biometry::util::cli::Command> const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::CommandWithSubcommands::CommandWithSubcommands(biometry::util::cli::SizeConstrainedString<15ul> const&, biometry::util::cli::SizeConstrainedString<60ul> const&, biometry::util::cli::SizeConstrainedString<60ul> const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::CommandWithSubcommands::CommandWithSubcommands(biometry::util::cli::SizeConstrainedString<15ul> const&, biometry::util::cli::SizeConstrainedString<60ul> const&, biometry::util::cli::SizeConstrainedString<60ul> const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::CommandWithSubcommands::~CommandWithSubcommands()@Base" 0.0.1
+ (c++)"biometry::util::cli::CommandWithSubcommands::~CommandWithSubcommands()@Base" 0.0.1
+ (c++)"biometry::util::cli::CommandWithSubcommands::~CommandWithSubcommands()@Base" 0.0.1
+ (c++)"biometry::util::cli::CommandWithFlagsAndAction::run(biometry::util::cli::Command::Context const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::CommandWithFlagsAndAction::flag(std::shared_ptr<biometry::util::cli::Flag> const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::CommandWithFlagsAndAction::help(std::basic_ostream<char, std::char_traits<char> >&)@Base" 0.0.1
+ (c++)"biometry::util::cli::CommandWithFlagsAndAction::action(std::function<int (biometry::util::cli::Command::Context const&)> const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::CommandWithFlagsAndAction::CommandWithFlagsAndAction(biometry::util::cli::SizeConstrainedString<15ul> const&, biometry::util::cli::SizeConstrainedString<60ul> const&, biometry::util::cli::SizeConstrainedString<60ul> const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::CommandWithFlagsAndAction::CommandWithFlagsAndAction(biometry::util::cli::SizeConstrainedString<15ul> const&, biometry::util::cli::SizeConstrainedString<60ul> const&, biometry::util::cli::SizeConstrainedString<60ul> const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::CommandWithFlagsAndAction::~CommandWithFlagsAndAction()@Base" 0.0.1
+ (c++)"biometry::util::cli::CommandWithFlagsAndAction::~CommandWithFlagsAndAction()@Base" 0.0.1
+ (c++)"biometry::util::cli::CommandWithFlagsAndAction::~CommandWithFlagsAndAction()@Base" 0.0.1
+ (c++)"biometry::util::cli::OptionalTypedReferenceFlag<biometry::cmds::Config::Flag>::notify(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::OptionalTypedReferenceFlag<biometry::cmds::Config::Flag>::~OptionalTypedReferenceFlag()@Base" 0.0.1
+ (c++)"biometry::util::cli::OptionalTypedReferenceFlag<biometry::cmds::Config::Flag>::~OptionalTypedReferenceFlag()@Base" 0.0.1
+ (c++)"biometry::util::cli::OptionalTypedReferenceFlag<biometry::cmds::Config::Flag>::~OptionalTypedReferenceFlag()@Base" 0.0.1
+ (c++)"biometry::util::cli::Flag::Flag(biometry::util::cli::SizeConstrainedString<15ul> const&, biometry::util::cli::SizeConstrainedString<60ul> const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::Flag::Flag(biometry::util::cli::SizeConstrainedString<15ul> const&, biometry::util::cli::SizeConstrainedString<60ul> const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::args(int, char**)@Base" 0.0.1
+ (c++)"biometry::util::cli::Command::FlagsMissing::FlagsMissing()@Base" 0.0.1
+ (c++)"biometry::util::cli::Command::FlagsMissing::FlagsMissing()@Base" 0.0.1
+ (c++)"biometry::util::cli::Command::FlagsMissing::~FlagsMissing()@Base" 0.0.1
+ (c++)"biometry::util::cli::Command::FlagsMissing::~FlagsMissing()@Base" 0.0.1
+ (c++)"biometry::util::cli::Command::FlagsMissing::~FlagsMissing()@Base" 0.0.1
+ (c++)"biometry::util::cli::Command::FlagsWithInvalidValue::FlagsWithInvalidValue()@Base" 0.0.1
+ (c++)"biometry::util::cli::Command::FlagsWithInvalidValue::FlagsWithInvalidValue()@Base" 0.0.1
+ (c++)"biometry::util::cli::Command::FlagsWithInvalidValue::~FlagsWithInvalidValue()@Base" 0.0.1
+ (c++)"biometry::util::cli::Command::FlagsWithInvalidValue::~FlagsWithInvalidValue()@Base" 0.0.1
+ (c++)"biometry::util::cli::Command::FlagsWithInvalidValue::~FlagsWithInvalidValue()@Base" 0.0.1
+ (c++)"biometry::util::cli::Command::Command(biometry::util::cli::SizeConstrainedString<15ul> const&, biometry::util::cli::SizeConstrainedString<60ul> const&, biometry::util::cli::SizeConstrainedString<60ul> const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::Command::Command(biometry::util::cli::SizeConstrainedString<15ul> const&, biometry::util::cli::SizeConstrainedString<60ul> const&, biometry::util::cli::SizeConstrainedString<60ul> const&)@Base" 0.0.1
+ (c++)"biometry::util::cli::Command::~Command()@Base" 0.0.1
+ (c++)"biometry::util::cli::Command::~Command()@Base" 0.0.1
+ (c++)"biometry::util::cli::Command::~Command()@Base" 0.0.1
+ (c++)"biometry::util::glibc::dl_api()@Base" 0.0.1
+ (c++)"biometry::Point::Point(double, double)@Base" 0.0.1
+ (c++)"biometry::Point::Point(double, double)@Base" 0.0.1
+ (c++)"biometry::Daemon::Configuration::custom_plugin_directory()@Base" 0.0.1
+ (c++)"biometry::Daemon::Configuration::default_plugin_directory()@Base" 0.0.1
+ (c++)"biometry::Daemon::Configuration::default_plugin_directories()@Base" 0.0.1
+ (c++)"biometry::Daemon::run(std::vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&)@Base" 0.0.1
+ (c++)"biometry::Daemon::Daemon()@Base" 0.0.1
+ (c++)"biometry::Daemon::Daemon()@Base" 0.0.1
+ (c++)"biometry::Daemon::~Daemon()@Base" 0.0.1
+ (c++)"biometry::Daemon::~Daemon()@Base" 0.0.1
+ (c++)"biometry::Daemon::~Daemon()@Base" 0.0.1
+ (c++)"biometry::Reason::unknown()@Base" 0.0.1
+ (c++)"biometry::Reason::Reason(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)@Base" 0.0.1
+ (c++)"biometry::Reason::Reason()@Base" 0.0.1
+ (c++)"biometry::Reason::Reason(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)@Base" 0.0.1
+ (c++)"biometry::Reason::Reason()@Base" 0.0.1
+ (c++)"biometry::Percent::from_raw_value(double)@Base" 0.0.1
+ (c++)"biometry::Percent::Percent(double)@Base" 0.0.1
+ (c++)"biometry::Percent::Percent()@Base" 0.0.1
+ (c++)"biometry::Percent::Percent(double)@Base" 0.0.1
+ (c++)"biometry::Percent::Percent()@Base" 0.0.1
+ (c++)"biometry::Runtime::to_dispatcher_functional()@Base" 0.0.1
+ (c++)"biometry::Runtime::stop()@Base" 0.0.1
+ (c++)"biometry::Runtime::start()@Base" 0.0.1
+ (c++)"biometry::Runtime::create(unsigned int)@Base" 0.0.1
+ (c++)"biometry::Runtime::service()@Base" 0.0.1
+ (c++)"biometry::Runtime::Runtime(unsigned int)@Base" 0.0.1
+ (c++)"biometry::Runtime::Runtime(unsigned int)@Base" 0.0.1
+ (c++)"biometry::Runtime::~Runtime()@Base" 0.0.1
+ (c++)"biometry::Runtime::~Runtime()@Base" 0.0.1
+ (c++)"biometry::Variant::floating_point(double)@Base" 0.0.1
+ (c++)"biometry::Variant::b(bool)@Base" 0.0.1
+ (c++)"biometry::Variant::d(double)@Base" 0.0.1
+ (c++)"biometry::Variant::i(long)@Base" 0.0.1
+ (c++)"biometry::Variant::r(biometry::Rectangle const&)@Base" 0.0.1
+ (c++)"biometry::Variant::s(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)@Base" 0.0.1
+ (c++)"biometry::Variant::v(std::vector<biometry::Variant, std::allocator<biometry::Variant> > const&)@Base" 0.0.1
+ (c++)"biometry::Variant::bl(std::vector<unsigned char, std::allocator<unsigned char> > const&)@Base" 0.0.1
+ (c++)"biometry::Variant::blob(std::vector<unsigned char, std::allocator<unsigned char> > const&)@Base" 0.0.1
+ (c++)"biometry::Variant::string(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)@Base" 0.0.1
+ (c++)"biometry::Variant::vector(std::vector<biometry::Variant, std::allocator<biometry::Variant> > const&)@Base" 0.0.1
+ (c++)"biometry::Variant::boolean(bool)@Base" 0.0.1
+ (c++)"biometry::Variant::integer(long)@Base" 0.0.1
+ (c++)"biometry::Variant::rectangle(biometry::Rectangle const&)@Base" 0.0.1
+ (c++)"biometry::Variant::Variant(biometry::Rectangle const&)@Base" 0.0.1
+ (c++)"biometry::Variant::Variant(biometry::Variant const&)@Base" 0.0.1
+ (c++)"biometry::Variant::Variant(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)@Base" 0.0.1
+ (c++)"biometry::Variant::Variant(std::vector<biometry::Variant, std::allocator<biometry::Variant> > const&)@Base" 0.0.1
+ (c++)"biometry::Variant::Variant(std::vector<unsigned char, std::allocator<unsigned char> > const&)@Base" 0.0.1
+ (c++)"biometry::Variant::Variant(bool)@Base" 0.0.1
+ (c++)"biometry::Variant::Variant(double)@Base" 0.0.1
+ (c++)"biometry::Variant::Variant(long)@Base" 0.0.1
+ (c++)"biometry::Variant::Variant()@Base" 0.0.1
+ (c++)"biometry::Variant::Variant(biometry::Rectangle const&)@Base" 0.0.1
+ (c++)"biometry::Variant::Variant(biometry::Variant const&)@Base" 0.0.1
+ (c++)"biometry::Variant::Variant(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)@Base" 0.0.1
+ (c++)"biometry::Variant::Variant(std::vector<biometry::Variant, std::allocator<biometry::Variant> > const&)@Base" 0.0.1
+ (c++)"biometry::Variant::Variant(std::vector<unsigned char, std::allocator<unsigned char> > const&)@Base" 0.0.1
+ (c++)"biometry::Variant::Variant(bool)@Base" 0.0.1
+ (c++)"biometry::Variant::Variant(double)@Base" 0.0.1
+ (c++)"biometry::Variant::Variant(long)@Base" 0.0.1
+ (c++)"biometry::Variant::Variant()@Base" 0.0.1
+ (c++)"biometry::Variant::~Variant()@Base" 0.0.1
+ (c++)"biometry::Variant::~Variant()@Base" 0.0.1
+ (c++)"biometry::Variant::operator=(biometry::Variant const&)@Base" 0.0.1
+ (c++)"biometry::devices::Forwarding::identifier()@Base" 0.0.1
+ (c++)"biometry::devices::Forwarding::template_store()@Base" 0.0.1
+ (c++)"biometry::devices::Forwarding::verifier()@Base" 0.0.1
+ (c++)"biometry::devices::Forwarding::Forwarding(std::shared_ptr<biometry::Device> const&)@Base" 0.0.1
+ (c++)"biometry::devices::Forwarding::Forwarding(std::shared_ptr<biometry::Device> const&)@Base" 0.0.1
+ (c++)"biometry::devices::Forwarding::~Forwarding()@Base" 0.0.1
+ (c++)"biometry::devices::Forwarding::~Forwarding()@Base" 0.0.1
+ (c++)"biometry::devices::Forwarding::~Forwarding()@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::Identifier::identify_user(biometry::Application const&, biometry::Reason const&)@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::Identifier::Identifier(std::shared_ptr<biometry::util::Dispatcher> const&, std::shared_ptr<biometry::Device> const&)@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::Identifier::Identifier(std::shared_ptr<biometry::util::Dispatcher> const&, std::shared_ptr<biometry::Device> const&)@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::Identifier::~Identifier()@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::Identifier::~Identifier()@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::Identifier::~Identifier()@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::identifier()@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::TemplateStore::list(biometry::Application const&, biometry::User const&)@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::TemplateStore::size(biometry::Application const&, biometry::User const&)@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::TemplateStore::clear(biometry::Application const&, biometry::User const&)@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::TemplateStore::enroll(biometry::Application const&, biometry::User const&)@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::TemplateStore::remove(biometry::Application const&, biometry::User const&, unsigned long)@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::TemplateStore::TemplateStore(std::shared_ptr<biometry::util::Dispatcher> const&, std::shared_ptr<biometry::Device> const&)@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::TemplateStore::TemplateStore(std::shared_ptr<biometry::util::Dispatcher> const&, std::shared_ptr<biometry::Device> const&)@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::TemplateStore::~TemplateStore()@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::TemplateStore::~TemplateStore()@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::TemplateStore::~TemplateStore()@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::template_store()@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::Verifier::verify_user(biometry::Application const&, biometry::User const&, biometry::Reason const&)@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::Verifier::Verifier(std::shared_ptr<biometry::util::Dispatcher> const&, std::shared_ptr<biometry::Device> const&)@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::Verifier::Verifier(std::shared_ptr<biometry::util::Dispatcher> const&, std::shared_ptr<biometry::Device> const&)@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::Verifier::~Verifier()@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::Verifier::~Verifier()@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::Verifier::~Verifier()@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::verifier()@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::Dispatching(std::shared_ptr<biometry::util::Dispatcher> const&, std::shared_ptr<biometry::Device> const&)@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::Dispatching(std::shared_ptr<biometry::util::Dispatcher> const&, std::shared_ptr<biometry::Device> const&)@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::~Dispatching()@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::~Dispatching()@Base" 0.0.1
+ (c++)"biometry::devices::Dispatching::~Dispatching()@Base" 0.0.1
+ (c++)"biometry::devices::FingerprintReader::identifier()@Base" 0.0.1
+ (c++)"biometry::devices::FingerprintReader::TemplateStore::guided_enroll(biometry::Application const&, biometry::User const&)@Base" 0.0.1
+ (c++)"biometry::devices::FingerprintReader::TemplateStore::list(biometry::Application const&, biometry::User const&)@Base" 0.0.1
+ (c++)"biometry::devices::FingerprintReader::TemplateStore::size(biometry::Application const&, biometry::User const&)@Base" 0.0.1
+ (c++)"biometry::devices::FingerprintReader::TemplateStore::clear(biometry::Application const&, biometry::User const&)@Base" 0.0.1
+ (c++)"biometry::devices::FingerprintReader::TemplateStore::enroll(biometry::Application const&, biometry::User const&)@Base" 0.0.1
+ (c++)"biometry::devices::FingerprintReader::TemplateStore::remove(biometry::Application const&, biometry::User const&, unsigned long)@Base" 0.0.1
+ (c++)"biometry::devices::FingerprintReader::TemplateStore::TemplateStore(std::reference_wrapper<biometry::TemplateStore> const&)@Base" 0.0.1
+ (c++)"biometry::devices::FingerprintReader::TemplateStore::TemplateStore(std::reference_wrapper<biometry::TemplateStore> const&)@Base" 0.0.1
+ (c++)"biometry::devices::FingerprintReader::TemplateStore::~TemplateStore()@Base" 0.0.1
+ (c++)"biometry::devices::FingerprintReader::TemplateStore::~TemplateStore()@Base" 0.0.1
+ (c++)"biometry::devices::FingerprintReader::TemplateStore::~TemplateStore()@Base" 0.0.1
+ (c++)"biometry::devices::FingerprintReader::template_store()@Base" 0.0.1
+ (c++)"biometry::devices::FingerprintReader::GuidedEnrollment::Hints::from_dictionary(std::map<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, biometry::Variant, std::less<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::basic_string<char, std::char_traits<char>, std::allocator<char> > const, biometry::Variant> > > const&)@Base" 0.0.1
+ (c++)"biometry::devices::FingerprintReader::template_store_with_guided_enrollment()@Base" 0.0.1
+ (c++)"biometry::devices::FingerprintReader::verifier()@Base" 0.0.1
+ (c++)"biometry::devices::FingerprintReader::FingerprintReader(std::shared_ptr<biometry::Device> const&)@Base" 0.0.1
+ (c++)"biometry::devices::FingerprintReader::FingerprintReader(std::shared_ptr<biometry::Device> const&)@Base" 0.0.1
+ (c++)"biometry::devices::FingerprintReader::~FingerprintReader()@Base" 0.0.1
+ (c++)"biometry::devices::FingerprintReader::~FingerprintReader()@Base" 0.0.1
+ (c++)"biometry::devices::FingerprintReader::~FingerprintReader()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Identifier::identify_user(biometry::Application const&, biometry::Reason const&)@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Identifier::~Identifier()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Identifier::~Identifier()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Identifier::~Identifier()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::identifier()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::TemplateStore::list(biometry::Application const&, biometry::User const&)@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::TemplateStore::size(biometry::Application const&, biometry::User const&)@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::TemplateStore::clear(biometry::Application const&, biometry::User const&)@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::TemplateStore::enroll(biometry::Application const&, biometry::User const&)@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::TemplateStore::remove(biometry::Application const&, biometry::User const&, unsigned long)@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::TemplateStore::~TemplateStore()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::TemplateStore::~TemplateStore()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::TemplateStore::~TemplateStore()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::template_store()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::make_descriptor()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Verifier::verify_user(biometry::Application const&, biometry::User const&, biometry::Reason const&)@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Verifier::~Verifier()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Verifier::~Verifier()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Verifier::~Verifier()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::verifier()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::Verification>::start_with_observer(std::shared_ptr<biometry::Operation<biometry::Verification>::Observer> const&)@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::Verification>::cancel()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::Verification>::~Operation()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::Verification>::~Operation()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::Verification>::~Operation()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::TemplateStore::Enrollment>::~Operation()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::TemplateStore::Enrollment>::~Operation()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::TemplateStore::Enrollment>::~Operation()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::TemplateStore::List>::~Operation()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::TemplateStore::List>::~Operation()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::TemplateStore::List>::~Operation()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::TemplateStore::Removal>::~Operation()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::TemplateStore::Removal>::~Operation()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::TemplateStore::Removal>::~Operation()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::TemplateStore::Clearance>::~Operation()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::TemplateStore::Clearance>::~Operation()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::TemplateStore::Clearance>::~Operation()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::TemplateStore::SizeQuery>::~Operation()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::TemplateStore::SizeQuery>::~Operation()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::TemplateStore::SizeQuery>::~Operation()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::Identification>::start_with_observer(std::shared_ptr<biometry::Operation<biometry::Identification>::Observer> const&)@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::Identification>::cancel()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::Identification>::~Operation()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::Identification>::~Operation()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Operation<biometry::Identification>::~Operation()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Dummy()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::Dummy()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::~Dummy()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::~Dummy()@Base" 0.0.1
+ (c++)"biometry::devices::Dummy::~Dummy()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::make_descriptor()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::NonVerifyingLoader::~NonVerifyingLoader()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::NonVerifyingLoader::~NonVerifyingLoader()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::NonVerifyingLoader::~NonVerifyingLoader()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::DirectoryEnumerator::DirectoryEnumerator(std::set<boost::filesystem::path, std::less<boost::filesystem::path>, std::allocator<boost::filesystem::path> > const&)@Base" 0.0.1
+ (c++)"biometry::devices::plugin::DirectoryEnumerator::DirectoryEnumerator(std::set<boost::filesystem::path, std::less<boost::filesystem::path>, std::allocator<boost::filesystem::path> > const&)@Base" 0.0.1
+ (c++)"biometry::devices::plugin::DirectoryEnumerator::~DirectoryEnumerator()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::DirectoryEnumerator::~DirectoryEnumerator()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::DirectoryEnumerator::~DirectoryEnumerator()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::ElfDescriptorLoader::NoSuchSection::NoSuchSection(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)@Base" 0.0.1
+ (c++)"biometry::devices::plugin::ElfDescriptorLoader::NoSuchSection::NoSuchSection(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)@Base" 0.0.1
+ (c++)"biometry::devices::plugin::ElfDescriptorLoader::NoSuchSection::~NoSuchSection()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::ElfDescriptorLoader::NoSuchSection::~NoSuchSection()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::ElfDescriptorLoader::NoSuchSection::~NoSuchSection()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::ElfDescriptorLoader::NotAnElfObject::NotAnElfObject()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::ElfDescriptorLoader::NotAnElfObject::NotAnElfObject()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::ElfDescriptorLoader::NotAnElfObject::~NotAnElfObject()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::ElfDescriptorLoader::NotAnElfObject::~NotAnElfObject()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::ElfDescriptorLoader::NotAnElfObject::~NotAnElfObject()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::ElfDescriptorLoader::FailedToInitializeElf::FailedToInitializeElf()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::ElfDescriptorLoader::FailedToInitializeElf::FailedToInitializeElf()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::ElfDescriptorLoader::FailedToInitializeElf::~FailedToInitializeElf()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::ElfDescriptorLoader::FailedToInitializeElf::~FailedToInitializeElf()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::ElfDescriptorLoader::FailedToInitializeElf::~FailedToInitializeElf()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::MajorVersionVerifier::MajorVersionMismatch::MajorVersionMismatch(unsigned int, unsigned int)@Base" 0.0.1
+ (c++)"biometry::devices::plugin::MajorVersionVerifier::MajorVersionMismatch::MajorVersionMismatch(unsigned int, unsigned int)@Base" 0.0.1
+ (c++)"biometry::devices::plugin::MajorVersionVerifier::MajorVersionMismatch::~MajorVersionMismatch()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::MajorVersionVerifier::MajorVersionMismatch::~MajorVersionMismatch()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::MajorVersionVerifier::MajorVersionMismatch::~MajorVersionMismatch()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::MajorVersionVerifier::~MajorVersionVerifier()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::MajorVersionVerifier::~MajorVersionVerifier()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::MajorVersionVerifier::~MajorVersionVerifier()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::ElfDescriptorVerifierLoader::~ElfDescriptorVerifierLoader()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::ElfDescriptorVerifierLoader::~ElfDescriptorVerifierLoader()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::ElfDescriptorVerifierLoader::~ElfDescriptorVerifierLoader()@Base" 0.0.1
+ (c++)"biometry::devices::plugin::load(std::shared_ptr<biometry::util::DynamicLibrary::Api> const&, boost::filesystem::path const&, biometry::devices::plugin::Loader const&)@Base" 0.0.1
+ (c++)"biometry::devices::operator==(biometry::devices::FingerprintReader::GuidedEnrollment::Hints const&, biometry::devices::FingerprintReader::GuidedEnrollment::Hints const&)@Base" 0.0.1
+ (c++)"biometry::version(unsigned int&, unsigned int&, unsigned int&)@Base" 0.0.1
+ (c++)"biometry::Progress::none()@Base" 0.0.1
+ (c++)"biometry::operator==(biometry::Application const&, biometry::Application const&)@Base" 0.0.1
+ (c++)"biometry::operator==(biometry::User const&, biometry::User const&)@Base" 0.0.1
+ (c++)"biometry::operator==(biometry::Point const&, biometry::Point const&)@Base" 0.0.1
+ (c++)"biometry::operator==(biometry::Reason const&, biometry::Reason const&)@Base" 0.0.1
+ (c++)"biometry::operator==(biometry::Percent const&, biometry::Percent const&)@Base" 0.0.1
+ (c++)"biometry::operator==(biometry::Variant::None const&, biometry::Variant::None const&)@Base" 0.0.1
+ (c++)"biometry::operator==(biometry::Progress const&, biometry::Progress const&)@Base" 0.0.1
+ (c++)"biometry::operator==(biometry::Rectangle const&, biometry::Rectangle const&)@Base" 0.0.1
+ (c++)"biometry::operator<<(std::basic_ostream<char, std::char_traits<char> >&, biometry::User const&)@Base" 0.0.1
+ (c++)"biometry::operator<<(std::basic_ostream<char, std::char_traits<char> >&, biometry::Point const&)@Base" 0.0.1
+ (c++)"biometry::operator<<(std::basic_ostream<char, std::char_traits<char> >&, biometry::Percent const&)@Base" 0.0.1
+ (c++)"biometry::operator<<(std::basic_ostream<char, std::char_traits<char> >&, biometry::Variant::None const&)@Base" 0.0.1
+ (c++)"biometry::operator<<(std::basic_ostream<char, std::char_traits<char> >&, biometry::Variant const&)@Base" 0.0.1
+ (c++)"biometry::operator<<(std::basic_ostream<char, std::char_traits<char> >&, biometry::Progress const&)@Base" 0.0.1
+ (c++)"biometry::operator<<(std::basic_ostream<char, std::char_traits<char> >&, biometry::Rectangle const&)@Base" 0.0.1
+ (c++)"biometry::operator<(biometry::User const&, biometry::User const&)@Base" 0.0.1
+ (c++)"biometry::operator!=(biometry::Point const&, biometry::Point const&)@Base" 0.0.1
+ (c++)"biometry::operator!=(biometry::Rectangle const&, biometry::Rectangle const&)@Base" 0.0.1
+ (c++)"biometry::operator>>(std::basic_istream<char, std::char_traits<char> >&, biometry::User&)@Base" 0.0.1
+ (c++)"biometry::Application::as_string() const@Base" 0.0.1
+ (c++)"biometry::Application::operator std::basic_string<char, std::char_traits<char>, std::allocator<char> >() const@Base" 0.0.1
+ (c++)"biometry::DispatchingService::default_device() const@Base" 0.0.1
+ (c++)"biometry::cmds::Run::ConfigurationOracle::make_an_educated_guess(biometry::util::PropertyStore const&) const@Base" 0.0.1
+ (c++)"biometry::dbus::stub::Service::default_device() const@Base" 0.0.1
+ (c++)"biometry::dbus::skeleton::Service::default_device() const@Base" 0.0.1
+ (c++)"biometry::util::Statistics::max() const@Base" 0.0.1
+ (c++)"biometry::util::Statistics::min() const@Base" 0.0.1
+ (c++)"biometry::util::Statistics::mean() const@Base" 0.0.1
+ (c++)"biometry::util::Statistics::variance() const@Base" 0.0.1
+ (c++)"biometry::util::Configuration::Node::value() const@Base" 0.0.1
+ (c++)"biometry::util::Configuration::Node::children() const@Base" 0.0.1
+ (c++)"biometry::util::Configuration::Node::operator()(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::function<void ()> const&) const@Base" 0.0.1
+ (c++)"biometry::util::Configuration::Node::operator bool() const@Base" 0.0.1
+ (c++)"biometry::util::Configuration::Node::operator[](std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const@Base" 0.0.1
+ (c++)"biometry::util::Configuration::children() const@Base" 0.0.1
+ (c++)"biometry::util::Configuration::operator()(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::function<void ()> const&) const@Base" 0.0.1
+ (c++)"biometry::util::Configuration::operator[](std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const@Base" 0.0.1
+ (c++)"biometry::util::DynamicLibrary::resolve_symbol_or_throw(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const@Base" 0.0.1
+ (c++)"biometry::util::AndroidPropertyStore::get(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const@Base" 0.0.1
+ (c++)"biometry::util::cli::Flag::description() const@Base" 0.0.1
+ (c++)"biometry::util::cli::Flag::name() const@Base" 0.0.1
+ (c++)"biometry::util::cli::Command::description() const@Base" 0.0.1
+ (c++)"biometry::util::cli::Command::name() const@Base" 0.0.1
+ (c++)"biometry::util::cli::Command::usage() const@Base" 0.0.1
+ (c++)"biometry::Reason::as_string() const@Base" 0.0.1
+ (c++)"biometry::Reason::operator std::basic_string<char, std::char_traits<char>, std::allocator<char> >() const@Base" 0.0.1
+ (c++)"biometry::Percent::operator*() const@Base" 0.0.1
+ (c++)"biometry::Variant::floating_point() const@Base" 0.0.1
+ (c++)"biometry::Variant::blob() const@Base" 0.0.1
+ (c++)"biometry::Variant::type() const@Base" 0.0.1
+ (c++)"biometry::Variant::print(std::basic_ostream<char, std::char_traits<char> >&) const@Base" 0.0.1
+ (c++)"biometry::Variant::string() const@Base" 0.0.1
+ (c++)"biometry::Variant::vector() const@Base" 0.0.1
+ (c++)"biometry::Variant::boolean() const@Base" 0.0.1
+ (c++)"biometry::Variant::integer() const@Base" 0.0.1
+ (c++)"biometry::Variant::rectangle() const@Base" 0.0.1
+ (c++)"biometry::Variant::operator==(biometry::Variant const&) const@Base" 0.0.1
+ (c++)"biometry::devices::FingerprintReader::GuidedEnrollment::Hints::to_dictionary() const@Base" 0.0.1
+ (c++)"biometry::devices::plugin::NonVerifyingLoader::verify_and_load(std::shared_ptr<biometry::util::DynamicLibrary::Api> const&, boost::filesystem::path const&) const@Base" 0.0.1
+ (c++)"biometry::devices::plugin::DirectoryEnumerator::enumerate(std::function<void (std::shared_ptr<biometry::Device::Descriptor> const&)> const&) const@Base" 0.0.1
+ (c++)"biometry::devices::plugin::ElfDescriptorLoader::load_with_name(boost::filesystem::path const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const@Base" 0.0.1
+ (c++)"biometry::devices::plugin::MajorVersionVerifier::verify(biometry::devices::plugin::Descriptor const&) const@Base" 0.0.1
+ (c++)"biometry::devices::plugin::ElfDescriptorVerifierLoader::verify_and_load(std::shared_ptr<biometry::util::DynamicLibrary::Api> const&, boost::filesystem::path const&) const@Base" 0.0.1
+ (c++)"typeinfo for biometry::Identifier@Base" 0.0.1
+ (c++)"typeinfo for biometry::DispatchingService@Base" 0.0.1
+ (c++)"typeinfo for biometry::cmds::Run@Base" 0.0.1
+ (c++)"typeinfo for biometry::cmds::Test::ConfigurationInvalid@Base" 0.0.1
+ (c++)"typeinfo for biometry::cmds::Test::CouldNotInstiantiateDevice@Base" 0.0.1
+ (c++)"typeinfo for biometry::cmds::Test@Base" 0.0.1
+ (c++)"typeinfo for biometry::cmds::Config@Base" 0.0.1
+ (c++)"typeinfo for biometry::dbus::stub::Service@Base" 0.0.1
+ (c++)"typeinfo for biometry::dbus::skeleton::Device@Base" 0.0.1
+ (c++)"typeinfo for biometry::dbus::skeleton::Service@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::Dispatcher@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::NotReachable@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::Configuration::Node@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::Configuration@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::PropertyStore@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::DynamicLibrary::NoSuchSymbol@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::DynamicLibrary::OpaqueTypeIsEmpty@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::DynamicLibrary::Api::Error@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::DynamicLibrary::Api@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::DynamicLibrary@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::AndroidPropertyStore@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::ConfigurationBuilder@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::JsonConfigurationBuilder@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>::IfStreamer@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>::RefStreamer@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>::Streamer@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::cli::TypedReferenceFlag<biometry::User>@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::cli::TypedReferenceFlag<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::cli::TypedReferenceFlag<unsigned int>@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::cli::CommandWithSubcommands@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::cli::CommandWithFlagsAndAction@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::cli::OptionalTypedReferenceFlag<biometry::cmds::Config::Flag>@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::cli::Flag@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::cli::Command::FlagsMissing@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::cli::Command::FlagsWithInvalidValue@Base" 0.0.1
+ (c++)"typeinfo for biometry::util::cli::Command@Base" 0.0.1
+ (c++)"typeinfo for biometry::Daemon@Base" 0.0.1
+ (c++)"typeinfo for biometry::Device::Descriptor@Base" 0.0.1
+ (c++)"typeinfo for biometry::Device@Base" 0.0.1
+ (c++)"typeinfo for biometry::Service@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::Forwarding@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::Dispatching::Identifier@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::Dispatching::TemplateStore@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::Dispatching::Verifier@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::Dispatching@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::FingerprintReader::TemplateStore@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::FingerprintReader@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::Dummy::Identifier@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::Dummy::TemplateStore@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::Dummy::Verifier@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::Dummy::Operation<biometry::Verification>@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::Dummy::Operation<biometry::TemplateStore::Enrollment>@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::Dummy::Operation<biometry::TemplateStore::List>@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::Dummy::Operation<biometry::TemplateStore::Removal>@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::Dummy::Operation<biometry::TemplateStore::Clearance>@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::Dummy::Operation<biometry::TemplateStore::SizeQuery>@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::Dummy::Operation<biometry::Identification>@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::Dummy@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::plugin::Enumerator@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::plugin::NonVerifyingLoader@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::plugin::DirectoryEnumerator@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::plugin::ElfDescriptorLoader::NoSuchSection@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::plugin::ElfDescriptorLoader::NotAnElfObject@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::plugin::ElfDescriptorLoader::FailedToInitializeElf@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::plugin::MajorVersionVerifier::MajorVersionMismatch@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::plugin::MajorVersionVerifier@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::plugin::ElfDescriptorVerifierLoader@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::plugin::Loader@Base" 0.0.1
+ (c++)"typeinfo for biometry::devices::plugin::Verifier@Base" 0.0.1
+ (c++)"typeinfo for biometry::Verifier@Base" 0.0.1
+ (c++)"typeinfo for biometry::Operation<biometry::Verification>@Base" 0.0.1
+ (c++)"typeinfo for biometry::Operation<biometry::Identification>::Observer@Base" 0.0.1
+ (c++)"typeinfo for biometry::Operation<biometry::Identification>@Base" 0.0.1
+ (c++)"typeinfo for biometry::Operation<biometry::devices::FingerprintReader::GuidedEnrollment>@Base" 0.0.1
+ (c++)"typeinfo name for biometry::Identifier@Base" 0.0.1
+ (c++)"typeinfo name for biometry::DispatchingService@Base" 0.0.1
+ (c++)"typeinfo name for biometry::cmds::Run@Base" 0.0.1
+ (c++)"typeinfo name for biometry::cmds::Test::ConfigurationInvalid@Base" 0.0.1
+ (c++)"typeinfo name for biometry::cmds::Test::CouldNotInstiantiateDevice@Base" 0.0.1
+ (c++)"typeinfo name for biometry::cmds::Test@Base" 0.0.1
+ (c++)"typeinfo name for biometry::cmds::Config@Base" 0.0.1
+ (c++)"typeinfo name for biometry::dbus::stub::Service@Base" 0.0.1
+ (c++)"typeinfo name for biometry::dbus::skeleton::Device@Base" 0.0.1
+ (c++)"typeinfo name for biometry::dbus::skeleton::Service@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::Dispatcher@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::NotReachable@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::Configuration::Node@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::Configuration@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::PropertyStore@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::DynamicLibrary::NoSuchSymbol@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::DynamicLibrary::OpaqueTypeIsEmpty@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::DynamicLibrary::Api::Error@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::DynamicLibrary::Api@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::DynamicLibrary@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::AndroidPropertyStore@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::ConfigurationBuilder@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::JsonConfigurationBuilder@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>::IfStreamer@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>::RefStreamer@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>::Streamer@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::cli::TypedReferenceFlag<biometry::User>@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::cli::TypedReferenceFlag<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::cli::TypedReferenceFlag<unsigned int>@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::cli::CommandWithSubcommands@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::cli::CommandWithFlagsAndAction@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::cli::OptionalTypedReferenceFlag<biometry::cmds::Config::Flag>@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::cli::Flag@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::cli::Command::FlagsMissing@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::cli::Command::FlagsWithInvalidValue@Base" 0.0.1
+ (c++)"typeinfo name for biometry::util::cli::Command@Base" 0.0.1
+ (c++)"typeinfo name for biometry::Daemon@Base" 0.0.1
+ (c++)"typeinfo name for biometry::Device::Descriptor@Base" 0.0.1
+ (c++)"typeinfo name for biometry::Device@Base" 0.0.1
+ (c++)"typeinfo name for biometry::Service@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::Forwarding@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::Dispatching::Identifier@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::Dispatching::TemplateStore@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::Dispatching::Verifier@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::Dispatching@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::FingerprintReader::TemplateStore@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::FingerprintReader@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::Dummy::Identifier@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::Dummy::TemplateStore@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::Dummy::Verifier@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::Dummy::Operation<biometry::Verification>@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::Dummy::Operation<biometry::TemplateStore::Enrollment>@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::Dummy::Operation<biometry::TemplateStore::List>@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::Dummy::Operation<biometry::TemplateStore::Removal>@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::Dummy::Operation<biometry::TemplateStore::Clearance>@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::Dummy::Operation<biometry::TemplateStore::SizeQuery>@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::Dummy::Operation<biometry::Identification>@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::Dummy@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::plugin::Enumerator@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::plugin::NonVerifyingLoader@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::plugin::DirectoryEnumerator@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::plugin::ElfDescriptorLoader::NoSuchSection@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::plugin::ElfDescriptorLoader::NotAnElfObject@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::plugin::ElfDescriptorLoader::FailedToInitializeElf@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::plugin::MajorVersionVerifier::MajorVersionMismatch@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::plugin::MajorVersionVerifier@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::plugin::ElfDescriptorVerifierLoader@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::plugin::Loader@Base" 0.0.1
+ (c++)"typeinfo name for biometry::devices::plugin::Verifier@Base" 0.0.1
+ (c++)"typeinfo name for biometry::Verifier@Base" 0.0.1
+ (c++)"typeinfo name for biometry::Operation<biometry::Verification>@Base" 0.0.1
+ (c++)"typeinfo name for biometry::Operation<biometry::Identification>::Observer@Base" 0.0.1
+ (c++)"typeinfo name for biometry::Operation<biometry::Identification>@Base" 0.0.1
+ (c++)"typeinfo name for biometry::Operation<biometry::devices::FingerprintReader::GuidedEnrollment>@Base" 0.0.1
+ (c++)"vtable for biometry::Identifier@Base" 0.0.1
+ (c++)"vtable for biometry::DispatchingService@Base" 0.0.1
+ (c++)"vtable for biometry::cmds::Run@Base" 0.0.1
+ (c++)"vtable for biometry::cmds::Test::ConfigurationInvalid@Base" 0.0.1
+ (c++)"vtable for biometry::cmds::Test::CouldNotInstiantiateDevice@Base" 0.0.1
+ (c++)"vtable for biometry::cmds::Test@Base" 0.0.1
+ (c++)"vtable for biometry::cmds::Config@Base" 0.0.1
+ (c++)"vtable for biometry::dbus::stub::Service@Base" 0.0.1
+ (c++)"vtable for biometry::dbus::skeleton::Device@Base" 0.0.1
+ (c++)"vtable for biometry::dbus::skeleton::Service@Base" 0.0.1
+ (c++)"vtable for biometry::util::Dispatcher@Base" 0.0.1
+ (c++)"vtable for biometry::util::NotReachable@Base" 0.0.1
+ (c++)"vtable for biometry::util::Configuration::Node@Base" 0.0.1
+ (c++)"vtable for biometry::util::Configuration@Base" 0.0.1
+ (c++)"vtable for biometry::util::PropertyStore@Base" 0.0.1
+ (c++)"vtable for biometry::util::DynamicLibrary::NoSuchSymbol@Base" 0.0.1
+ (c++)"vtable for biometry::util::DynamicLibrary::OpaqueTypeIsEmpty@Base" 0.0.1
+ (c++)"vtable for biometry::util::DynamicLibrary::Api::Error@Base" 0.0.1
+ (c++)"vtable for biometry::util::DynamicLibrary::Api@Base" 0.0.1
+ (c++)"vtable for biometry::util::DynamicLibrary@Base" 0.0.1
+ (c++)"vtable for biometry::util::AndroidPropertyStore@Base" 0.0.1
+ (c++)"vtable for biometry::util::ConfigurationBuilder@Base" 0.0.1
+ (c++)"vtable for biometry::util::JsonConfigurationBuilder@Base" 0.0.1
+ (c++)"vtable for biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>::IfStreamer@Base" 0.0.1
+ (c++)"vtable for biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>::RefStreamer@Base" 0.0.1
+ (c++)"vtable for biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>::Streamer@Base" 0.0.1
+ (c++)"vtable for biometry::util::StreamingConfigurationBuilder<biometry::util::JsonConfigurationBuilder>@Base" 0.0.1
+ (c++)"vtable for biometry::util::cli::TypedReferenceFlag<biometry::User>@Base" 0.0.1
+ (c++)"vtable for biometry::util::cli::TypedReferenceFlag<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >@Base" 0.0.1
+ (c++)"vtable for biometry::util::cli::TypedReferenceFlag<unsigned int>@Base" 0.0.1
+ (c++)"vtable for biometry::util::cli::CommandWithSubcommands@Base" 0.0.1
+ (c++)"vtable for biometry::util::cli::CommandWithFlagsAndAction@Base" 0.0.1
+ (c++)"vtable for biometry::util::cli::OptionalTypedReferenceFlag<biometry::cmds::Config::Flag>@Base" 0.0.1
+ (c++)"vtable for biometry::util::cli::Flag@Base" 0.0.1
+ (c++)"vtable for biometry::util::cli::Command::FlagsMissing@Base" 0.0.1
+ (c++)"vtable for biometry::util::cli::Command::FlagsWithInvalidValue@Base" 0.0.1
+ (c++)"vtable for biometry::util::cli::Command@Base" 0.0.1
+ (c++)"vtable for biometry::Daemon@Base" 0.0.1
+ (c++)"vtable for biometry::Device::Descriptor@Base" 0.0.1
+ (c++)"vtable for biometry::Device@Base" 0.0.1
+ (c++)"vtable for biometry::Service@Base" 0.0.1
+ (c++)"vtable for biometry::devices::Forwarding@Base" 0.0.1
+ (c++)"vtable for biometry::devices::Dispatching::Identifier@Base" 0.0.1
+ (c++)"vtable for biometry::devices::Dispatching::TemplateStore@Base" 0.0.1
+ (c++)"vtable for biometry::devices::Dispatching::Verifier@Base" 0.0.1
+ (c++)"vtable for biometry::devices::Dispatching@Base" 0.0.1
+ (c++)"vtable for biometry::devices::FingerprintReader::TemplateStore@Base" 0.0.1
+ (c++)"vtable for biometry::devices::FingerprintReader@Base" 0.0.1
+ (c++)"vtable for biometry::devices::Dummy::Identifier@Base" 0.0.1
+ (c++)"vtable for biometry::devices::Dummy::TemplateStore@Base" 0.0.1
+ (c++)"vtable for biometry::devices::Dummy::Verifier@Base" 0.0.1
+ (c++)"vtable for biometry::devices::Dummy::Operation<biometry::Verification>@Base" 0.0.1
+ (c++)"vtable for biometry::devices::Dummy::Operation<biometry::TemplateStore::Enrollment>@Base" 0.0.1
+ (c++)"vtable for biometry::devices::Dummy::Operation<biometry::TemplateStore::List>@Base" 0.0.1
+ (c++)"vtable for biometry::devices::Dummy::Operation<biometry::TemplateStore::Removal>@Base" 0.0.1
+ (c++)"vtable for biometry::devices::Dummy::Operation<biometry::TemplateStore::Clearance>@Base" 0.0.1
+ (c++)"vtable for biometry::devices::Dummy::Operation<biometry::TemplateStore::SizeQuery>@Base" 0.0.1
+ (c++)"vtable for biometry::devices::Dummy::Operation<biometry::Identification>@Base" 0.0.1
+ (c++)"vtable for biometry::devices::Dummy@Base" 0.0.1
+ (c++)"vtable for biometry::devices::plugin::Enumerator@Base" 0.0.1
+ (c++)"vtable for biometry::devices::plugin::NonVerifyingLoader@Base" 0.0.1
+ (c++)"vtable for biometry::devices::plugin::DirectoryEnumerator@Base" 0.0.1
+ (c++)"vtable for biometry::devices::plugin::ElfDescriptorLoader::NoSuchSection@Base" 0.0.1
+ (c++)"vtable for biometry::devices::plugin::ElfDescriptorLoader::NotAnElfObject@Base" 0.0.1
+ (c++)"vtable for biometry::devices::plugin::ElfDescriptorLoader::FailedToInitializeElf@Base" 0.0.1
+ (c++)"vtable for biometry::devices::plugin::MajorVersionVerifier::MajorVersionMismatch@Base" 0.0.1
+ (c++)"vtable for biometry::devices::plugin::MajorVersionVerifier@Base" 0.0.1
+ (c++)"vtable for biometry::devices::plugin::ElfDescriptorVerifierLoader@Base" 0.0.1
+ (c++)"vtable for biometry::devices::plugin::Loader@Base" 0.0.1
+ (c++)"vtable for biometry::devices::plugin::Verifier@Base" 0.0.1
+ (c++)"vtable for biometry::Verifier@Base" 0.0.1
+ (c++)"vtable for biometry::Operation<biometry::Verification>@Base" 0.0.1
+ (c++)"vtable for biometry::Operation<biometry::Identification>::Observer@Base" 0.0.1
+ (c++)"vtable for biometry::Operation<biometry::Identification>@Base" 0.0.1
+ (c++)"vtable for biometry::Operation<biometry::devices::FingerprintReader::GuidedEnrollment>@Base" 0.0.1
