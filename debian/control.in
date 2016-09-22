@@ -66,6 +66,7 @@ Section: devel
 Architecture: any
 Depends: libbiometryd@BIOMETRYD_SOVERSION@ (= ${binary:Version}),
          ${misc:Depends},
+         ${shlibs:Depends},
 Description: biometryd mediates/multiplexes to biometric devices - daemon/helper binaries
  biometryd mediates and multiplexes access to biometric devices present on the system,
  enabling applications and system components to leverage them for identification and verification
@@ -78,6 +79,7 @@ Section: devel
 Architecture: any
 Depends: libbiometryd@BIOMETRYD_SOVERSION@ (= ${binary:Version}),
          ${misc:Depends},
+         ${shlibs:Depends},
 Description: biometryd mediates/multiplexes to biometric devices - QML bindings
  biometryd mediates and multiplexes access to biometric devices present on the system,
  enabling applications and system components to leverage them for identification and verification
