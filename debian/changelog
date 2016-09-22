@@ -1,3 +1,22 @@
+biometryd (0.0.1+16.10.20160628-0ubuntu4) yakkety; urgency=medium
+
+  * Skip qml test on powerpc, segfaults. LP: #1606927
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Thu, 18 Aug 2016 15:44:55 +0100
+
+biometryd (0.0.1+16.10.20160628-0ubuntu3) yakkety; urgency=medium
+
+  * Cast enum to int, to use in another enum. Fixes FTBFS with gcc6.
+  * Rebuild for boost soname change.
+
+ -- Dimitri John Ledkov <xnox@ubuntu.com>  Thu, 18 Aug 2016 11:13:07 +0100
+
+biometryd (0.0.1+16.10.20160628-0ubuntu2) yakkety; urgency=medium
+
+  * No-change rebuild for boost soname change.
+
+ -- Matthias Klose <doko@ubuntu.com>  Thu, 04 Aug 2016 08:11:16 +0000
+
 biometryd (0.0.1+16.10.20160628-0ubuntu1) yakkety; urgency=medium
 
   * Add an initial snapcraft.yaml setup for biometryd.

@@ -37,7 +37,7 @@ Homepage: https://launchpad.net/biometryd
 # upstream branch
 Vcs-Bzr: lp:biometryd
 
-Package: libbiometryd0
+Package: libbiometryd1
 Architecture: any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends},
@@ -56,7 +56,7 @@ Section: libdevel
 Architecture: any
 Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends},
-Depends: libbiometryd0 (= ${binary:Version}),
+Depends: libbiometryd1 (= ${binary:Version}),
          ${misc:Depends},
 Description: biometryd mediates/multiplexes to biometric devices - runtime library 
  biometryd mediates and multiplexes access to biometric devices present on the system,
@@ -69,7 +69,7 @@ Description: biometryd mediates/multiplexes to biometric devices - runtime libra
 Package: biometryd-bin
 Section: devel
 Architecture: any
-Depends: libbiometryd0 (= ${binary:Version}),
+Depends: libbiometryd1 (= ${binary:Version}),
          ${misc:Depends},
 Description: biometryd mediates/multiplexes to biometric devices - daemon/helper binaries
  biometryd mediates and multiplexes access to biometric devices present on the system,
@@ -81,7 +81,7 @@ Description: biometryd mediates/multiplexes to biometric devices - daemon/helper
 Package: qml-module-biometryd
 Section: devel
 Architecture: any
-Depends: libbiometryd0 (= ${binary:Version}),
+Depends: libbiometryd1 (= ${binary:Version}),
          ${misc:Depends},
 Description: biometryd mediates/multiplexes to biometric devices - QML bindings
  biometryd mediates and multiplexes access to biometric devices present on the system,

@@ -24,7 +24,7 @@ export XDG_DATA_HOME=/tmp
 	dh $@ --fail-missing
 
 override_dh_auto_configure:
-	dh_auto_configure -- -DBIOMETRYD_VERSION_MAJOR=$(major) -DBIOMETRYD_VERSION_MINOR=$(minor) -DBIOMETRYD_VERSION_PATCH=$(patch)
+	dh_auto_configure -- -DBIOMETRYD_VERSION_MAJOR=$(major) -DBIOMETRYD_VERSION_MINOR=$(minor) -DBIOMETRYD_VERSION_PATCH=$(patch) -DDEB_TARGET_ARCH=$(DEB_TARGET_ARCH)
 
 override_dh_auto_clean:
 	/bin/sh $(CURDIR)/debian/gen-debian-files.sh $(CURDIR)/debian

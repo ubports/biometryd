@@ -75,6 +75,8 @@ BIOMETRYD_ADD_TEST(test_cmds_config cmds/test_config.cpp)
 BIOMETRYD_ADD_TEST(test_cmds_run cmds/test_run.cpp)
 BIOMETRYD_ADD_TEST(test_cmds_test cmds/test_test.cpp)
 
+if ("DEB_TARGET_ARCH" STREQUAL "powerpc")
+else()
 add_executable(test_qml_plugin test_qml_plugin.cpp)
 qt5_use_modules(test_qml_plugin Core Qml Quick QuickTest)
 add_test(test_qml_plugin test_qml_plugin)
@@ -84,4 +86,6 @@ file(GLOB BIOMETRYD_QML_TEST_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} tst_*.qm
 foreach (QML_FILE ${BIOMETRYD_QML_TEST_FILES})
     message(INFO  ${QML_FILE})
     configure_file(${QML_FILE} ${QML_FILE} COPYONLY)
-endforeach(QML_FILE)
+  endforeach(QML_FILE)
+endif()
+

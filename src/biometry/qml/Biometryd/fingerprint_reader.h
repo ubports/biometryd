@@ -44,15 +44,15 @@ public:
     /// @brief Direction enumerates all known direction hints.
     enum class Direction
     {
-        NotAvailable    = biometry::devices::FingerprintReader::Direction::not_available,
-        SouthWest       = biometry::devices::FingerprintReader::Direction::south_west,
-        South           = biometry::devices::FingerprintReader::Direction::south,
-        SouthEast       = biometry::devices::FingerprintReader::Direction::south_east,
-        NorthWest       = biometry::devices::FingerprintReader::Direction::north_west,
-        North           = biometry::devices::FingerprintReader::Direction::north,
-        NorthEast       = biometry::devices::FingerprintReader::Direction::north_east,
-        East            = biometry::devices::FingerprintReader::Direction::east,
-        West            = biometry::devices::FingerprintReader::Direction::west
+        NotAvailable    = int(biometry::devices::FingerprintReader::Direction::not_available),
+	SouthWest       = int(biometry::devices::FingerprintReader::Direction::south_west),
+	South           = int(biometry::devices::FingerprintReader::Direction::south),
+        SouthEast       = int(biometry::devices::FingerprintReader::Direction::south_east),
+        NorthWest       = int(biometry::devices::FingerprintReader::Direction::north_west),
+        North           = int(biometry::devices::FingerprintReader::Direction::north),
+        NorthEast       = int(biometry::devices::FingerprintReader::Direction::north_east),
+        East            = int(biometry::devices::FingerprintReader::Direction::east),
+	    West            = int(biometry::devices::FingerprintReader::Direction::west)
     };
 
     /// @brief FingerprintReader initializes a new instance with the given parent.
