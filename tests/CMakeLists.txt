@@ -6,9 +6,7 @@ find_package(Qt5QuickTest 5.4 REQUIRED)
 configure_file(config.cpp.in config.cpp)
 include_directories(.)
 # Build with system gmock and embedded gtest
-set (GMOCK_INCLUDE_DIR "/usr/include/gmock/include" CACHE PATH "gmock source include directory")
-set (GMOCK_SOURCE_DIR "/usr/src/gmock" CACHE PATH "gmock source directory")
-set (GTEST_INCLUDE_DIR "${GMOCK_SOURCE_DIR}/gtest/include" CACHE PATH "gtest source include directory")
+find_package(GMock)
 
 add_subdirectory(${GMOCK_SOURCE_DIR} "${CMAKE_CURRENT_BINARY_DIR}/gmock")
 
@@ -38,10 +36,8 @@ macro(BIOMETRYD_ADD_TEST test_name src)
 
     ${ARGN}
 
-    gmock
-
-    gtest
-    gtest_main)
+    ${GMOCK_LIBRARIES}
+    ${GTEST_BOTH_LIBRARIES})
 
   add_test(${test_name} ${CMAKE_CURRENT_BINARY_DIR}/${test_name} --gtest_filter=*-*requires*)
   set_tests_properties(${test_name} PROPERTIES ENVIRONMENT "BIOMETRYD_DBUS_SKELETON_IS_RUNNING_UNDER_TESTING=1")
