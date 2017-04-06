@@ -8,8 +8,6 @@ include_directories(.)
 # Build with system gmock and embedded gtest
 find_package(GMock)
 
-add_subdirectory(${GMOCK_SOURCE_DIR} "${CMAKE_CURRENT_BINARY_DIR}/gmock")
-
 # Ensure that we have a ready-made fixture maintaining a private bus instance
 # readily available in unit- and integration tests.
 add_definitions(-DCORE_DBUS_ENABLE_GOOGLE_TEST_FIXTURE)
