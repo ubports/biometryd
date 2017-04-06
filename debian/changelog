@@ -1,3 +1,10 @@
+biometryd (0.0.1+17.04.20170406.2-0ubuntu1) zesty; urgency=medium
+
+  [ Łukasz 'sil2100' Zemczak ]
+  * Switch to using cmake-extras for gmock and gtest. (LP: #1680153)
+
+ -- Łukasz Zemczak <lukasz.zemczak@canonical.com>  Thu, 06 Apr 2017 16:41:56 +0000
+
 biometryd (0.0.1+16.10.20160922.3-0ubuntu1) yakkety; urgency=medium
 
   * Added shlibs:Depends

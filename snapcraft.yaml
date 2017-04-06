@@ -1,5 +1,5 @@
 name: biometryd
-version: 0.0.1
+version: 0.0.1+17.04.20170406.2-0ubuntu1
 confinement: devmode
 summary: biometryd mediates/multiplexes to biometric devices
 description: biometryd mediates/multiplexes access to biometric devices
