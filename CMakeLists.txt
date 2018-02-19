@@ -70,8 +70,7 @@ include_directories(
     ${SQLITE3_INCLUDE_DIRS})
 
 add_subdirectory(data)
-add_subdirectory(doc)  
+add_subdirectory(doc)
 add_subdirectory(include)
 add_subdirectory(src)
-add_subdirectory(tests)
-
+#add_subdirectory(tests)
