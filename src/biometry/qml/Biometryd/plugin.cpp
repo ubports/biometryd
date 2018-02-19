@@ -22,6 +22,7 @@
 #include <biometry/user.h>
 #include <biometry/version.h>
 #include <biometry/devices/fingerprint_reader.h>
+#include <biometry/geometry.h>
 
 #include <biometry/dbus/service.h>
 
@@ -185,8 +186,9 @@ struct Enrollment : public biometry::Operation<biometry::TemplateStore::Enrollme
                 hints.is_main_cluster_identified = i > 85;
                 hints.is_finger_present = i % 15;
                 hints.suggested_next_direction = static_cast<biometry::devices::FingerprintReader::Direction>(i % 9);
-                hints.masks = { biometry::Rectangle{biometry::Point{10/100.f, 10/100.f}, biometry::Point{50/100.f, 50/100.f}},
+                std::vector<biometry::Rectangle> masks = { biometry::Rectangle{biometry::Point{10/100.f, 10/100.f}, biometry::Point{50/100.f, 50/100.f}},
                                 biometry::Rectangle{biometry::Point{50/100.f, 50/100.f}, biometry::Point{90/100.f, 90/100.f}} };
+                hints.masks = masks;
 
                 observer->on_progress(biometry::Progress{biometry::Percent::from_raw_value(i/100.f), hints.to_dictionary()});
                 std::this_thread::sleep_for(std::chrono::milliseconds{50});
