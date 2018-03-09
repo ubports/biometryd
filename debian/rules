@@ -17,7 +17,7 @@ patch=$(shell echo $(full_version) | cut -d'.' -f3)
 export XDG_DATA_HOME=/tmp
 
 %:
-	dh $@ --fail-missing
+	dh $@ --parallel --fail-missing
 
 override_dh_auto_configure:
 	dh_auto_configure -- -DBIOMETRYD_VERSION_MAJOR=$(major) -DBIOMETRYD_VERSION_MINOR=$(minor) -DBIOMETRYD_VERSION_PATCH=$(patch) -DDEB_TARGET_ARCH=$(DEB_TARGET_ARCH)
