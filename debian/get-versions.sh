@@ -47,16 +47,7 @@ minor=$(echo $full_version | cut -d'.' -f2)
 micro=$(echo $full_version | cut -d'.' -f3)
 major_minor="${major}.${minor}"
 
-vivid_full_version=$(cat "${dir}"/VERSION.vivid)
-vivid_major=$(echo $vivid_full_version | cut -d'.' -f1)
-vivid_soversion=$vivid_major
-
-if [ "$distro" = "vivid" ]
-then
-    soversion=${vivid_soversion}
-else
-    soversion="${major}"
-fi
+soversion="${major}"
 [ -n $soversion ]
 
 echo ${full_version} >${output_dir}/libbiometryd.full-version
@@ -65,4 +56,4 @@ echo ${minor} >${output_dir}/libbiometryd.minor-version
 echo ${micro} >${output_dir}/libbiometryd.micro-version
 echo ${major_minor} >${output_dir}/libbiometryd.major-minor-version
 echo ${soversion} >${output_dir}/libbiometryd.soversion
-echo ${vivid_soversion} >${output_dir}/libbiometryd.vivid-soversion
+echo ${soversion} >${output_dir}/libbiometryd.vivid-soversion
