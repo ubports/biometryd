@@ -7,11 +7,7 @@ include /usr/share/dpkg/default.mk
 
 distro=$(shell lsb_release -c -s)
 
-ifeq ($(distro),vivid)
-	full_version=$(shell cat $(CURDIR)/debian/VERSION.vivid)
-else
-	full_version=$(shell cat $(CURDIR)/debian/VERSION)
-endif
+full_version=$(shell cat $(CURDIR)/debian/VERSION)
 
 major=$(shell echo $(full_version) | cut -d'.' -f1)
 minor=$(shell echo $(full_version) | cut -d'.' -f2)
