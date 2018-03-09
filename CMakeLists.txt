@@ -18,15 +18,9 @@ if (NOT DEFINED BIOMETRYD_VERSION_MAJOR)
   #   - other distros
   #   - errors
   # we define the version to be 0.0.1
-  if (${DISTRO_CODENAME} STREQUAL "vivid")
-    set(BIOMETRYD_VERSION_MAJOR 0)
-    set(BIOMETRYD_VERSION_MINOR 0)
-    set(BIOMETRYD_VERSION_PATCH 1)
-  else ()
-    set(BIOMETRYD_VERSION_MAJOR 1)
-    set(BIOMETRYD_VERSION_MINOR 0)
-    set(BIOMETRYD_VERSION_PATCH 1)
-  endif()
+  set(BIOMETRYD_VERSION_MAJOR 0)
+  set(BIOMETRYD_VERSION_MINOR 0)
+  set(BIOMETRYD_VERSION_PATCH 1)
 endif()
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wall -pedantic -Wextra -fPIC -fvisibility=hidden -pthread")
