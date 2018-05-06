@@ -16,6 +16,10 @@ patch=$(shell echo $(full_version) | cut -d'.' -f3)
 # The home directory of user buildd does not exist on the builders
 export XDG_DATA_HOME=/tmp
 
+# Force use for 4.9 toolchain since needed to keep abi with the plugins
+export CC=$(DEB_HOST_GNU_TYPE)-gcc-4.9
+export CXX=$(DEB_HOST_GNU_TYPE)-g++-4.9
+
 %:
 	dh $@ --parallel --fail-missing
 

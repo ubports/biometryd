@@ -4,6 +4,7 @@ Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 Build-Depends: cmake,
                debhelper (>= 9),
                doxygen,
+               g++-4.9,
                google-mock,
                graphviz,
                libapparmor-dev,
