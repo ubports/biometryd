@@ -29,6 +29,10 @@ if (NOT DEFINED BIOMETRYD_VERSION_MAJOR)
   endif()
 endif()
 
+# To be able to load the Meizu fingerprint plug-in binary, we need to set
+# this flag to tell gcc to work with the old C++11 ABI.
+add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
+
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wall -pedantic -Wextra -fPIC -fvisibility=hidden -pthread")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Werror -Wall -fno-strict-aliasing -fvisibility=hidden -fvisibility-inlines-hidden -pedantic -Wextra -fPIC -pthread")
 set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-undefined")
