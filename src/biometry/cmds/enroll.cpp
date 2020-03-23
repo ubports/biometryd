@@ -39,7 +39,6 @@ biometry::cmds::Enroll::Enroll()
       user(biometry::User::current())
 {
     flag(cli::make_flag(cli::Name{"device"}, cli::Description{"The device to enroll to"}, device));
-    flag(cli::make_flag(cli::Name{"device"}, cli::Description{"The device to enroll to"}, device));
     flag(cli::make_flag(cli::Name{"user"}, cli::Description{"The user to enroll for"}, device));
 
     action([this](const cli::Command::Context& ctxt)
