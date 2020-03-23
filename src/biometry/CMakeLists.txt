@@ -11,7 +11,7 @@ add_library(
 
   application.cpp
   daemon.h
-  daemon.cpp  
+  daemon.cpp
   device_registrar.h
   device_registrar.cpp
   device_registry.h
@@ -28,7 +28,7 @@ add_library(
   user.cpp
   variant.cpp
   version.cpp
-  
+
   "${CMAKE_CURRENT_BINARY_DIR}/daemon_configuration.cpp"
 
   cmds/config.h
@@ -76,6 +76,8 @@ add_library(
   dbus/skeleton/observer.h
   dbus/skeleton/operation.h
 
+  devices/android.h
+  devices/android.cpp
   devices/dispatching.h
   devices/dispatching.cpp
   devices/dummy.h
