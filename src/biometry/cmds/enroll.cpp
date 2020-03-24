@@ -59,7 +59,7 @@ biometry::cmds::Enroll::Enroll()
         };
 
         auto descriptor = biometry::device_registry().at(device);
-        auto device = descriptor->create(builder.build_configuration());
+        auto device = descriptor->create({});
 
         auto op = device->template_store().enroll(biometry::Application::system(), user);
 
