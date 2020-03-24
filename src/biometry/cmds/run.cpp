@@ -84,7 +84,7 @@ biometry::Device::Id biometry::cmds::Run::ConfigurationOracle::make_an_educated_
         throw std::runtime_error{"Could not identify device"};
 
     if (device_id_lut().count(value) == 0)
-        throw std::runtime_error{"Unknown device: " + value};
+        return "android";
 
     return device_id_lut().at(value);
 }
