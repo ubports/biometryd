@@ -58,7 +58,7 @@ biometry::cmds::Identify::Identify()
         };
 
         auto descriptor = biometry::device_registry().at(device);
-        auto device = descriptor->create(builder.build_configuration());
+        auto device = descriptor->create({});
 
         auto op = device->identifier().identify_user(biometry::Application::system(), biometry::Reason{"requested by cli"});
 
