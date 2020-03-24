@@ -40,6 +40,7 @@ biometry::cmds::Enroll::Enroll()
 {
     flag(cli::make_flag(cli::Name{"device"}, cli::Description{"The device to enroll to"}, device));
     flag(cli::make_flag(cli::Name{"user"}, cli::Description{"The user to enroll for"}, device));
+    flag(cli::make_flag(cli::Name{"config"}, cli::Description{"The daemon configuration"}, config));
 
     action([this](const cli::Command::Context& ctxt)
     {
