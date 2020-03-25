@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Canonical, Ltd.
+ * Copyright (C) 2020 Canonical, Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Authored by: Thomas Voß <thomas.voss@canonical.com>
+ * Authored by: Erfan Abdi <erfangplus@gmail.com>
  *
  */
 
@@ -25,6 +25,8 @@
 #include <biometry/identifier.h>
 #include <biometry/template_store.h>
 #include <biometry/verifier.h>
+
+#include <biometry/hardware/biometry.h>
 
 namespace biometry
 {
@@ -39,33 +41,48 @@ public:
     class TemplateStore : public biometry::TemplateStore
     {
     public:
+        TemplateStore(UHardwareBiometry hybris_fp_instance);
+
         // From biometry::TemplateStore.
         biometry::Operation<biometry::TemplateStore::SizeQuery>::Ptr size(const biometry::Application& app, const biometry::User& user) override;
         biometry::Operation<biometry::TemplateStore::List>::Ptr list(const biometry::Application& app, const biometry::User& user) override;
         biometry::Operation<biometry::TemplateStore::Enrollment>::Ptr enroll(const biometry::Application& app, const biometry::User& user) override;
         biometry::Operation<biometry::TemplateStore::Removal>::Ptr remove(const biometry::Application& app, const biometry::User& user, biometry::TemplateStore::TemplateId id) override;
         biometry::Operation<biometry::TemplateStore::Clearance>::Ptr clear(const biometry::Application& app, const biometry::User& user) override;
+
+    private:
+        UHardwareBiometry hybris_fp_instance;
     };
 
     class Identifier : public biometry::Identifier
     {
     public:
+        Identifier(UHardwareBiometry hybris_fp_instance);
+
         // From biometry::Identifier.
         biometry::Operation<biometry::Identification>::Ptr identify_user(const biometry::Application& app, const biometry::Reason& reason) override;
+
+    private:
+        UHardwareBiometry hybris_fp_instance;
     };
 
     class Verifier : public biometry::Verifier
     {
     public:
+        Verifier(UHardwareBiometry hybris_fp_instance);
+
         // From biometry::Identifier.
         Operation<Verification>::Ptr verify_user(const Application& app, const User& user, const Reason& reason) override;
+
+    private:
+        UHardwareBiometry hybris_fp_instance;
     };
 
     /// @brief make_descriptor returns a descriptor instance describing a android device;
     static Descriptor::Ptr make_descriptor();
 
     /// @brief android initializes a new instance.
-    android();
+    android(UHardwareBiometry hybris_fp_instance);
 
     // From biometry::Device
     biometry::TemplateStore& template_store() override;
