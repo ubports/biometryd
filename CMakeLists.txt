@@ -54,6 +54,16 @@ pkg_check_modules(LIBAPPARMOR libapparmor REQUIRED)
 pkg_check_modules(PROCESS_CPP process-cpp REQUIRED)
 pkg_check_modules(SQLITE3 sqlite3 REQUIRED)
 
+# Try to find hybris, and disable hybris from build if not found
+find_library(Hybris
+    NAMES hybris-common
+)
+
+if(NOT Hybris)
+    message(STATUS "Notice: libhybris-common.so not found, disabling hybris support")
+    set(ENABLE_HYBRIS_IMPLEMENTATION OFF)
+endif()
+
 include_directories(
     include
     src
