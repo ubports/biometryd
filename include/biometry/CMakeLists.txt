@@ -4,3 +4,5 @@ install(
     FILES ${CMAKE_CURRENT_BINARY_DIR}/version.h
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/biometry
 )
+
+add_subdirectory(hardware)

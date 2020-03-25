@@ -1,0 +1,9 @@
+set(
+  BIOMETRY_HARDWARE_HEADERS
+  biometry.h
+)
+
+install(
+  FILES ${BIOMETRY_HARDWARE_HEADERS}
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/biometry/hardware
+)
