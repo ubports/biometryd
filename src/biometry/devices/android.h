@@ -36,22 +36,6 @@ class BIOMETRY_DLL_PUBLIC android : public biometry::Device
 public:
     static constexpr const char* id{"android"};
 
-    template<typename T>
-    struct Operation : public biometry::Operation<T>
-    {
-        void start_with_observer(const typename biometry::Operation<T>::Observer::Ptr& observer) override
-        {
-            observer->on_started();
-            typename biometry::Operation<T>::Result result{};
-            observer->on_succeeded(result);
-        }
-
-        void cancel() override
-        {
-
-        }
-    };
-
     class TemplateStore : public biometry::TemplateStore
     {
     public:

@@ -23,39 +23,59 @@
 
 #include <biometry/device_registry.h>
 
+namespace
+{
+template<typename T>
+class androidOperation : public biometry::Operation<T>
+{
+public:
+    void start_with_observer(const typename biometry::Operation<T>::Observer::Ptr& observer) override
+    {
+        observer->on_started();
+        typename biometry::Operation<T>::Result result{};
+        observer->on_succeeded(result);
+    }
+
+    void cancel() override
+    {
+
+    }
+};
+}
+
 biometry::Operation<biometry::TemplateStore::SizeQuery>::Ptr biometry::devices::android::TemplateStore::size(const biometry::Application&, const biometry::User&)
 {
-    return std::make_shared<android::Operation<biometry::TemplateStore::SizeQuery>>();
+    return std::make_shared<androidOperation<biometry::TemplateStore::SizeQuery>>();
 }
 
 biometry::Operation<biometry::TemplateStore::List>::Ptr biometry::devices::android::TemplateStore::list(const biometry::Application&, const biometry::User&)
 {
-    return std::make_shared<android::Operation<biometry::TemplateStore::List>>();
+    return std::make_shared<androidOperation<biometry::TemplateStore::List>>();
 }
 
 biometry::Operation<biometry::TemplateStore::Enrollment>::Ptr biometry::devices::android::TemplateStore::enroll(const biometry::Application&, const biometry::User&)
 {
-    return std::make_shared<android::Operation<biometry::TemplateStore::Enrollment>>();
+    return std::make_shared<androidOperation<biometry::TemplateStore::Enrollment>>();
 }
 
 biometry::Operation<biometry::TemplateStore::Removal>::Ptr biometry::devices::android::TemplateStore::remove(const biometry::Application&, const biometry::User&, biometry::TemplateStore::TemplateId)
 {
-    return std::make_shared<android::Operation<biometry::TemplateStore::Removal>>();
+    return std::make_shared<androidOperation<biometry::TemplateStore::Removal>>();
 }
 
 biometry::Operation<biometry::TemplateStore::Clearance>::Ptr biometry::devices::android::TemplateStore::clear(const biometry::Application&, const biometry::User&)
 {
-    return std::make_shared<android::Operation<biometry::TemplateStore::Clearance>>();
+    return std::make_shared<androidOperation<biometry::TemplateStore::Clearance>>();
 }
 
 biometry::Operation<biometry::Identification>::Ptr biometry::devices::android::Identifier::identify_user(const biometry::Application&, const biometry::Reason&)
 {
-    return std::make_shared<android::Operation<biometry::Identification>>();
+    return std::make_shared<androidOperation<biometry::Identification>>();
 }
 
 biometry::Operation<biometry::Verification>::Ptr biometry::devices::android::Verifier::verify_user(const Application&, const User&, const Reason&)
 {
-    return std::make_shared<android::Operation<biometry::Verification>>();
+    return std::make_shared<androidOperation<biometry::Verification>>();
 }
 
 biometry::devices::android::android()
