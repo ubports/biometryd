@@ -121,6 +121,13 @@ add_library(
   util/streaming_configuration_builder.h
   util/synchronized.h
 
+  bridge/bridge_defs.h
+  bridge/bridge.h
+  bridge/hybris_bridge_defs.h
+
+  hardware/biometry_fp_api.cpp
+  hardware/android_hw_module.h
+
   ${BIOMETRYD_PUBLIC_HEADERS})
 
 set_target_properties(
@@ -144,7 +151,8 @@ target_link_libraries(
   ${Boost_LIBRARIES}
   ${DBUS_CPP_LIBRARIES}
   ${PROCESS_CPP_LIBRARIES}
-  ${SQLITE3_LIBRARIES})
+  ${SQLITE3_LIBRARIES}
+  ${Hybris})
 
 add_executable(
   biometryd
