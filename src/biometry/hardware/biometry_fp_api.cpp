@@ -22,18 +22,18 @@
 
 IMPLEMENT_FUNCTION0(
 UHardwareBiometry,
-u_hardware_biometry_new);
+u_hardware_biometry_new)
 
 IMPLEMENT_FUNCTION2(
 uint64_t,
 u_hardware_biometry_setNotify,
 UHardwareBiometry,
-UHardwareBiometryParams*);
+UHardwareBiometryParams*)
 
 IMPLEMENT_FUNCTION1(
 uint64_t,
 u_hardware_biometry_preEnroll,
-UHardwareBiometry);
+UHardwareBiometry)
 
 IMPLEMENT_FUNCTION4(
 UHardwareBiometryRequestStatus,
@@ -41,45 +41,45 @@ u_hardware_biometry_enroll,
 UHardwareBiometry,
 uint8_t*,
 uint32_t,
-uint32_t);
+uint32_t)
 
 IMPLEMENT_FUNCTION1(
 UHardwareBiometryRequestStatus,
 u_hardware_biometry_postEnroll,
-UHardwareBiometry);
+UHardwareBiometry)
 
 IMPLEMENT_FUNCTION1(
 uint64_t,
 u_hardware_biometry_getAuthenticatorId,
-UHardwareBiometry);
+UHardwareBiometry)
 
 IMPLEMENT_FUNCTION1(
 UHardwareBiometryRequestStatus,
 u_hardware_biometry_cancel,
-UHardwareBiometry);
+UHardwareBiometry)
 
 IMPLEMENT_FUNCTION1(
 UHardwareBiometryRequestStatus,
 u_hardware_biometry_enumerate,
-UHardwareBiometry);
+UHardwareBiometry)
 
 IMPLEMENT_FUNCTION3(
 UHardwareBiometryRequestStatus,
 u_hardware_biometry_remove,
 UHardwareBiometry,
 uint32_t,
-uint32_t);
+uint32_t)
 
 IMPLEMENT_FUNCTION3(
 UHardwareBiometryRequestStatus,
 u_hardware_biometry_setActiveGroup,
 UHardwareBiometry,
 uint32_t,
-char*);
+char*)
 
 IMPLEMENT_FUNCTION3(
 UHardwareBiometryRequestStatus,
 u_hardware_biometry_authenticate,
 UHardwareBiometry,
 uint64_t,
-uint32_t);
+uint32_t)
