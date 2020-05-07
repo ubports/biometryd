@@ -17,6 +17,8 @@
  *
  */
 
+#include <arpa/inet.h>
+
 #include <biometry/devices/android.h>
 #include <biometry/util/configuration.h>
 #include <biometry/util/not_implemented.h>
@@ -491,8 +493,8 @@ biometry::Operation<biometry::TemplateStore::Enrollment>::Ptr biometry::devices:
     authToken.challenge = u_hardware_biometry_preEnroll(hybris_fp_instance);
     authToken.user_id = 1;
     authToken.authenticator_id = 0;
-    authToken.authenticator_type = HW_AUTH_FINGERPRINT;
-    authToken.timestamp = time(NULL);
+    authToken.authenticator_type = htonl(HW_AUTH_PASSWORD);
+    authToken.timestamp = htobe64(time(NULL));
     authToken.hmac[0] = 1;
     printf("%s : hat->challange %lu\n",__func__,(unsigned long) authToken.challenge);
     printf("%s : hat->user_id %lu\n",__func__,(unsigned long) authToken.user_id);
