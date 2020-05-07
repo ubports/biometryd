@@ -252,9 +252,10 @@ private:
     static void removed_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
     static void enumerate_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
 
-    static void authenticated_cb(uint64_t, uint32_t fingerId, uint32_t, void *context)
+    static void authenticated_cb(uint64_t, uint32_t, uint32_t, void *context)
     {
-        ((androidRemovalOperation*)context)->mobserver->on_succeeded(fingerId);
+        typename biometry::Operation<T>::Result result{};
+        ((androidAuthenticateOperation*)context)->mobserver->on_succeeded(result);
     }
     static void error_cb(uint64_t, UHardwareBiometryFingerprintError error, int32_t vendorCode, void *context)
     {
