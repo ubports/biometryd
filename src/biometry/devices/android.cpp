@@ -396,7 +396,6 @@ class androidClearOperation : public biometry::Operation<biometry::TemplateStore
 public:
     typename biometry::Operation<biometry::TemplateStore::Clearance>::Observer::Ptr mobserver;
     UHardwareBiometry hybris_fp_instance;
-    int totalrem = 0;
 
     androidClearOperation(UHardwareBiometry hybris_fp_instance)
      : hybris_fp_instance{hybris_fp_instance}
@@ -429,27 +428,13 @@ private:
     static void enrollresult_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
     static void acquired_cb(uint64_t, UHardwareBiometryFingerprintAcquiredInfo, int32_t, void *){}
     static void authenticated_cb(uint64_t, uint32_t, uint32_t, void *){}
+    static void enumerate_cb(uint64_t, uint32_t, uint32_t, uint32_t remaining, void *context){}
 
-    static void removed_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *)
-    {
-        // Do anything?
-    }
-
-    static void enumerate_cb(uint64_t, uint32_t fingerId, uint32_t groupId, uint32_t remaining, void *context)
+    static void removed_cb(uint64_t, uint32_t, uint32_t, uint32_t remaining, void *context)
     {
         biometry::Void result;
-        if (remaining > 0)
-        {
-            if (((androidClearOperation*)context)->totalrem == 0)
-                ((androidClearOperation*)context)->totalrem = remaining + 1;
-            float raw_value = 1 - (remaining / ((androidClearOperation*)context)->totalrem);
-            ((androidClearOperation*)context)->mobserver->on_progress(biometry::Progress{biometry::Percent::from_raw_value(raw_value), biometry::Dictionary{}});
-            u_hardware_biometry_remove(((androidClearOperation*)context)->hybris_fp_instance, groupId, fingerId);
-        } else {
-            ((androidClearOperation*)context)->mobserver->on_progress(biometry::Progress{biometry::Percent::from_raw_value(1), biometry::Dictionary{}});
-            u_hardware_biometry_remove(((androidClearOperation*)context)->hybris_fp_instance, groupId, fingerId);
+        if (remaining == 0)
             ((androidClearOperation*)context)->mobserver->on_succeeded(result);
-        }
     }
 
     static void error_cb(uint64_t, UHardwareBiometryFingerprintError error, int32_t vendorCode, void *context)
@@ -520,7 +505,7 @@ biometry::Operation<biometry::TemplateStore::Removal>::Ptr biometry::devices::an
 
 biometry::Operation<biometry::TemplateStore::Clearance>::Ptr biometry::devices::android::TemplateStore::clear(const biometry::Application&, const biometry::User&)
 {
-    UHardwareBiometryRequestStatus ret = u_hardware_biometry_enumerate(hybris_fp_instance);
+    UHardwareBiometryRequestStatus ret = u_hardware_biometry_remove(hybris_fp_instance, 0, 0);
     if (ret == SYS_OK)
         return std::make_shared<androidClearOperation>(hybris_fp_instance);
     else
