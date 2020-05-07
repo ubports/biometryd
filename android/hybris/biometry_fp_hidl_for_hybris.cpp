@@ -24,7 +24,14 @@
 // android stuff
 #include <android/hardware/biometrics/fingerprint/2.1/IBiometricsFingerprint.h>
 
+#include <hardware/hw_auth_token.h>
+#include <android/security/IKeystoreService.h>
+#include <binder/IPCThreadState.h>
+#include <binder/IServiceManager.h>
+#include <keystore/keystore.h>
+
 #include <utils/Log.h>
+#include <utils/String16.h>
 
 using android::OK;
 using android::sp;
@@ -264,6 +271,21 @@ UHardwareBiometryRequestStatus UHardwareBiometry_::enroll(uint8_t *hat, uint32_t
     if (fpHal == nullptr) {
         ALOGE("Unable to get FP service\n");
         return 0;
+    }
+    if (hat != NULL) {
+        sp <android::IServiceManager> sm = android::defaultServiceManager();
+        sp <android::IBinder> binder = sm->getService(android::String16("android.security.keystore"));
+        sp <android::security::IKeystoreService> service = android::interface_cast<android::security::IKeystoreService>(binder);
+        if (service != NULL) {
+            int result = 0;
+            std::vector<uint8_t> auth_token_vector(hat, (hat) + sizeof(hw_auth_token_t));
+            auto binder_result = service->addAuthToken(auth_token_vector, &result);
+            if (!binder_result.isOk() || !keystore::KeyStoreServiceReturnCode(result).isOk()) {
+                ALOGE("Falure sending auth token to KeyStore");
+            }
+        } else {
+            ALOGE("Unable to communicate with KeyStore");
+        }
     }
     
     return HIDLToURequestStatus(fpHal->enroll(hat, gid, timeoutSec));
