@@ -389,9 +389,6 @@ UHardwareBiometry u_hardware_biometry_new()
 
 uint64_t u_hardware_biometry_setNotify(UHardwareBiometry self, UHardwareBiometryParams *params)
 {
-    if (hybris_fp_instance_cb != NULL)
-        return 0;
-
     UHardwareBiometryCallback u_hardware_biometry_cb = new UHardwareBiometryCallback_(params);
     hybris_fp_instance_cb = u_hardware_biometry_cb;
 
