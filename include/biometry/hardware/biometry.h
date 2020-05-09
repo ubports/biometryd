@@ -124,7 +124,7 @@ BIOMETRY_DLL_PUBLIC uint64_t
 u_hardware_biometry_preEnroll(UHardwareBiometry self);
 
 BIOMETRY_DLL_PUBLIC UHardwareBiometryRequestStatus
-u_hardware_biometry_enroll(UHardwareBiometry self, uint32_t gid, uint32_t timeoutSec);
+u_hardware_biometry_enroll(UHardwareBiometry self, uint32_t gid, uint32_t timeoutSec, uint32_t uid);
 
 BIOMETRY_DLL_PUBLIC UHardwareBiometryRequestStatus
 u_hardware_biometry_postEnroll(UHardwareBiometry self);
