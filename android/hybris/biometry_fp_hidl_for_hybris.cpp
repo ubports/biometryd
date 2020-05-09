@@ -24,6 +24,7 @@
 // android stuff
 #include <android/hardware/biometrics/fingerprint/2.1/IBiometricsFingerprint.h>
 #include <android/hardware/gatekeeper/1.0/IGatekeeper.h>
+#include <hardware/hw_auth_token.h>
 
 #include <utils/Log.h>
 
@@ -153,8 +154,14 @@ Return<void> BiometricsFingerprintClientCallback::onAcquired(uint64_t deviceId, 
 
 Return<void> BiometricsFingerprintClientCallback::onAuthenticated(uint64_t deviceId, uint32_t fingerId, uint32_t groupId, const hidl_vec<uint8_t>& token)
 {
+    uint8_t *auth_token;
+    uint32_t auth_token_len;
+    auth_token = new uint8_t[token.size()];
+    auth_token_len = token.size();
+    memcpy(auth_token, token.data(), auth_token_len);
+    hw_auth_token_t* authToken = reinterpret_cast<hw_auth_token_t*>(auth_token);
     if (hybris_fp_instance_cb && hybris_fp_instance_cb->authenticated_cb) {
-        hybris_fp_instance_cb->authenticated_cb(deviceId, fingerId, groupId, hybris_fp_instance_cb->context);
+        hybris_fp_instance_cb->authenticated_cb(deviceId, fingerId, groupId, authToken->user_id, hybris_fp_instance_cb->context);
     }
     return Void();
 }
