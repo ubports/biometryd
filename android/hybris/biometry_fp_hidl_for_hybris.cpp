@@ -58,7 +58,7 @@ struct UHardwareBiometry_
 
     uint64_t setNotify();
     uint64_t preEnroll();
-    UHardwareBiometryRequestStatus enroll(uint32_t gid, uint32_t timeoutSec);
+    UHardwareBiometryRequestStatus enroll(uint32_t gid, uint32_t timeoutSec, uint32_t uid);
     UHardwareBiometryRequestStatus postEnroll();
     uint64_t getAuthenticatorId();
     UHardwareBiometryRequestStatus cancel();
@@ -263,7 +263,7 @@ uint64_t UHardwareBiometry_::preEnroll()
     return fpHal->preEnroll();
 }
 
-UHardwareBiometryRequestStatus UHardwareBiometry_::enroll(uint32_t gid, uint32_t timeoutSec)
+UHardwareBiometryRequestStatus UHardwareBiometry_::enroll(uint32_t gid, uint32_t timeoutSec, uint32_t user_id)
 {
     if (fpHal == nullptr) {
         ALOGE("Unable to get FP service\n");
@@ -273,7 +273,6 @@ UHardwareBiometryRequestStatus UHardwareBiometry_::enroll(uint32_t gid, uint32_t
     uint32_t auth_token_len;
     int ret = 0;
     uint64_t challange = fpHal->preEnroll();
-    int user_id = 1012; // Hardcoded user id only for fingerprint
     std::string Password = "default_password";
     bool request_reenroll = false;
     sp<IGatekeeper> gk_device;
@@ -441,9 +440,9 @@ uint64_t u_hardware_biometry_preEnroll(UHardwareBiometry self)
     return self->preEnroll();
 }
 
-UHardwareBiometryRequestStatus u_hardware_biometry_enroll(UHardwareBiometry self, uint32_t gid, uint32_t timeoutSec)
+UHardwareBiometryRequestStatus u_hardware_biometry_enroll(UHardwareBiometry self, uint32_t gid, uint32_t timeoutSec, uint32_t uid)
 {
-    return self->enroll(gid, timeoutSec);
+    return self->enroll(gid, timeoutSec, uid);
 }
 
 UHardwareBiometryRequestStatus u_hardware_biometry_postEnroll(UHardwareBiometry self)
