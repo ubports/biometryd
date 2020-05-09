@@ -35,11 +35,10 @@ uint64_t,
 u_hardware_biometry_preEnroll,
 UHardwareBiometry)
 
-IMPLEMENT_FUNCTION4(
+IMPLEMENT_FUNCTION3(
 UHardwareBiometryRequestStatus,
 u_hardware_biometry_enroll,
 UHardwareBiometry,
-uint8_t*,
 uint32_t,
 uint32_t)
 

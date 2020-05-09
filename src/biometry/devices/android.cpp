@@ -93,21 +93,7 @@ public:
 
         u_hardware_biometry_setNotify(hybris_fp_instance, &fp_params);
 
-        hw_auth_token_t authToken;
-        authToken.version = HW_AUTH_TOKEN_VERSION;
-        authToken.challenge = u_hardware_biometry_preEnroll(hybris_fp_instance);
-        authToken.user_id = 1;
-        authToken.authenticator_id = 0;
-        authToken.authenticator_type = htonl(HW_AUTH_PASSWORD);
-        authToken.timestamp = htobe64(time(NULL));
-        authToken.hmac[0] = 1;
-        printf("%s : hat->challange %lu\n", __func__, (unsigned long)authToken.challenge);
-        printf("%s : hat->user_id %lu\n", __func__, (unsigned long)authToken.user_id);
-        printf("%s : hat->authenticator_id %lu\n", __func__, (unsigned long)authToken.authenticator_id);
-        printf("%s : hat->authenticator_type %d\n", __func__, authToken.authenticator_type);
-        printf("%s : hat->timestamp %lu\n", __func__, (unsigned long)authToken.timestamp);
-        printf("%s : hat size %lu\n", __func__, (unsigned long)sizeof(hw_auth_token_t));
-        UHardwareBiometryRequestStatus ret = u_hardware_biometry_enroll(hybris_fp_instance, reinterpret_cast<uint8_t *>(&authToken), 0, 60);
+        UHardwareBiometryRequestStatus ret = u_hardware_biometry_enroll(hybris_fp_instance, 0, 60);
         if (ret != SYS_OK)
             observer->on_failed(IntToStringRequestStatus(ret));
     }
