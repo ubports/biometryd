@@ -108,7 +108,7 @@ private:
     uid_t user_id;
 
     static void acquired_cb(uint64_t, UHardwareBiometryFingerprintAcquiredInfo, int32_t, void *){}
-    static void authenticated_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
+    static void authenticated_cb(uint64_t, uint32_t, uint32_t, void *){}
     static void removed_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
     static void enumerate_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
 
@@ -181,7 +181,7 @@ private:
 
     static void enrollresult_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
     static void acquired_cb(uint64_t, UHardwareBiometryFingerprintAcquiredInfo, int32_t, void *){}
-    static void authenticated_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
+    static void authenticated_cb(uint64_t, uint32_t, uint32_t, void *){}
     static void enumerate_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
 
     static void removed_cb(uint64_t, uint32_t fingerId, uint32_t, uint32_t remaining, void *context)
@@ -202,9 +202,8 @@ class androidVerificationOperation : public biometry::Operation<biometry::Verifi
 public:
     typename biometry::Operation<biometry::Verification>::Observer::Ptr mobserver;
 
-    androidVerificationOperation(UHardwareBiometry hybris_fp_instance, uid_t user_id)
-     : hybris_fp_instance{hybris_fp_instance},
-       user_id{user_id}
+    androidVerificationOperation(UHardwareBiometry hybris_fp_instance)
+     : hybris_fp_instance{hybris_fp_instance}
     {
     }
 
@@ -235,20 +234,16 @@ public:
 
 private:
     UHardwareBiometry hybris_fp_instance;
-    uid_t user_id;
 
     static void enrollresult_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
     static void acquired_cb(uint64_t, UHardwareBiometryFingerprintAcquiredInfo, int32_t, void *){}
     static void removed_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
     static void enumerate_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
 
-    static void authenticated_cb(uint64_t, uint32_t fingerId, uint32_t, uint32_t userId, void *context)
+    static void authenticated_cb(uint64_t, uint32_t fingerId, uint32_t, void *context)
     {
         if (fingerId != 0)
-            if (userId == ((androidVerificationOperation*)context)->user_id)
-                ((androidVerificationOperation*)context)->mobserver->on_succeeded(biometry::Verification::Result::verified);
-            else
-                ((androidVerificationOperation*)context)->mobserver->on_succeeded(biometry::Verification::Result::not_verified);
+            ((androidVerificationOperation*)context)->mobserver->on_succeeded(biometry::Verification::Result::verified);
         else
             ((androidVerificationOperation*)context)->mobserver->on_failed("FINGER_NOT_RECOGNIZED");
     }
@@ -303,10 +298,10 @@ private:
     static void removed_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
     static void enumerate_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
     
-    static void authenticated_cb(uint64_t, uint32_t fingerId, uint32_t, uint32_t userId, void *context)
+    static void authenticated_cb(uint64_t, uint32_t fingerId, uint32_t, void *context)
     {
         if (fingerId != 0)
-            ((androidIdentificationOperation*)context)->mobserver->on_succeeded(biometry::User(userId));
+            ((androidIdentificationOperation*)context)->mobserver->on_succeeded(biometry::User::current());
         else
             ((androidIdentificationOperation*)context)->mobserver->on_failed("FINGER_NOT_RECOGNIZED");
     }
@@ -360,7 +355,7 @@ private:
 
     static void enrollresult_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
     static void acquired_cb(uint64_t, UHardwareBiometryFingerprintAcquiredInfo, int32_t, void *){}
-    static void authenticated_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
+    static void authenticated_cb(uint64_t, uint32_t, uint32_t, void *){}
     static void removed_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
     static void enumerate_cb(uint64_t, uint32_t fingerId, uint32_t, uint32_t remaining, void *context)
     {
@@ -431,7 +426,7 @@ private:
 
     static void enrollresult_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
     static void acquired_cb(uint64_t, UHardwareBiometryFingerprintAcquiredInfo, int32_t, void *){}
-    static void authenticated_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
+    static void authenticated_cb(uint64_t, uint32_t, uint32_t, void *){}
     static void removed_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
     static void enumerate_cb(uint64_t, uint32_t fingerId, uint32_t, uint32_t remaining, void *context)
     {
@@ -498,7 +493,7 @@ private:
 
     static void enrollresult_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
     static void acquired_cb(uint64_t, UHardwareBiometryFingerprintAcquiredInfo, int32_t, void *){}
-    static void authenticated_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
+    static void authenticated_cb(uint64_t, uint32_t, uint32_t, void *){}
     static void enumerate_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
 
     static void removed_cb(uint64_t, uint32_t, uint32_t, uint32_t remaining, void *context)
@@ -564,9 +559,9 @@ biometry::devices::android::Verifier::Verifier(UHardwareBiometry hybris_fp_insta
 {
 }
 
-biometry::Operation<biometry::Verification>::Ptr biometry::devices::android::Verifier::verify_user(const biometry::Application&, const biometry::User& user, const biometry::Reason&)
+biometry::Operation<biometry::Verification>::Ptr biometry::devices::android::Verifier::verify_user(const biometry::Application&, const biometry::User&, const biometry::Reason&)
 {
-    return std::make_shared<androidVerificationOperation>(hybris_fp_instance, user.id);
+    return std::make_shared<androidVerificationOperation>(hybris_fp_instance);
 }
 
 biometry::devices::android::android(UHardwareBiometry hybris_fp_instance)
