@@ -239,9 +239,10 @@ private:
 
     static void authenticated_cb(uint64_t, uint32_t fingerId, uint32_t, void *context)
     {
-        if (fingerId != 0) {
+        if (fingerId != 0)
             ((androidVerificationOperation*)context)->mobserver->on_succeeded(biometry::Verification::Result::verified);
-        }
+        else
+            ((androidVerificationOperation*)context)->mobserver->on_failed("FINGER_NOT_RECOGNIZED");
     }
     static void error_cb(uint64_t, UHardwareBiometryFingerprintError error, int32_t vendorCode, void *context)
     {
@@ -296,9 +297,10 @@ class androidIdentificationOperation : public biometry::Operation<biometry::Iden
     
     static void authenticated_cb(uint64_t, uint32_t fingerId, uint32_t, void *context)
     {
-        if (fingerId != 0) {
+        if (fingerId != 0)
             ((androidIdentificationOperation*)context)->mobserver->on_succeeded(biometry::User::current());
-        }
+        else
+            ((androidIdentificationOperation*)context)->mobserver->on_failed("FINGER_NOT_RECOGNIZED");
     }
     static void error_cb(uint64_t, UHardwareBiometryFingerprintError error, int32_t vendorCode, void *context)
     {
