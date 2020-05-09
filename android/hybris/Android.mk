@@ -59,7 +59,8 @@ LOCAL_SHARED_LIBRARIES += \
     libhidlbase \
     libhidltransport \
     libsensor \
-    android.hardware.biometrics.fingerprint@2.1
+    android.hardware.biometrics.fingerprint@2.1 \
+    android.hardware.gatekeeper@1.0
 endif
 
 include $(BUILD_SHARED_LIBRARY)
