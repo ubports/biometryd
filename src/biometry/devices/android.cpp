@@ -374,6 +374,8 @@ private:
             ((androidListOperation*)context)->mobserver->on_progress(biometry::Progress{biometry::Percent::from_raw_value(raw_value), biometry::Dictionary{}});
             ((androidListOperation*)context)->result.push_back(fingerId);
         } else {
+            if (fingerId != 0)
+                ((androidListOperation*)context)->result.push_back(fingerId);
             ((androidListOperation*)context)->mobserver->on_progress(biometry::Progress{biometry::Percent::from_raw_value(1), biometry::Dictionary{}});
             ((androidListOperation*)context)->mobserver->on_succeeded(((androidListOperation*)context)->result);
         }
@@ -431,7 +433,7 @@ private:
     static void acquired_cb(uint64_t, UHardwareBiometryFingerprintAcquiredInfo, int32_t, void *){}
     static void authenticated_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
     static void removed_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
-    static void enumerate_cb(uint64_t, uint32_t, uint32_t, uint32_t remaining, void *context)
+    static void enumerate_cb(uint64_t, uint32_t fingerId, uint32_t, uint32_t remaining, void *context)
     {
         if (remaining > 0)
         {
@@ -440,6 +442,8 @@ private:
             float raw_value = 1 - (remaining / ((androidSizeOperation*)context)->totalrem);
             ((androidSizeOperation*)context)->mobserver->on_progress(biometry::Progress{biometry::Percent::from_raw_value(raw_value), biometry::Dictionary{}});
         } else {
+            if (((androidSizeOperation*)context)->totalrem == 0 && fingerId != 0)
+                ((androidSizeOperation*)context)->totalrem++;
             ((androidSizeOperation*)context)->mobserver->on_progress(biometry::Progress{biometry::Percent::from_raw_value(1), biometry::Dictionary{}});
             ((androidSizeOperation*)context)->mobserver->on_succeeded(((androidSizeOperation*)context)->totalrem);
         }
