@@ -299,12 +299,12 @@ private:
     static void removed_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
     static void enumerate_cb(uint64_t, uint32_t fingerId, uint32_t, uint32_t remaining, void *context)
     {
+        if (((androidListOperation*)context)->totalrem == 0)
+            ((androidListOperation*)context)->result.clear();
         if (remaining > 0)
         {
-            if (((androidListOperation*)context)->totalrem == 0) {
+            if (((androidListOperation*)context)->totalrem == 0)
                 ((androidListOperation*)context)->totalrem = remaining + 1;
-                ((androidListOperation*)context)->result.clear();
-            }
             float raw_value = 1 - ((float)remaining / ((androidListOperation*)context)->totalrem);
             ((androidListOperation*)context)->mobserver->on_progress(biometry::Progress{biometry::Percent::from_raw_value(raw_value), biometry::Dictionary{}});
             ((androidListOperation*)context)->result.push_back(fingerId);
