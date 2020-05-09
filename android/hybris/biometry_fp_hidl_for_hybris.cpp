@@ -54,7 +54,7 @@ struct UHardwareBiometry_
 
     uint64_t setNotify();
     uint64_t preEnroll();
-    UHardwareBiometryRequestStatus enroll(uint8_t *hat, uint32_t gid, uint32_t timeoutSec);
+    UHardwareBiometryRequestStatus enroll(uint32_t gid, uint32_t timeoutSec);
     UHardwareBiometryRequestStatus postEnroll();
     uint64_t getAuthenticatorId();
     UHardwareBiometryRequestStatus cancel();
@@ -259,14 +259,15 @@ uint64_t UHardwareBiometry_::preEnroll()
     return fpHal->preEnroll();
 }
 
-UHardwareBiometryRequestStatus UHardwareBiometry_::enroll(uint8_t *hat, uint32_t gid, uint32_t timeoutSec)
+UHardwareBiometryRequestStatus UHardwareBiometry_::enroll(uint32_t gid, uint32_t timeoutSec)
 {
     if (fpHal == nullptr) {
         ALOGE("Unable to get FP service\n");
         return 0;
     }
-    
-    return HIDLToURequestStatus(fpHal->enroll(hat, gid, timeoutSec));
+    //TODO: Define hat
+
+    return HIDLToURequestStatus(fpHal->enroll(new uint8_t[69], gid, timeoutSec));
 }
 
 UHardwareBiometryRequestStatus UHardwareBiometry_::postEnroll()
@@ -378,9 +379,9 @@ uint64_t u_hardware_biometry_preEnroll(UHardwareBiometry self)
     return self->preEnroll();
 }
 
-UHardwareBiometryRequestStatus u_hardware_biometry_enroll(UHardwareBiometry self, uint8_t *hat, uint32_t gid, uint32_t timeoutSec)
+UHardwareBiometryRequestStatus u_hardware_biometry_enroll(UHardwareBiometry self, uint32_t gid, uint32_t timeoutSec)
 {
-    return self->enroll(hat, gid, timeoutSec);
+    return self->enroll(gid, timeoutSec);
 }
 
 UHardwareBiometryRequestStatus u_hardware_biometry_postEnroll(UHardwareBiometry self)
