@@ -263,7 +263,7 @@ UHardwareBiometryRequestStatus UHardwareBiometry_::enroll(uint32_t gid, uint32_t
 {
     if (fpHal == nullptr) {
         ALOGE("Unable to get FP service\n");
-        return 0;
+        return SYS_UNKNOWN;
     }
     //TODO: Define hat
 
@@ -274,7 +274,7 @@ UHardwareBiometryRequestStatus UHardwareBiometry_::postEnroll()
 {
     if (fpHal == nullptr) {
         ALOGE("Unable to get FP service\n");
-        return 0;
+        return SYS_UNKNOWN;
     }
     
     return HIDLToURequestStatus(fpHal->postEnroll());
@@ -294,7 +294,7 @@ UHardwareBiometryRequestStatus UHardwareBiometry_::cancel()
 {
     if (fpHal == nullptr) {
         ALOGE("Unable to get FP service\n");
-        return 0;
+        return SYS_UNKNOWN;
     }
     
     return HIDLToURequestStatus(fpHal->cancel());
@@ -304,7 +304,7 @@ UHardwareBiometryRequestStatus UHardwareBiometry_::enumerate()
 {
     if (fpHal == nullptr) {
         ALOGE("Unable to get FP service\n");
-        return 0;
+        return SYS_UNKNOWN;
     }
     
     return HIDLToURequestStatus(fpHal->enumerate());
@@ -314,7 +314,7 @@ UHardwareBiometryRequestStatus UHardwareBiometry_::remove(uint32_t gid, uint32_t
 {
     if (fpHal == nullptr) {
         ALOGE("Unable to get FP service\n");
-        return 0;
+        return SYS_UNKNOWN;
     }
     
     return HIDLToURequestStatus(fpHal->remove(gid, fid));
@@ -324,7 +324,7 @@ UHardwareBiometryRequestStatus UHardwareBiometry_::setActiveGroup(uint32_t gid, 
 {
     if (fpHal == nullptr) {
         ALOGE("Unable to get FP service\n");
-        return 0;
+        return SYS_UNKNOWN;
     }
     
     return HIDLToURequestStatus(fpHal->setActiveGroup(gid, storePath));
@@ -334,7 +334,7 @@ UHardwareBiometryRequestStatus UHardwareBiometry_::authenticate(uint64_t operati
 {
     if (fpHal == nullptr) {
         ALOGE("Unable to get FP service\n");
-        return 0;
+        return SYS_UNKNOWN;
     }
     
     return HIDLToURequestStatus(fpHal->authenticate(operationId, gid));
