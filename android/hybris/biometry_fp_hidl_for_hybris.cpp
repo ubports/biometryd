@@ -23,6 +23,7 @@
 
 // android stuff
 #include <android/hardware/biometrics/fingerprint/2.1/IBiometricsFingerprint.h>
+#include <android/hardware/gatekeeper/1.0/IGatekeeper.h>
 
 #include <utils/Log.h>
 
@@ -36,6 +37,9 @@ using android::hardware::biometrics::fingerprint::V2_1::IBiometricsFingerprintCl
 using android::hardware::biometrics::fingerprint::V2_1::RequestStatus;
 using android::hardware::biometrics::fingerprint::V2_1::FingerprintAcquiredInfo;
 using android::hardware::biometrics::fingerprint::V2_1::FingerprintError;
+using android::hardware::gatekeeper::V1_0::IGatekeeper;
+using android::hardware::gatekeeper::V1_0::GatekeeperStatusCode;
+using android::hardware::gatekeeper::V1_0::GatekeeperResponse;
 using android::hardware::Return;
 using android::hardware::Void;
 using android::hardware::hidl_vec;
@@ -265,9 +269,67 @@ UHardwareBiometryRequestStatus UHardwareBiometry_::enroll(uint32_t gid, uint32_t
         ALOGE("Unable to get FP service\n");
         return SYS_UNKNOWN;
     }
-    //TODO: Define hat
+    uint8_t *auth_token;
+    uint32_t auth_token_len;
+    int ret = 0;
+    uint64_t challange = fpHal->preEnroll();
+    int user_id = 1012; // Hardcoded user id only for fingerprint
+    std::string Password = "default_password";
+    bool request_reenroll = false;
+    sp<IGatekeeper> gk_device;
+    gk_device = IGatekeeper::getService();
+    if (gk_device == nullptr) {
+        ALOGE("Unable to get Gatekeeper service\n");
+        return SYS_UNKNOWN;
+    }
+    hidl_vec<uint8_t> curPwdHandle;
+    hidl_vec<uint8_t> enteredPwd;
+    enteredPwd.setToExternal(const_cast<uint8_t *>((const uint8_t *)Password.c_str()), Password.size());
 
-    return HIDLToURequestStatus(fpHal->enroll(new uint8_t[69], gid, timeoutSec));
+    Return<void> hwRet =
+    gk_device->enroll(user_id, NULL,
+                      NULL,
+                      enteredPwd,
+                      [&ret, &curPwdHandle]
+                      (const GatekeeperResponse &rsp) {
+                          ret = static_cast<int>(rsp.code); // propagate errors
+                          if (rsp.code >= GatekeeperStatusCode::STATUS_OK) {
+                              curPwdHandle.setToExternal(const_cast<uint8_t *>((const uint8_t *)rsp.data.data()), rsp.data.size());
+                              ret = 0; // all success states are reported as 0
+                          } else if (rsp.code == GatekeeperStatusCode::ERROR_RETRY_TIMEOUT && rsp.timeout > 0) {
+                              ret = rsp.timeout;
+                          }
+                      }
+                      );
+    if (!hwRet.isOk()) {
+        ALOGE("Unable to Enroll on Gatekeeper\n");
+        return SYS_UNKNOWN;
+    }
+
+    hwRet =
+    gk_device->verify(user_id, challange,
+                      curPwdHandle,
+                      enteredPwd,
+                      [&ret, &request_reenroll, &auth_token, &auth_token_len]
+                      (const GatekeeperResponse &rsp) {
+                          ret = static_cast<int>(rsp.code); // propagate errors
+                          if (rsp.code >= GatekeeperStatusCode::STATUS_OK) {
+                              auth_token = new uint8_t[rsp.data.size()];
+                              auth_token_len = rsp.data.size();
+                              memcpy(auth_token, rsp.data.data(), auth_token_len);
+                              request_reenroll = (rsp.code == GatekeeperStatusCode::STATUS_REENROLL);
+                              ret = 0; // all success states are reported as 0
+                          } else if (rsp.code == GatekeeperStatusCode::ERROR_RETRY_TIMEOUT && rsp.timeout > 0) {
+                              ret = rsp.timeout;
+                          }
+                      }
+                      );
+    if (!hwRet.isOk()) {
+        ALOGE("Unable to Verify on Gatekeeper\n");
+        return SYS_UNKNOWN;
+    }
+
+    return HIDLToURequestStatus(fpHal->enroll(auth_token, gid, timeoutSec));
 }
 
 UHardwareBiometryRequestStatus UHardwareBiometry_::postEnroll()
