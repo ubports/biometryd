@@ -93,7 +93,7 @@ typedef struct UHardwareBiometryCallback_* UHardwareBiometryCallback;
 
 typedef void (*UHardwareBiometryEnrollResult)(uint64_t deviceId, uint32_t fingerId, uint32_t groupId, uint32_t remaining, void *context);
 typedef void (*UHardwareBiometryAcquired)(uint64_t deviceId, UHardwareBiometryFingerprintAcquiredInfo acquiredInfo, int32_t vendorCode, void *context);
-typedef void (*UHardwareBiometryAuthenticated)(uint64_t deviceId, uint32_t fingerId, uint32_t groupId, void *context);
+typedef void (*UHardwareBiometryAuthenticated)(uint64_t deviceId, uint32_t fingerId, uint32_t groupId, uint32_t userId, void *context);
 typedef void (*UHardwareBiometryError)(uint64_t deviceId, UHardwareBiometryFingerprintError error, int32_t vendorCode, void *context);
 typedef void (*UHardwareBiometryRemoved)(uint64_t deviceId, uint32_t fingerId, uint32_t groupId, uint32_t remaining, void *context);
 typedef void (*UHardwareBiometryEnumerate)(uint64_t deviceId, uint32_t fingerId, uint32_t groupId, uint32_t remaining, void *context);
