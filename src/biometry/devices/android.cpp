@@ -301,7 +301,7 @@ private:
     static void authenticated_cb(uint64_t, uint32_t fingerId, uint32_t, void *context)
     {
         if (fingerId != 0)
-            ((androidIdentificationOperation*)context)->mobserver->on_succeeded(biometry::User::current());
+            ((androidIdentificationOperation*)context)->mobserver->on_succeeded(biometry::User(32011));
         else
             ((androidIdentificationOperation*)context)->mobserver->on_failed("FINGER_NOT_RECOGNIZED");
     }
