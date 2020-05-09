@@ -62,9 +62,5 @@ LOCAL_SHARED_LIBRARIES += \
     android.hardware.biometrics.fingerprint@2.1
 endif
 
-LOCAL_SHARED_LIBRARIES += \
-    libkeystore_aidl \
-    libkeystore_binder
-
 include $(BUILD_SHARED_LIBRARY)
 
