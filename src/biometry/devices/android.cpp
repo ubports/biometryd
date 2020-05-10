@@ -22,6 +22,7 @@
 #include <biometry/devices/android.h>
 #include <biometry/util/configuration.h>
 #include <biometry/util/not_implemented.h>
+#include <biometry/util/property_store.h>
 #include <biometry/hardware/android_hw_auth_token.h>
 
 #include <biometry/device_registry.h>
@@ -569,7 +570,15 @@ biometry::devices::android::android(UHardwareBiometry hybris_fp_instance)
       identifier_{hybris_fp_instance},
       verifier_{hybris_fp_instance}
 {
-    UHardwareBiometryRequestStatus ret = u_hardware_biometry_setActiveGroup(hybris_fp_instance, 0, (char*)"/data/vendor_de/fpdata");
+    biometry::util::AndroidPropertyStore store;
+    UHardwareBiometryRequestStatus ret = SYS_OK;
+    std::string api_level = store.get("ro.product.first_api_level");
+    if (api_level.empty())
+        api_level = store.get("ro.build.version.sdk");
+    if (atoi(api_level.c_str()) <= 27)
+        ret = u_hardware_biometry_setActiveGroup(hybris_fp_instance, 0, (char*)"/data/system/users/0/fpdata/");
+    else
+        ret = u_hardware_biometry_setActiveGroup(hybris_fp_instance, 0, (char*)"/data/vendor_de/0/fpdata/");
     if (ret != SYS_OK)
         printf("setActiveGroup failed: %s\n", IntToStringRequestStatus(ret).c_str());
 }
