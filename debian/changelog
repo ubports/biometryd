@@ -1,3 +1,9 @@
+biometryd (0.0.3+ubports) xenial; urgency=medium
+
+  * Add Android 9 support
+
+ -- Erfan Abdi <erfangplus@gmail.com>  Sun, 10 May 2020 05:08:59 +0430
+
 biometryd (0.0.2+ubports1) xenial; urgency=medium
 
   * No change rebuild to publish sources to ubports repo
