@@ -23,7 +23,6 @@
 #include <biometry/util/configuration.h>
 #include <biometry/util/not_implemented.h>
 #include <biometry/util/property_store.h>
-#include <biometry/hardware/android_hw_auth_token.h>
 
 #include <biometry/device_registry.h>
 
