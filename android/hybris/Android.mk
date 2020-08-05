@@ -38,7 +38,8 @@ ifeq ($(IS_ANDROID_8),true)
 LOCAL_SRC_FILES += \
     biometry_fp_hidl_for_hybris.cpp
 else
-$(error "Android pre oreo not supported")
+LOCAL_SRC_FILES += \
+    biometry_fp_for_hybris.cpp
 endif
 
 LOCAL_MODULE := libbiometry_fp_api
