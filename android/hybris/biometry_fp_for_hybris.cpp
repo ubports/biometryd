@@ -18,13 +18,13 @@
 #include <biometry/hardware/biometry.h>
 
 #include <pthread.h>
-#include <string.h>
+#include <string>
 #include <unistd.h>
 
 // android stuff
+#include <hardware/hardware.h>
 #include <hardware/fingerprint.h>
 #include <hardware/gatekeeper.h>
-#include <hardware/hardware.h>
 
 #include <utils/Log.h>
 
@@ -49,7 +49,7 @@ struct UHardwareBiometry_
     UHardwareBiometryRequestStatus setActiveGroup(uint32_t gid, char *storePath);
     UHardwareBiometryRequestStatus authenticate(uint64_t operationId, uint32_t gid);
 
-    void getCbInstance();
+    UHardwareBiometryCallback getCbInstance();
     void notify(const fingerprint_msg_t *msg);
 };
 
@@ -78,8 +78,8 @@ UHardwareBiometry_::UHardwareBiometry_()
 
 UHardwareBiometry_::~UHardwareBiometry_()
 {
-    if (fpHal != nullptr) {
-        fpHal->cancel();
+    if (fp_device != nullptr) {
+        fp_device->cancel(fp_device);
     }
 }
 
@@ -110,8 +110,6 @@ UHardwareBiometryFingerprintError VendorErrorFilter(int32_t error, int32_t* vend
             return ERROR_CANCELED;
         case FINGERPRINT_ERROR_UNABLE_TO_REMOVE:
             return ERROR_UNABLE_TO_REMOVE;
-        case FINGERPRINT_ERROR_LOCKOUT:
-            return ERROR_LOCKOUT;
         default:
             if (error >= FINGERPRINT_ERROR_VENDOR_BASE) {
                 // vendor specific code.
@@ -233,8 +231,7 @@ uint64_t UHardwareBiometry_::setNotify()
         ALOGE("Unable to get FP device\n");
         return 0;
     }
-
-    return fp_device->set_notify(fp_device, UHardwareBiometry_::notify);
+    return fp_device->set_notify(fp_device, notify);
 }
 
 uint64_t UHardwareBiometry_::preEnroll()
@@ -261,18 +258,18 @@ UHardwareBiometryRequestStatus UHardwareBiometry_::enroll(uint32_t gid, uint32_t
     bool should_reenroll = false;
     gatekeeper_device_t *gk_device;
     ret = gatekeeper_device_initialize(&gk_device);
-    if (ret == nullptr) {
+    if (ret) {
         ALOGE("Unable to get Gatekeeper hal\n");
         return SYS_UNKNOWN;
     }
     uint8_t* PwdHandle;
     uint32_t PwdHandle_len;
 
-    ret = gk_device->enroll(gk_device, user_id, NULL, NULL, NULL, NULL,
+    ret = gk_device->enroll(gk_device, user_id, NULL, 0, NULL, 0,
                             (const uint8_t *)Password.c_str(), Password.size(),
                             &PwdHandle, &PwdHandle_len);
     
-    if (ret == nullptr) {
+    if (ret) {
         ALOGE("Unable to Enroll on Gatekeeper\n");
         return SYS_UNKNOWN;
     }
@@ -281,12 +278,12 @@ UHardwareBiometryRequestStatus UHardwareBiometry_::enroll(uint32_t gid, uint32_t
                             (const uint8_t *)Password.c_str(), (uint32_t)Password.size(), &auth_token,
                             &auth_token_len, &should_reenroll);
 
-    if (ret == nullptr) {
+    if (ret) {
         ALOGE("Unable to Verify on Gatekeeper\n");
         return SYS_UNKNOWN;
     }
 
-    return ErrorFilter(fp_device->enroll(fp_device, auth_token, gid, timeoutSec));
+    return ErrorFilter(fp_device->enroll(fp_device, (const hw_auth_token_t *)auth_token, gid, timeoutSec));
 }
 
 UHardwareBiometryRequestStatus UHardwareBiometry_::postEnroll()
@@ -365,8 +362,7 @@ UHardwareBiometryCallback UHardwareBiometry_::getCbInstance() {
 
 void UHardwareBiometry_::notify(const fingerprint_msg_t *msg)
 {
-    UHardwareBiometryCallback hybris_fp_instance_cb = static_cast<UHardwareBiometryCallback(
-        UHardwareBiometry_::getCbInstance());
+    UHardwareBiometryCallback hybris_fp_instance_cb = static_cast<UHardwareBiometryCallback>(UHardwareBiometry_::getCbInstance());
     const uint64_t devId = 0; // Multiple fp sensors not supported so always set 0
     switch (msg->type) {
         case FINGERPRINT_ERROR: {
@@ -409,15 +405,14 @@ void UHardwareBiometry_::notify(const fingerprint_msg_t *msg)
             }
             break;
         case FINGERPRINT_TEMPLATE_REMOVED:
-            ALOGD("onRemove(fid=%d, gid=%d, rem=%d)",
+            ALOGD("onRemove(fid=%d, gid=%d)",
                   msg->data.removed.finger.fid,
-                  msg->data.removed.finger.gid,
-                  msg->data.removed.remaining_templates);
+                  msg->data.removed.finger.gid);
             if (hybris_fp_instance_cb && hybris_fp_instance_cb->removed_cb) {
                 hybris_fp_instance_cb->removed_cb(devId,
                                                   msg->data.removed.finger.fid,
                                                   msg->data.removed.finger.gid,
-                                                  msg->data.removed.remaining_templates,
+                                                  0,
                                                   hybris_fp_instance_cb->context);
             }
             break;
