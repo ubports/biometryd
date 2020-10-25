@@ -35,6 +35,9 @@
 #include <iostream>
 #include <map>
 
+#include <iostream>
+using namespace std;
+
 namespace cli = biometry::util::cli;
 namespace po = boost::program_options;
 
@@ -53,5 +56,6 @@ biometry::Daemon::Daemon()
 
 int biometry::Daemon::run(const std::vector<std::string>& args)
 {
+    cerr << "Running biometryd daemon..." << endl;
     return cmd.run({std::cin, std::cout, args});
 }

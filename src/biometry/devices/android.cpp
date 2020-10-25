@@ -26,6 +26,10 @@
 
 #include <biometry/device_registry.h>
 
+#include <iostream>
+#include <cstdio>
+using namespace std;
+
 std::string IntToStringFingerprintError(int error, int vendorCode){
     switch(error) {
         case ERROR_NO_ERROR: return "ERROR_NO_ERROR";
@@ -122,11 +126,11 @@ private:
             ((androidEnrollOperation*)context)->mobserver->on_progress(biometry::Progress{biometry::Percent::from_raw_value(raw_value), biometry::Dictionary{}});
         } else {
             ((androidEnrollOperation*)context)->mobserver->on_progress(biometry::Progress{biometry::Percent::from_raw_value(1), biometry::Dictionary{}});
-            UHardwareBiometryRequestStatus ret = u_hardware_biometry_postEnroll(((androidEnrollOperation*)context)->hybris_fp_instance);
-            if (ret == SYS_OK)
+            //UHardwareBiometryRequestStatus ret = u_hardware_biometry_postEnroll(((androidEnrollOperation*)context)->hybris_fp_instance);
+            //if (ret == SYS_OK)
                 ((androidEnrollOperation*)context)->mobserver->on_succeeded(fingerId);
-            else
-                ((androidEnrollOperation*)context)->mobserver->on_failed(IntToStringRequestStatus(ret));
+            //else
+            //    ((androidEnrollOperation*)context)->mobserver->on_failed(IntToStringRequestStatus(ret));
         }
     }
 
@@ -197,6 +201,7 @@ private:
         ((androidRemovalOperation*)context)->mobserver->on_failed(IntToStringFingerprintError(error, vendorCode));
     }
 };
+
 class androidVerificationOperation : public biometry::Operation<biometry::Verification>
 {
 public:
@@ -255,22 +260,23 @@ private:
         ((androidVerificationOperation*)context)->mobserver->on_failed(IntToStringFingerprintError(error, vendorCode));
     }
 };
+
 class androidIdentificationOperation : public biometry::Operation<biometry::Identification>
 {
 public:
     typename biometry::Operation<biometry::Identification>::Observer::Ptr mobserver;
-    
+
     androidIdentificationOperation(UHardwareBiometry hybris_fp_instance)
     : hybris_fp_instance{hybris_fp_instance}
     {
     }
-    
+
     void start_with_observer(const typename biometry::Operation<biometry::Identification>::Observer::Ptr& observer) override
     {
         mobserver = observer;
         observer->on_started();
         UHardwareBiometryParams fp_params;
-        
+
         fp_params.enrollresult_cb = enrollresult_cb;
         fp_params.acquired_cb = acquired_cb;
         fp_params.authenticated_cb = authenticated_cb;
@@ -278,26 +284,26 @@ public:
         fp_params.removed_cb = removed_cb;
         fp_params.enumerate_cb = enumerate_cb;
         fp_params.context = this;
-        
+
         u_hardware_biometry_setNotify(hybris_fp_instance, &fp_params);
         UHardwareBiometryRequestStatus ret = u_hardware_biometry_authenticate(hybris_fp_instance, 0, 0);
         if (ret != SYS_OK)
             observer->on_failed(IntToStringRequestStatus(ret));
     }
-    
+
     void cancel() override
     {
         u_hardware_biometry_cancel(hybris_fp_instance);
     }
-    
+
 private:
     UHardwareBiometry hybris_fp_instance;
-    
+
     static void enrollresult_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
     static void acquired_cb(uint64_t, UHardwareBiometryFingerprintAcquiredInfo, int32_t, void *){}
     static void removed_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
     static void enumerate_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
-    
+
     static void authenticated_cb(uint64_t, uint32_t fingerId, uint32_t, void *context)
     {
         if (fingerId != 0)
@@ -309,10 +315,11 @@ private:
     {
         if (error == 0)
         return;
-        
+
         ((androidIdentificationOperation*)context)->mobserver->on_failed(IntToStringFingerprintError(error, vendorCode));
     }
 };
+
 class androidListOperation : public biometry::Operation<biometry::TemplateStore::List>
 {
 public:
@@ -359,21 +366,28 @@ private:
     static void removed_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
     static void enumerate_cb(uint64_t, uint32_t fingerId, uint32_t, uint32_t remaining, void *context)
     {
+        auto file = freopen( "/tmp/biometryd.log", "w", stdout );
+        cout << "List operation:" << endl;
         if (((androidListOperation*)context)->totalrem == 0)
             ((androidListOperation*)context)->result.clear();
         if (remaining > 0)
         {
-            if (((androidListOperation*)context)->totalrem == 0)
+            cout << "More than 0 fingerprints remaining..." << endl;
+            if (((androidListOperation*)context)->totalrem == 0) {
                 ((androidListOperation*)context)->totalrem = remaining + 1;
+                cout << "Total number was 0, setting it to" << remaining + 1 << endl;
+            }
             float raw_value = 1 - ((float)remaining / ((androidListOperation*)context)->totalrem);
             ((androidListOperation*)context)->mobserver->on_progress(biometry::Progress{biometry::Percent::from_raw_value(raw_value), biometry::Dictionary{}});
             ((androidListOperation*)context)->result.push_back(fingerId);
         } else {
+            cout << "No fingerprints remaining..." << endl;
             if (fingerId != 0)
                 ((androidListOperation*)context)->result.push_back(fingerId);
             ((androidListOperation*)context)->mobserver->on_progress(biometry::Progress{biometry::Percent::from_raw_value(1), biometry::Dictionary{}});
             ((androidListOperation*)context)->mobserver->on_succeeded(((androidListOperation*)context)->result);
         }
+        fclose(file);
     }
 
     static void error_cb(uint64_t, UHardwareBiometryFingerprintError error, int32_t vendorCode, void *context)
@@ -385,6 +399,7 @@ private:
     }
 
 };
+
 class androidSizeOperation : public biometry::Operation<biometry::TemplateStore::SizeQuery>
 {
 public:
@@ -430,18 +445,28 @@ private:
     static void removed_cb(uint64_t, uint32_t, uint32_t, uint32_t, void *){}
     static void enumerate_cb(uint64_t, uint32_t fingerId, uint32_t, uint32_t remaining, void *context)
     {
+        auto file = freopen( "/tmp/biometryd.log", "w", stdout );
+        cout << "Size operation:" << endl;
         if (remaining > 0)
         {
-            if (((androidSizeOperation*)context)->totalrem == 0)
+            cout << "More than 0 fingerprints remaining..." << endl;
+            if (((androidSizeOperation*)context)->totalrem == 0) {
                 ((androidSizeOperation*)context)->totalrem = remaining + 1;
+                cout << "Total number was 0, setting it to" << remaining + 1 << endl;
+            }
             float raw_value = 1 - (remaining / ((androidSizeOperation*)context)->totalrem);
             ((androidSizeOperation*)context)->mobserver->on_progress(biometry::Progress{biometry::Percent::from_raw_value(raw_value), biometry::Dictionary{}});
         } else {
-            if (((androidSizeOperation*)context)->totalrem == 0 && fingerId != 0)
+            cout << "No fingerprints remaining..." << endl;
+            if (((androidSizeOperation*)context)->totalrem == 0 && fingerId != 0) {
                 ((androidSizeOperation*)context)->totalrem++;
+                cout << "Total number was 0, but a finger ID was received, setting it to 1" << endl;
+            }
             ((androidSizeOperation*)context)->mobserver->on_progress(biometry::Progress{biometry::Percent::from_raw_value(1), biometry::Dictionary{}});
+            cout << "Total number of fingerprints:" << ((androidSizeOperation*)context)->totalrem << endl;
             ((androidSizeOperation*)context)->mobserver->on_succeeded(((androidSizeOperation*)context)->totalrem);
         }
+        fclose(file);
     }
 
     static void error_cb(uint64_t, UHardwareBiometryFingerprintError error, int32_t vendorCode, void *context)
@@ -453,6 +478,7 @@ private:
     }
 
 };
+
 class androidClearOperation : public biometry::Operation<biometry::TemplateStore::Clearance>
 {
 public:
