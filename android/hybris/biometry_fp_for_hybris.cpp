@@ -49,21 +49,21 @@ struct UHardwareBiometry_
     UHardwareBiometryRequestStatus setActiveGroup(uint32_t gid, char *storePath);
     UHardwareBiometryRequestStatus authenticate(uint64_t operationId, uint32_t gid);
 
-    UHardwareBiometryCallback getCbInstance();
-    void notify(const fingerprint_msg_t *msg);
+    static UHardwareBiometryCallback getCbInstance();
+    static void notify(const fingerprint_msg_t *msg);
 };
 
 struct UHardwareBiometryCallback_
 {
     UHardwareBiometryCallback_(UHardwareBiometryParams* params);
-    
+
     UHardwareBiometryEnrollResult enrollresult_cb;
     UHardwareBiometryAcquired acquired_cb;
     UHardwareBiometryAuthenticated authenticated_cb;
     UHardwareBiometryError error_cb;
     UHardwareBiometryRemoved removed_cb;
     UHardwareBiometryEnumerate enumerate_cb;
-    
+
     void* context;
 };
 
@@ -172,14 +172,14 @@ int gatekeeper_device_initialize(gatekeeper_device_t **dev) {
     int ret;
     const hw_module_t *mod;
     ret = hw_get_module_by_class(GATEKEEPER_HARDWARE_MODULE_ID, NULL, &mod);
-    
+
     if (ret!=0) {
         printf("failed to get hw module\n");
         return ret;
     }
-    
+
     ret = gatekeeper_open(mod, dev);
-    
+
     if (ret!=0)
         printf("failed to open gatekeeper\n");
     return ret;
@@ -194,26 +194,26 @@ bool UHardwareBiometry_::init()
         ALOGE("Can't open fingerprint HW Module, error: %d", err);
         return false;
     }
-    
+
     if (hw_mdl == nullptr) {
         ALOGE("No valid fingerprint module");
         return false;
     }
-    
+
     fingerprint_module_t const *module =
     reinterpret_cast<const fingerprint_module_t*>(hw_mdl);
     if (module->common.methods->open == nullptr) {
         ALOGE("No valid open method");
         return false;
     }
-    
+
     hw_device_t *device = nullptr;
-    
+
     if (0 != (err = module->common.methods->open(hw_mdl, nullptr, &device))) {
         ALOGE("Can't open fingerprint methods, error: %d", err);
         return false;
     }
-    
+
     if (kVersion != device->version) {
         // enforce version on new devices because of HIDL@2.1 translation layer
         ALOGE("Wrong fp version. Expected %d, got %d", kVersion, device->version);
@@ -231,7 +231,7 @@ uint64_t UHardwareBiometry_::setNotify()
         ALOGE("Unable to get FP device\n");
         return 0;
     }
-    return fp_device->set_notify(fp_device, notify);
+    return fp_device->set_notify(fp_device, UHardwareBiometry_::notify);
 }
 
 uint64_t UHardwareBiometry_::preEnroll()
@@ -268,12 +268,12 @@ UHardwareBiometryRequestStatus UHardwareBiometry_::enroll(uint32_t gid, uint32_t
     ret = gk_device->enroll(gk_device, user_id, NULL, 0, NULL, 0,
                             (const uint8_t *)Password.c_str(), Password.size(),
                             &PwdHandle, &PwdHandle_len);
-    
+
     if (ret) {
         ALOGE("Unable to Enroll on Gatekeeper\n");
         return SYS_UNKNOWN;
     }
-    
+
     ret = gk_device->verify(gk_device, user_id, challange, (const uint8_t *)PwdHandle, PwdHandle_len,
                             (const uint8_t *)Password.c_str(), (uint32_t)Password.size(), &auth_token,
                             &auth_token_len, &should_reenroll);
@@ -292,7 +292,7 @@ UHardwareBiometryRequestStatus UHardwareBiometry_::postEnroll()
         ALOGE("Unable to get FP device\n");
         return SYS_UNKNOWN;
     }
-    
+
     return ErrorFilter(fp_device->post_enroll(fp_device));
 }
 
@@ -302,7 +302,7 @@ uint64_t UHardwareBiometry_::getAuthenticatorId()
         ALOGE("Unable to get FP device\n");
         return 0;
     }
-    
+
     return fp_device->get_authenticator_id(fp_device);
 }
 
@@ -312,7 +312,7 @@ UHardwareBiometryRequestStatus UHardwareBiometry_::cancel()
         ALOGE("Unable to get FP device\n");
         return SYS_UNKNOWN;
     }
-    
+
     return ErrorFilter(fp_device->cancel(fp_device));
 }
 
@@ -322,7 +322,7 @@ UHardwareBiometryRequestStatus UHardwareBiometry_::enumerate()
         ALOGE("Unable to get FP device\n");
         return SYS_UNKNOWN;
     }
-    
+
     return ErrorFilter(fp_device->enumerate(fp_device));
 }
 
@@ -332,7 +332,7 @@ UHardwareBiometryRequestStatus UHardwareBiometry_::remove(uint32_t gid, uint32_t
         ALOGE("Unable to get FP device\n");
         return SYS_UNKNOWN;
     }
-    
+
     return ErrorFilter(fp_device->remove(fp_device, gid, fid));
 }
 
@@ -342,7 +342,7 @@ UHardwareBiometryRequestStatus UHardwareBiometry_::setActiveGroup(uint32_t gid, 
         ALOGE("Unable to get FP device\n");
         return SYS_UNKNOWN;
     }
-    
+
     return ErrorFilter(fp_device->set_active_group(fp_device, gid, storePath));
 }
 
@@ -352,7 +352,7 @@ UHardwareBiometryRequestStatus UHardwareBiometry_::authenticate(uint64_t operati
         ALOGE("Unable to get FP device\n");
         return SYS_UNKNOWN;
     }
-    
+
     return ErrorFilter(fp_device->authenticate(fp_device, operationId, gid));
 }
 
