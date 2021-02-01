@@ -19,6 +19,8 @@
 
 #include <biometry/devices/forwarding.h>
 
+#include <stdexcept>
+
 biometry::devices::Forwarding::Forwarding(const std::shared_ptr<Device>& device)
     : impl{device}
 {
