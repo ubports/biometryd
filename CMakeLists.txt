@@ -2,32 +2,9 @@ cmake_minimum_required(VERSION 2.8)
 
 project(biometryd)
 
-# We haven't received version information via the packaging setup.
-# For that, we try to determine sensible values on our own, ensuring
-# plain old invocations to cmake still work as expected.
-if (NOT DEFINED BIOMETRYD_VERSION_MAJOR)
-  find_program(LSB_RELEASE lsb_release)
-  execute_process(
-    COMMAND ${LSB_RELEASE} -c -s
-    OUTPUT_VARIABLE DISTRO_CODENAME
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-  # We explicitly ignore errors and only check if we are building for vivid.
-  # For all other cases:
-  #   - releases other than vivid
-  #   - other distros
-  #   - errors
-  # we define the version to be 0.0.1
-  if (${DISTRO_CODENAME} STREQUAL "vivid")
-    set(BIOMETRYD_VERSION_MAJOR 0)
-    set(BIOMETRYD_VERSION_MINOR 0)
-    set(BIOMETRYD_VERSION_PATCH 1)
-  else ()
-    set(BIOMETRYD_VERSION_MAJOR 1)
-    set(BIOMETRYD_VERSION_MINOR 0)
-    set(BIOMETRYD_VERSION_PATCH 1)
-  endif()
-endif()
+set(BIOMETRYD_VERSION_MAJOR 1)
+set(BIOMETRYD_VERSION_MINOR 0)
+set(BIOMETRYD_VERSION_PATCH 1)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wall -pedantic -Wextra -fPIC -fvisibility=hidden -pthread")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Werror -Wall -fno-strict-aliasing -fvisibility=hidden -fvisibility-inlines-hidden -pedantic -Wextra -fPIC -pthread")
@@ -74,4 +51,3 @@ add_subdirectory(doc)
 add_subdirectory(include)
 add_subdirectory(src)
 add_subdirectory(tests)
-

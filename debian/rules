@@ -5,18 +5,6 @@ export DPKG_GENSYMBOLS_CHECK_LEVEL=4
 
 include /usr/share/dpkg/default.mk
 
-distro=$(shell lsb_release -c -s)
-
-ifeq ($(distro),vivid)
-	full_version=$(shell cat $(CURDIR)/debian/VERSION.vivid)
-else
-	full_version=$(shell cat $(CURDIR)/debian/VERSION)
-endif
-
-major=$(shell echo $(full_version) | cut -d'.' -f1)
-minor=$(shell echo $(full_version) | cut -d'.' -f2)
-patch=$(shell echo $(full_version) | cut -d'.' -f3)
-
 # The home directory of user buildd does not exist on the builders
 export XDG_DATA_HOME=/tmp
 
@@ -24,8 +12,5 @@ export XDG_DATA_HOME=/tmp
 	dh $@ --fail-missing --parallel
 
 override_dh_auto_configure:
-	dh_auto_configure -- -DBIOMETRYD_VERSION_MAJOR=$(major) -DBIOMETRYD_VERSION_MINOR=$(minor) -DBIOMETRYD_VERSION_PATCH=$(patch) -DDEB_TARGET_ARCH=$(DEB_TARGET_ARCH)
-
-override_dh_auto_clean:
-	/bin/sh $(CURDIR)/debian/gen-debian-files.sh $(CURDIR)/debian
-	dh_auto_clean
+	# DEB_TARGET_ARCH is to avoid running qml tests on powerpc
+	dh_auto_configure -- -DDEB_TARGET_ARCH=$(DEB_TARGET_ARCH)

@@ -82,4 +82,3 @@ foreach (QML_FILE ${BIOMETRYD_QML_TEST_FILES})
     configure_file(${QML_FILE} ${QML_FILE} COPYONLY)
   endforeach(QML_FILE)
 endif()
-
