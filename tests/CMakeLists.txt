@@ -67,7 +67,9 @@ BIOMETRYD_ADD_TEST(test_percent test_percent.cpp)
 BIOMETRYD_ADD_TEST(test_plugin_device test_plugin_device.cpp)
 BIOMETRYD_ADD_TEST(test_progress test_progress.cpp)
 BIOMETRYD_ADD_TEST(test_user test_user.cpp)
-BIOMETRYD_ADD_TEST(test_verifier test_verifier.cpp)
+
+# TODO implement verifier test, its currently empty
+#BIOMETRYD_ADD_TEST(test_verifier test_verifier.cpp)
 
 BIOMETRYD_ADD_TEST(test_cmds_config cmds/test_config.cpp)
 BIOMETRYD_ADD_TEST(test_cmds_run cmds/test_run.cpp)
