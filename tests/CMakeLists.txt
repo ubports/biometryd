@@ -4,9 +4,13 @@ find_package(Qt5Quick 5.4 REQUIRED)
 find_package(Qt5QuickTest 5.4 REQUIRED)
 
 configure_file(config.cpp.in config.cpp)
-include_directories(.)
 # Build with system gmock and embedded gtest
 find_package(GMock)
+
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${GMOCK_INCLUDE_DIRS}
+)
 
 # Ensure that we have a ready-made fixture maintaining a private bus instance
 # readily available in unit- and integration tests.
