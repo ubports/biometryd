@@ -21,6 +21,8 @@
 
 #include <boost/variant.hpp>
 
+#include <iostream>
+
 namespace
 {
 typedef typename boost::make_recursive_variant

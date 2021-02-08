@@ -4,9 +4,13 @@ find_package(Qt5Quick 5.4 REQUIRED)
 find_package(Qt5QuickTest 5.4 REQUIRED)
 
 configure_file(config.cpp.in config.cpp)
-include_directories(.)
 # Build with system gmock and embedded gtest
 find_package(GMock)
+
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${GMOCK_INCLUDE_DIRS}
+)
 
 # Ensure that we have a ready-made fixture maintaining a private bus instance
 # readily available in unit- and integration tests.
@@ -63,7 +67,9 @@ BIOMETRYD_ADD_TEST(test_percent test_percent.cpp)
 BIOMETRYD_ADD_TEST(test_plugin_device test_plugin_device.cpp)
 BIOMETRYD_ADD_TEST(test_progress test_progress.cpp)
 BIOMETRYD_ADD_TEST(test_user test_user.cpp)
-BIOMETRYD_ADD_TEST(test_verifier test_verifier.cpp)
+
+# TODO implement verifier test, its currently empty
+#BIOMETRYD_ADD_TEST(test_verifier test_verifier.cpp)
 
 BIOMETRYD_ADD_TEST(test_cmds_config cmds/test_config.cpp)
 BIOMETRYD_ADD_TEST(test_cmds_run cmds/test_run.cpp)
@@ -82,4 +88,3 @@ foreach (QML_FILE ${BIOMETRYD_QML_TEST_FILES})
     configure_file(${QML_FILE} ${QML_FILE} COPYONLY)
   endforeach(QML_FILE)
 endif()
-

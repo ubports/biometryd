@@ -111,7 +111,7 @@ void biometry::dbus::skeleton::DaemonCredentialsResolver::resolve_credentials(
         stub.get_connection_app_armor_security_async(msg->sender(), [stub, msg, then, uid](const biometry::Optional<std::string>& label) mutable
         {
             Optional<RequestVerifier::Credentials> credentials;
-            then((label && uid ? credentials = {biometry::Application{label.get()}, biometry::User{uid.get()}} : credentials));
+            then((label && uid ? credentials = RequestVerifier::Credentials{biometry::Application{label.get()}, biometry::User{uid.get()}} : credentials));
         });
     });
 }

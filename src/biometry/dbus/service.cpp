@@ -25,26 +25,10 @@
 #include <core/dbus/bus.h>
 #include <core/dbus/asio/executor.h>
 
-namespace
-{
-std::shared_ptr<biometry::Runtime> runtime()
-{
-    static auto rt = biometry::Runtime::create();
-    return rt;
-}
-
-core::dbus::Bus::Ptr bus()
-{
-    auto bus = std::make_shared<core::dbus::Bus>(core::dbus::WellKnownBus::system);
-    bus->install_executor(core::dbus::asio::make_executor(bus, runtime()->service()));
-
-    runtime()->start();
-
-    return bus;
-}
-}
-
 std::shared_ptr<biometry::Service> biometry::dbus::Service::create_stub()
 {    
-    return biometry::dbus::stub::Service::create_for_bus(bus());
+    auto bus = std::make_shared<core::dbus::Bus>(core::dbus::WellKnownBus::system);
+    bus->install_executor(core::dbus::asio::make_executor(bus));
+
+    return biometry::dbus::stub::Service::create_for_bus(bus);
 }
