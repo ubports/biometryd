@@ -6,6 +6,26 @@ add_subdirectory(qml)
 
 configure_file(daemon_configuration.cpp.in daemon_configuration.cpp)
 
+if(ENABLE_HYBRIS_IMPLEMENTATION)
+  set(HYBRIS_SRC
+    devices/android.h
+    devices/android.cpp
+
+    bridge/bridge_defs.h
+    bridge/bridge.h
+    bridge/hybris_bridge_defs.h
+
+    hardware/biometry_fp_api.cpp
+    hardware/android_hw_module.h
+  )
+
+  set(HYBRIS_LINK
+    ${HYBRIS}
+  )
+
+  add_definitions(-DENABLE_HYBRIS_IMPLEMENTATION)
+endif()
+
 add_library(
   biometry SHARED
 
@@ -76,8 +96,6 @@ add_library(
   dbus/skeleton/observer.h
   dbus/skeleton/operation.h
 
-  devices/android.h
-  devices/android.cpp
   devices/dispatching.h
   devices/dispatching.cpp
   devices/dummy.h
@@ -121,12 +139,7 @@ add_library(
   util/streaming_configuration_builder.h
   util/synchronized.h
 
-  bridge/bridge_defs.h
-  bridge/bridge.h
-  bridge/hybris_bridge_defs.h
-
-  hardware/biometry_fp_api.cpp
-  hardware/android_hw_module.h
+  ${HYBRIS_SRC}
 
   ${BIOMETRYD_PUBLIC_HEADERS})
 
@@ -152,7 +165,8 @@ target_link_libraries(
   ${DBUS_CPP_LIBRARIES}
   ${PROCESS_CPP_LIBRARIES}
   ${SQLITE3_LIBRARIES}
-  ${Hybris})
+  ${HYBRIS_LINK}
+)
 
 add_executable(
   biometryd

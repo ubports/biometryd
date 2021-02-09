@@ -32,7 +32,9 @@ biometry::DeviceRegistrar::DeviceRegistrar(const biometry::devices::plugin::Enum
 {
     biometry::device_registry()[biometry::devices::Dummy::id] = biometry::devices::Dummy::make_descriptor();
     biometry::device_registry()[biometry::devices::plugin::id] = biometry::devices::plugin::make_descriptor();
+#ifdef ENABLE_HYBRIS_IMPLEMENTATION
     biometry::device_registry()[biometry::devices::android::id] = biometry::devices::android::make_descriptor();
+#endif
 
     enumerator.enumerate([](const biometry::Device::Descriptor::Ptr& desc)
     {
